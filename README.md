@@ -1,7 +1,7 @@
 Group Project - README Template
 ===
 
-# APP_NAME_HERE
+# Kanban
 
 ## Table of Contents
 1. [Overview](#Overview)
@@ -11,16 +11,16 @@ Group Project - README Template
 
 ## Overview
 ### Description
-[Description of your app]
+An intuitive application for managing team workflows and maximizing productivity.
 
 ### App Evaluation
 [Evaluation of your app across the following attributes]
-- **Category:**
-- **Mobile:**
-- **Story:**
-- **Market:**
-- **Habit:**
-- **Scope:**
+- **Category:** Productivity/Tools
+- **Mobile:** The application will provide a convenient way to observe and manage individual tasks from anywhere
+- **Story:** Regardless of what you're working on, a good project management application will ease the pains of coordinating tasks and communication within a team, allowing everyone to be more productive 
+- **Market:** Our market will include anyone who's work includes a lot of collaboration amongst a group. Due to it's focus on efficiency with team work this application has a broad market
+- **Habit:** By integrating this app into team workflow, it would be very easy to have a recurring userbase. Ultimately we want people to rely on this app in order to functionally do work
+- **Scope:** Getting the MVP (Minimal Viable Product) completed will not be too difficult, but getting the application to be a full fledged platform for collaboration will be a difficult challenge
 
 ## Product Spec
 
@@ -28,27 +28,47 @@ Group Project - README Template
 
 **Required Must-have Stories**
 
-* [fill in your required user stories here]
-* ...
+* User authentication
+* Member list view
+* Project creation
+* Project switching
+* Project invitation
+* Project list
+* Project overview/task list view
+* Individual's task screen
+* Task creation
+* Individual timeline
+* Task tags/flags
+* Task organization
+* Task conversations
 
 **Optional Nice-to-have Stories**
 
-* [fill in your required user stories here]
-* ...
+* Push notifications
+* Project timeline
+* Project status/health screen
+* Task progress/estimate
+* Confetti animation upon completion
+* Progress charts
+* Application onboarding
+* Account recovery
 
 ### 2. Screen Archetypes
 
-* [list first screen here]
-   * [list associated required story here]
-   * ...
-* [list second screen here]
-   * [list associated required story here]
-   * ...
+* Authentication screen 
+   * Usernme & Password
+   * Registration pop-up
+* User dashboard
+   * Individual's task list (Organized by project)
 
 ### 3. Navigation
 
-**Tab Navigation** (Tab to Screen)
+**Drawer Navigation**
+   * Individual tasks
+   * Individual timeline
+   **Project List**
 
+**Tab Navigation** (Tab to Screen)
 * [fill out your first tab]
 * [fill out your second tab]
 * [fill out your third tab]
@@ -78,3 +98,6 @@ Group Project - README Template
 - [Add list of network requests by screen ]
 - [Create basic snippets for each Parse network request]
 - [OPTIONAL: List endpoints if using existing API such as Yelp]
+
+## Notes
+Horizontal member list at top of project dashboard
