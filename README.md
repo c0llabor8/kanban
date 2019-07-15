@@ -92,18 +92,18 @@ An intuitive application for managing team workflows and maximizing productivity
    * Tab navigation
 
 ## Wireframes
-<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_01.png" width=600>
-<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_02.png" width=600>
-<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_03.png" width=600>
-<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_04.png" width=600>
-<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_05.png" width=600>
+<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_01.png" width=300>
+<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_02.png" width=300>
+<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_03.png" width=300>
+<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_04.png" width=300>
+<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/wireframes/screen_05.png" width=300>
 
 ### [BONUS] Digital Wireframes & Mockups
 
 ### [BONUS] Interactive Prototype
 
 ## Schema
-<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/schema.png" width=600>
+<img src="https://raw.githubusercontent.com/c0llabor8/kanban/master/schema.png" width=300>
 
 ### Models
 # Use joint  relationship table
