@@ -108,6 +108,7 @@ An intuitive application for managing team workflows and maximizing productivity
 ### Models
 # Use joint  relationship table
 
+```
 User
 ------
 email string
@@ -148,6 +149,7 @@ user fk - user
 project fk - project
 body string
 created_at date
+```
 ### Networking
 - [Add list of network requests by screen ]
 - [Create basic snippets for each Parse network request]
