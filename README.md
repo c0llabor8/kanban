@@ -1,4 +1,4 @@
-# Kanban
+Kanban
 ===
 
 ## Table of Contents
