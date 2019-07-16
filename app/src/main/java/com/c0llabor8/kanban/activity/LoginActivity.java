@@ -1,12 +1,10 @@
 package com.c0llabor8.kanban.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
@@ -55,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     ParseUser.logInInBackground(username, password, new LogInCallback() {
       @Override
       public void done(ParseUser user, ParseException e) {
-        if(e == null) {
+        if (e == null) {
           Log.d("LoginActivity", "Login successful!");
           final Intent intent = new Intent(LoginActivity.this, MainActivity.class);
           startActivity(intent);

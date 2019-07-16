@@ -3,7 +3,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="com.c0llabor8.kanban">
 
-  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.INTERNET"/>
 
   <application
     android:allowBackup="false"
@@ -33,7 +33,7 @@
     <activity
       android:label="My Application"
       android:name=".activity.SignupActivity"
-      android:theme="@style/AppTheme" />
+      android:theme="@style/AppTheme"/>
 
   </application>
 
