@@ -41,7 +41,14 @@ public class LoginActivity extends AppCompatActivity {
       }
     });
 
-
+    binding.authMessage.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        final Intent intent = new Intent(LoginActivity.this, SignupActivity.class);
+        startActivity(intent);
+        finish();
+      }
+    });
   }
 
   private void login(String username, String password) {

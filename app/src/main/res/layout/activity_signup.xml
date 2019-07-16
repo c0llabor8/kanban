@@ -68,6 +68,8 @@
       android:textColor="@color/color_error"
       android:visibility="gone"/>
 
+
+
   </LinearLayout>
 
 </layout>
