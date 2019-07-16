@@ -156,4 +156,4 @@ created_at date
 - [OPTIONAL: List endpoints if using existing API such as Yelp]
 
 ## Notes
-Horizontal member list at top of project dashboard
+Ignore future edits of PARSE_MASTER_KEY `git update-index --skip-worktree .env`
