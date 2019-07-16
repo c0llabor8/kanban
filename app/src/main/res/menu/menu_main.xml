@@ -3,8 +3,12 @@
   xmlns:tools="http://schemas.android.com/tools"
   tools:context="com.c0llabor8.kanban.MainActivity">
   <item
-    android:id="@+id/action_settings"
-    android:orderInCategory="100"
-    android:title="@string/action_settings"
-    app:showAsAction="never"/>
+      android:id="@+id/group_tasks"
+      android:title="My Group Tasks" />
+  <item
+      android:id="@+id/work_project"
+      android:title="Work Project" />
+  <item
+      android:id="@+id/volunteer_work"
+      android:title="Volunteer Work" />
 </menu>
