@@ -24,9 +24,9 @@ public class Application extends android.app.Application {
     // Initialize the Parse SDK at the app entry point
     Parse.initialize(
         new Parse.Configuration.Builder(this)
-            .applicationId("fakestergram")
+            .applicationId("c0llabor8")
             .clientBuilder(builder)
-            .server("https://fakestergram.herokuapp.com/parse")
+            .server("https://c0llabor8.herokuapp.com/parse")
             .build()
     );
   }
