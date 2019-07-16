@@ -29,6 +29,6 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
   @Nullable
   @Override
   public CharSequence getPageTitle(int pos) {
-    return frags[pos].getTag();
+    return frags[pos].getArguments().getString("title", "");
   }
 }
