@@ -156,4 +156,4 @@ created_at date
 - [OPTIONAL: List endpoints if using existing API such as Yelp]
 
 ## Notes
-Ignore future edits of PARSE_MASTER_KEY `git update-index --skip-worktree .env`
+Start the Parse Dashboard by running `./dashboard`

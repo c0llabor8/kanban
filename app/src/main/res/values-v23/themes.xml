@@ -15,10 +15,10 @@
 -->
 
 <resources>
-    <!--Base custom theme which will be shared between both light and dark theme variants-->
-    <style name="Base.MaterialTheme" parent="Base.MaterialThemeBuilder">
-        <item name="android:statusBarColor">?colorSurface</item>
-        <item name="android:navigationBarColor">?android:colorBackground</item>
-    </style>
+  <!--Base custom theme which will be shared between both light and dark theme variants-->
+  <style name="Base.MaterialTheme" parent="Base.MaterialThemeBuilder">
+    <item name="android:statusBarColor">?colorSurface</item>
+    <item name="android:navigationBarColor">?android:colorBackground</item>
+  </style>
 
 </resources>

@@ -1,26 +1,20 @@
 package com.c0llabor8.kanban;
 
 import android.os.Bundle;
-
+import android.view.Menu;
+import android.view.MenuItem;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.viewpager.widget.ViewPager;
+public class MainActivity extends AppCompatActivity {
 
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-
-public class MainActivity extends AppCompatActivity  {
-
+  ViewPager pager;
   private BottomAppBar bar;
   private TabLayout tabLayout;
-  ViewPager pager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +29,9 @@ public class MainActivity extends AppCompatActivity  {
     setSupportActionBar(bar);
 
     FloatingActionButton fab = findViewById(R.id.fab);
-    fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show());
+    fab.setOnClickListener(
+        view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            .setAction("Action", null).show());
   }
 
   @Override
@@ -56,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
     //noinspection SimplifiableIfStatement
     if (id == android.R.id.home) {
       Snackbar.make(bar, "Replace with your own action", Snackbar.LENGTH_LONG)
-              .setAction("Action", null).show();
+          .setAction("Action", null).show();
       return true;
     }
 

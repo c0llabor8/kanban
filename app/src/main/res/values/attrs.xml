@@ -17,49 +17,49 @@
 
 <resources>
 
-    <attr name="alphaEmphasisHigh" format="float"/>
-    <attr name="alphaEmphasisMedium" format="float"/>
-    <attr name="alphaEmphasisDisabled" format="float"/>
+  <attr format="float" name="alphaEmphasisHigh"/>
+  <attr format="float" name="alphaEmphasisMedium"/>
+  <attr format="float" name="alphaEmphasisDisabled"/>
 
-    <!--Common attributes-->
-    <attr name="colorFillColor" format="color"/>
-    <attr name="colorStrokeColor" format="color"/>
+  <!--Common attributes-->
+  <attr format="color" name="colorFillColor"/>
+  <attr format="color" name="colorStrokeColor"/>
 
-    <!--Label view attributes-->
-    <declare-styleable name="LabelLinkView">
-        <attr name="android:text" />
-        <attr name="leadingIcon" format="integer" />
-        <attr name="linkUrl" format="string" />
-    </declare-styleable>
+  <!--Label view attributes-->
+  <declare-styleable name="LabelLinkView">
+    <attr name="android:text"/>
+    <attr format="integer" name="leadingIcon"/>
+    <attr format="string" name="linkUrl"/>
+  </declare-styleable>
 
-    <!--Color attribute view attributes-->
-    <declare-styleable name="ColorAttributeView">
-        <attr name="android:text"/>
-        <attr name="colorFillColor"/>
-        <attr name="colorStrokeColor"/>
-    </declare-styleable>
+  <!--Color attribute view attributes-->
+  <declare-styleable name="ColorAttributeView">
+    <attr name="android:text"/>
+    <attr name="colorFillColor"/>
+    <attr name="colorStrokeColor"/>
+  </declare-styleable>
 
-    <!--Color dot view attributes-->
-    <declare-styleable name="ColorDotView">
-        <attr name="colorFillColor"/>
-        <attr name="colorStrokeColor"/>
-    </declare-styleable>
+  <!--Color dot view attributes-->
+  <declare-styleable name="ColorDotView">
+    <attr name="colorFillColor"/>
+    <attr name="colorStrokeColor"/>
+  </declare-styleable>
 
-    <!--Type attribute view attributes-->
-    <declare-styleable name="TypeAttributeView">
-        <attr name="android:text"/>
-        <attr name="previewText" format="string"/>
-        <attr name="previewTextAppearance" format="reference"/>
-        <attr name="previewAlpha" format="reference"/>
-    </declare-styleable>
+  <!--Type attribute view attributes-->
+  <declare-styleable name="TypeAttributeView">
+    <attr name="android:text"/>
+    <attr format="string" name="previewText"/>
+    <attr format="reference" name="previewTextAppearance"/>
+    <attr format="reference" name="previewAlpha"/>
+  </declare-styleable>
 
-    <!--Shape attribute view attributes-->
-    <declare-styleable name="ShapeAttributeView">
-        <attr name="android:text"/>
-        <attr name="shapeSizeLetter" format="string"/>
-        <attr name="shapeFillColor" format="color"/>
-        <attr name="shapeStrokeColor" format="color"/>
-        <attr name="shapeAppearanceAttr" format="reference"/>
-    </declare-styleable>
-    
+  <!--Shape attribute view attributes-->
+  <declare-styleable name="ShapeAttributeView">
+    <attr name="android:text"/>
+    <attr format="string" name="shapeSizeLetter"/>
+    <attr format="color" name="shapeFillColor"/>
+    <attr format="color" name="shapeStrokeColor"/>
+    <attr format="reference" name="shapeAppearanceAttr"/>
+  </declare-styleable>
+
 </resources>
