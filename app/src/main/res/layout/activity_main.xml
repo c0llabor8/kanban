@@ -1,52 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/tasks"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools">
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/coordinator"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
-    tools:context=".MainActivity">
-
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.design.widget.TabItem android:text="Tab 1" />
-
-        <android.support.design.widget.TabItem android:text="Tab 2" />
-
-        <android.support.design.widget.TabItem android:text="Tab 3" />
-
-    </android.support.design.widget.TabLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/view_pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    tools:context=".activity.MainActivity">
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:fabAlignmentMode="end"
-        app:fabCradleRoundedCornerRadius="0dp"
-        app:navigationIcon="@drawable/ic_menu_24dp" />
+      android:id="@+id/bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_gravity="bottom"
+      app:fabAlignmentMode="end"
+      app:fabCradleRoundedCornerRadius="0dp"
+      app:navigationIcon="@drawable/ic_menu_24dp"/>
 
     <TextView
-        android:id="@+id/title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:title="My Group Tasks" />
-
+      android:id="@+id/title"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:title="My Group Tasks"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_add_24dp"
-        app:layout_anchor="@id/bar" />
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@drawable/ic_add_24dp"
+      app:layout_anchor="@id/bar"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

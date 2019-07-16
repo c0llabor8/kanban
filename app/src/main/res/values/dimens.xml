@@ -25,6 +25,9 @@
 
   <dimen name="elevation_default_top_app_bar">4dp</dimen>
 
+  <dimen name="layout_default_margin">@dimen/keyline_2</dimen>
+  <dimen name="activity_default_margin">@dimen/keyline_4</dimen>
+
   <!--Emphasis modifiers for "on" colors-->
   <dimen name="alpha_emphasis_high">@dimen/mtrl_emphasis_high_type</dimen>
   <dimen name="alpha_emphasis_medium">@dimen/mtrl_emphasis_medium</dimen>

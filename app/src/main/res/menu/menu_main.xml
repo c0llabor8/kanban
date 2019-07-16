@@ -1,14 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
-  tools:context="com.c0llabor8.kanban.MainActivity">
+  tools:context="com.c0llabor8.kanban.activity.MainActivity">
   <item
-      android:id="@+id/group_tasks"
-      android:title="My Group Tasks" />
+    android:id="@+id/group_tasks"
+    android:title="My Group Tasks"/>
   <item
-      android:id="@+id/work_project"
-      android:title="Work Project" />
+    android:id="@+id/work_project"
+    android:title="Work Project"/>
   <item
-      android:id="@+id/volunteer_work"
-      android:title="Volunteer Work" />
+    android:id="@+id/volunteer_work"
+    android:title="Volunteer Work"/>
 </menu>
