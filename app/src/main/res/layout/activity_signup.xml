@@ -57,7 +57,7 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_margin="@dimen/layout_default_margin"
-      android:text="Login"/>
+      android:text="Signup"/>
 
     <TextView
       android:id="@+id/auth_message"
@@ -68,13 +68,6 @@
       android:textColor="@color/color_error"
       android:visibility="gone"/>
 
-    <TextView
-      android:id="@+id/tvSignUp"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_gravity="bottom"
-      android:text="Sign Up"
-      />
   </LinearLayout>
 
 </layout>
