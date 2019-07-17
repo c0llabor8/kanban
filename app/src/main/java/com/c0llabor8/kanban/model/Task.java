@@ -21,6 +21,7 @@ public class Task extends ParseObject {
   public String getTitle() {
     return getString(KEY_TITLE);
   }
+
   public void setTitle(String title) {
     put(KEY_TITLE, title);
   }
@@ -56,6 +57,5 @@ public class Task extends ParseObject {
   public void setProject(ParseObject project) {
     put(KEY_PROJECT, project);
   }
-
 
 }

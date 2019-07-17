@@ -1,6 +1,5 @@
 package com.c0llabor8.kanban.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -4,6 +4,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 public class Assignment extends ParseObject {
+
   public static final String KEY_USER = "user";
   public static final String KEY_TASK = "task";
 

@@ -3,7 +3,6 @@ package com.c0llabor8.kanban.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("Membership")
@@ -27,7 +26,6 @@ public class Membership extends ParseObject {
   public void setProject(String project) {
     put(KEY_PROJECT, project);
   }
-
 
 
 }
