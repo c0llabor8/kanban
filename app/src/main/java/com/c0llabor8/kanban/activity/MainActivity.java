@@ -33,8 +33,9 @@ public class MainActivity extends AppCompatActivity {
   /*
    * Sets the text for the R.id.title within the BottomAppBar
    *
-   * @param  title text to display in as the title
-   */
+   * @param title text to display in as the title
+   * */
+
   @Override
   public void setTitle(CharSequence title) {
     binding.title.setText(title);
