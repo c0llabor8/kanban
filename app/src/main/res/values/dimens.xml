@@ -21,10 +21,6 @@
   <dimen name="keyline_4">16dp</dimen>
   <dimen name="keyline_5">24dp</dimen>
 
-  <dimen name="component_label_horizontal_margin">@dimen/keyline_4</dimen>
-
-  <dimen name="elevation_default_top_app_bar">4dp</dimen>
-
   <dimen name="layout_default_margin">@dimen/keyline_2</dimen>
   <dimen name="activity_default_margin">@dimen/keyline_4</dimen>
 
