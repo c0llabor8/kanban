@@ -24,7 +24,7 @@
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
       app:fabAlignmentMode="end"
-      app:fabCradleRoundedCornerRadius="0dp"
+      app:fabCradleMargin="0dp"
       app:navigationIcon="@drawable/ic_menu_24dp"/>
 
     <TextView

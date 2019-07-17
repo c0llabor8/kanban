@@ -1,6 +1,8 @@
 package com.c0llabor8.kanban.activity;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -9,6 +11,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.BasicFragment;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,16 +31,31 @@ public class MainActivity extends AppCompatActivity {
 
     binding.pager.setAdapter(pagerAdapter);
     binding.tabs.setupWithViewPager(binding.pager, true);
+
+    setSupportActionBar(binding.bar);
   }
 
   /*
-   * Sets the text for the R.id.title within the BottomAppBar
+   * Sets the text for TextView(R.id.title) within the BottomAppBar
    *
    * @param title text to display in as the title
    * */
-
   @Override
   public void setTitle(CharSequence title) {
     binding.title.setText(title);
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+    // If the menu on the bottom app bar is clicked
+    if (item.getItemId() == android.R.id.home) {
+      Snackbar.make(binding.getRoot(), "Menu clicked", Snackbar.LENGTH_SHORT)
+          .setAnchorView(binding.fab).show();
+
+      return true;
+    }
+
+    return super.onOptionsItemSelected(item);
   }
 }
