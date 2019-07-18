@@ -12,8 +12,6 @@
       android:title="Projects">
 
       <menu>
-        <item android:title="Android Studio"/>
-        <item android:title="Facebook Intern"/>
       </menu>
 
     </item>
