@@ -11,6 +11,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.BasicFragment;
+import com.c0llabor8.kanban.fragment.BottomSheetNavFragment;
 import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,9 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     // If the menu on the bottom app bar is clicked
     if (item.getItemId() == android.R.id.home) {
-      Snackbar.make(binding.getRoot(), "Menu clicked", Snackbar.LENGTH_SHORT)
-          .setAnchorView(binding.fab).show();
-
+      BottomSheetNavFragment.newInstance().show(getSupportFragmentManager(), "");
       return true;
     }
 

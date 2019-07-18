@@ -1,13 +1,27 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  tools:context="com.c0llabor8.kanban.activity.MainActivity">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <group
+    android:id="@+id/project_group"
+    android:orderInCategory="1">
+
+    <item
+      android:id="@+id/my_tasks"
+      android:title="My Personal Tasks"/>
+
+    <item
+      android:id="@+id/project_list"
+      android:title="Projects">
+
+      <menu>
+        <item android:title="Android Studio"/>
+        <item android:title="Facebook Intern"/>
+      </menu>
+
+    </item>
+  </group>
+
   <item
-    android:id="@+id/group_tasks"
-    android:title="My Group Tasks"/>
-  <item
-    android:id="@+id/work_project"
-    android:title="Work Project"/>
-  <item
-    android:id="@+id/volunteer_work"
-    android:title="Volunteer Work"/>
+    android:id="@+id/new_project"
+    android:icon="@drawable/ic_add_24dp"
+    android:orderInCategory="2"
+    android:title="Create a new project"/>
 </menu>
