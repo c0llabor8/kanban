@@ -18,6 +18,7 @@ import com.c0llabor8.kanban.fragment.BasicFragment;
 import com.c0llabor8.kanban.fragment.BottomSheetNavFragment;
 import com.c0llabor8.kanban.fragment.BottomSheetNavFragment.BottomNavSheetListener;
 import com.c0llabor8.kanban.fragment.TaskCreationDialog;
+import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity implements BottomNavSheetListener {
@@ -51,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
     }, 300);
 
     Fragment[] fragments = {
-        BasicFragment.newInstance(),
+        TaskListFragment.newInstance(),
         BasicFragment.newInstance(),
         BasicFragment.newInstance(),
     };

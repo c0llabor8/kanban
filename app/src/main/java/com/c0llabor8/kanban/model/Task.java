@@ -2,6 +2,7 @@ package com.c0llabor8.kanban.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 @ParseClassName("Task")
 public class Task extends ParseObject {
@@ -56,6 +57,18 @@ public class Task extends ParseObject {
 
   public void setProject(ParseObject project) {
     put(KEY_PROJECT, project);
+  }
+
+  public static class Query extends ParseQuery<Task> {
+
+    public Query() {
+      super(Task.class);
+    }
+
+    public Query sortAscending() {
+      addAscendingOrder(KEY_ESTIMATE);
+      return this;
+    }
   }
 
 }
