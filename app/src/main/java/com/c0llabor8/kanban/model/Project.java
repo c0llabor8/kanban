@@ -1,8 +1,10 @@
 package com.c0llabor8.kanban.model;
 
+import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import java.util.Date;
 
+@ParseClassName("Project")
 public class Project extends ParseObject {
 
   public static final String KEY_NAME = "name";
@@ -15,24 +17,27 @@ public class Project extends ParseObject {
     return getString(KEY_NAME);
   }
 
-  public void setTitle(String name) {
+  public Project setTitle(String name) {
     put(KEY_NAME, name);
+    return this;
   }
 
   public int getMembers() {
     return getInt(KEY_MEMBERS);
   }
 
-  public void setMembers(String members) {
-    put(KEY_MEMBERS, members);
+  public Project setMembers(int count) {
+    put(KEY_MEMBERS, count);
+    return this;
   }
 
   public int getTasks() {
     return getInt(KEY_TASKS);
   }
 
-  public void setTasks(String estimate) {
-    put(KEY_TASKS, estimate);
+  public Project setTasks(int count) {
+    put(KEY_TASKS, count);
+    return this;
   }
 
   public Date getDeadline() {

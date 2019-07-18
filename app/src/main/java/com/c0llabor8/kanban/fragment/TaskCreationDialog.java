@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import com.c0llabor8.kanban.R;
@@ -16,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class TaskCreationDialog extends DialogFragment {
+public class TaskCreationDialog extends AppCompatDialogFragment {
 
   private final Calendar calendar = Calendar.getInstance();
   private FragmentTaskCreationBinding binding;
@@ -31,6 +33,12 @@ public class TaskCreationDialog extends DialogFragment {
   }
 
   @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppTheme);
+  }
+
+  @Override
   public void onStart() {
     super.onStart();
     Dialog dialog = getDialog();
@@ -38,12 +46,14 @@ public class TaskCreationDialog extends DialogFragment {
       int width = ViewGroup.LayoutParams.MATCH_PARENT;
       int height = ViewGroup.LayoutParams.MATCH_PARENT;
       dialog.getWindow().setLayout(width, height);
+      dialog.getWindow().setWindowAnimations(R.style.Animation_MyTheme_BottomSheet_Modal);
     }
   }
 
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
       Bundle savedInstanceState) {
+
     super.onCreateView(inflater, container, savedInstanceState);
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_creation, container, false);
 
@@ -69,7 +79,7 @@ public class TaskCreationDialog extends DialogFragment {
     binding.toolbar.setNavigationOnClickListener((View v) -> dismiss());
 
     binding.toolbar.setTitle("New Task");
-    binding.toolbar.inflateMenu(R.menu.task_creation);
+    binding.toolbar.inflateMenu(R.menu.menu_dialog_save);
     binding.toolbar.setOnMenuItemClickListener((MenuItem item) -> {
       dismiss();
       return true;

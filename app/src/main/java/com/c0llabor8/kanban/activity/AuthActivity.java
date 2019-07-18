@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.ActivityLoginBinding;
+import com.c0llabor8.kanban.databinding.ActivityAuthBinding;
 import com.c0llabor8.kanban.fragment.BaseAuthFragment;
 import com.c0llabor8.kanban.fragment.LoginFragment;
 import com.c0llabor8.kanban.fragment.SignUpFragment;
@@ -16,7 +16,7 @@ import com.parse.ParseUser;
 public class AuthActivity extends AppCompatActivity implements
     BaseAuthFragment.AuthenticationFragmentListener {
 
-  ActivityLoginBinding binding;
+  ActivityAuthBinding binding;
   LoginFragment loginFragment;
   SignUpFragment signUpFragment;
 
@@ -24,7 +24,7 @@ public class AuthActivity extends AppCompatActivity implements
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
+    binding = DataBindingUtil.setContentView(this, R.layout.activity_auth);
 
     // Start MainActivity if our user is logged in
     if (ParseUser.getCurrentUser() != null) {

@@ -9,11 +9,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.AuthFragmentLoginBinding;
+import com.c0llabor8.kanban.databinding.FragmentLoginBinding;
 
 public class LoginFragment extends BaseAuthFragment {
 
-  private AuthFragmentLoginBinding binding;
+  private FragmentLoginBinding binding;
 
   private OnClickListener loginOnClick = (View view) -> {
     final String username = binding.etUsername.getText().toString();
@@ -34,7 +34,7 @@ public class LoginFragment extends BaseAuthFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    binding = DataBindingUtil.inflate(inflater, R.layout.auth_fragment_login, container, false);
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
     return binding.getRoot();
   }
 

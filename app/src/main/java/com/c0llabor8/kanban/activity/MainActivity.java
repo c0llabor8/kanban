@@ -15,18 +15,20 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.BasicFragment;
-import com.c0llabor8.kanban.fragment.BottomSheetNavFragment;
-import com.c0llabor8.kanban.fragment.BottomSheetNavFragment.BottomNavSheetListener;
+import com.c0llabor8.kanban.fragment.BottomNavFragment;
+import com.c0llabor8.kanban.fragment.BottomNavFragment.BottomNavSheetListener;
 import com.c0llabor8.kanban.fragment.TaskCreationDialog;
+import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 
 public class MainActivity extends AppCompatActivity implements BottomNavSheetListener {
 
   ActivityMainBinding binding;
   Handler handler;
-  BottomSheetNavFragment navFragment;
+  BottomNavFragment navFragment;
   ProjectPagerAdapter pagerAdapter;
   TaskCreationDialog taskCreationDialog;
+  NewProjectDialog newProjectDialog;
   SparseArray<String> projectMenuMap = new SparseArray<>();
 
   @Override
@@ -64,11 +66,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
     setSupportActionBar(binding.bar);
 
-    // Create and save a new instance of our BottomSheetNavFragment
-    navFragment = BottomSheetNavFragment.newInstance();
+    // Create and save a new instance of our BottomNavFragment
+    navFragment = BottomNavFragment.newInstance();
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
     taskCreationDialog = TaskCreationDialog.newInstance();
+    newProjectDialog = NewProjectDialog.newInstance();
   }
 
   private void openTaskCreationDialog() {
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-    // Show our BottomSheetNavFragment when the menu icon is clicked
+    // Show our BottomNavFragment when the menu icon is clicked
     if (item.getItemId() == android.R.id.home) {
       navFragment.show(getSupportFragmentManager(), "");
       return true;
@@ -99,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
   @Override
   public void onAttachFragment(@NonNull Fragment fragment) {
-    if (fragment instanceof BottomSheetNavFragment) {
-      BottomSheetNavFragment navFragment = (BottomSheetNavFragment) fragment;
+    if (fragment instanceof BottomNavFragment) {
+      BottomNavFragment navFragment = (BottomNavFragment) fragment;
       navFragment.setListener(this);
     }
   }
@@ -134,6 +137,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
       // if the selected item's id is in our HashSet<int(menuID), String(Project)>
       if (projectMenuMap.indexOfKey(item.getItemId()) > -1) {
         setTitle(projectMenuMap.get(item.getItemId()));
+        navFragment.dismiss();
+        return true;
+      }
+
+      if (item.getItemId() == R.id.new_project) {
+        newProjectDialog.show(getSupportFragmentManager(), "");
         navFragment.dismiss();
         return true;
       }

@@ -15,17 +15,18 @@ public class Membership extends ParseObject {
     return getParseUser(KEY_USER);
   }
 
-  public void setUser(ParseUser user) {
+  public Membership setUser(ParseUser user) {
     put(KEY_USER, user);
+    return this;
   }
 
-  public ParseObject getProject() {
-    return getParseObject(KEY_PROJECT);
+  public Project getProject() {
+    return (Project) getParseObject(KEY_PROJECT);
   }
 
-  public void setProject(String project) {
+  public Membership setProject(Project project) {
     put(KEY_PROJECT, project);
+    return this;
   }
-
 
 }

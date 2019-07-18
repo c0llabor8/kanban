@@ -9,18 +9,13 @@
     <com.google.android.material.appbar.AppBarLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:background="#FEFEFE"
       app:elevation="0dp">
 
       <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:paddingStart="6dp"
-        android:paddingEnd="16dp"
-        android:background="#B0D6FA"
-        app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/baseline_close_black_18dp"/>
+        app:navigationIcon="@drawable/ic_close_24dp"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
