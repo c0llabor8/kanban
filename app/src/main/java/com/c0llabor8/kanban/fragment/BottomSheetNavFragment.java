@@ -2,7 +2,6 @@ package com.c0llabor8.kanban.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,6 +58,7 @@ public class BottomSheetNavFragment extends BottomSheetDialogFragment {
   }
 
   public interface BottomNavSheetListener {
+
     // Callback to populate projects into the submenu
     void populateProjects(SubMenu subMenu);
 

@@ -2,14 +2,11 @@ package com.c0llabor8.kanban.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import androidx.annotation.NonNull;
-import android.view.View;
-import android.view.View.OnClickListener;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -20,9 +17,8 @@ import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.BasicFragment;
 import com.c0llabor8.kanban.fragment.BottomSheetNavFragment;
 import com.c0llabor8.kanban.fragment.BottomSheetNavFragment.BottomNavSheetListener;
+import com.c0llabor8.kanban.fragment.TaskCreationDialog;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
-import java.util.HashMap;
-import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity implements BottomNavSheetListener {
 
@@ -30,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
   Handler handler;
   BottomSheetNavFragment navFragment;
   ProjectPagerAdapter pagerAdapter;
+  TaskCreationDialog taskCreationDialog;
   SparseArray<String> projectMenuMap = new SparseArray<>();
 
   @Override
@@ -48,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
     // Using a handler to simulate network requests
     handler.postDelayed(() -> {
-      for (int i = 0; i < projects.length; i++)
+      for (int i = 0; i < projects.length; i++) {
         projectMenuMap.put(Menu.FIRST + i, projects[i]);
+      }
     }, 300);
 
     Fragment[] fragments = {
@@ -68,17 +66,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
     // Create and save a new instance of our BottomSheetNavFragment
     navFragment = BottomSheetNavFragment.newInstance();
-    binding.fab.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        openDialog();
-      }
-    });
+    binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
+    taskCreationDialog = TaskCreationDialog.newInstance();
   }
 
-  private void openDialog() {
-    TaskCreationActivity.display(getSupportFragmentManager());
+  private void openTaskCreationDialog() {
+    taskCreationDialog.show(getSupportFragmentManager(), "");
   }
 
   /*
