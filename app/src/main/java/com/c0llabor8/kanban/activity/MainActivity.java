@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SubMenu;
 import androidx.annotation.NonNull;
+import android.view.View;
+import android.view.View.OnClickListener;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -20,6 +22,7 @@ import com.c0llabor8.kanban.fragment.BottomSheetNavFragment;
 import com.c0llabor8.kanban.fragment.BottomSheetNavFragment.BottomNavSheetListener;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 import java.util.HashMap;
+import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity implements BottomNavSheetListener {
 
@@ -63,6 +66,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
     // Create and save a new instance of our BottomSheetNavFragment
     navFragment = BottomSheetNavFragment.newInstance();
+    binding.fab.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        openDialog();
+      }
+    });
+
+  }
+
+  private void openDialog() {
+    TaskCreationActivity.display(getSupportFragmentManager());
   }
 
   /*
