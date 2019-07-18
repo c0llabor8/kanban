@@ -19,6 +19,7 @@ import com.c0llabor8.kanban.fragment.BasicFragment;
 import com.c0llabor8.kanban.fragment.BottomNavFragment;
 import com.c0llabor8.kanban.fragment.BottomNavFragment.BottomNavSheetListener;
 import com.c0llabor8.kanban.fragment.TaskCreationDialog;
+import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 import com.parse.LogOutCallback;
@@ -57,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
     }, 300);
 
     Fragment[] fragments = {
-        BasicFragment.newInstance(),
+        TaskListFragment.newInstance(),
         BasicFragment.newInstance(),
         BasicFragment.newInstance(),
     };
