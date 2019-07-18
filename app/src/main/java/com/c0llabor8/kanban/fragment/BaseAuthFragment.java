@@ -31,6 +31,7 @@ public abstract class BaseAuthFragment extends Fragment {
 
   /*
    * Method to login an existing user and call all proper pre and post hooks
+   *
    * @param username username of the account being logged in
    * @param password password of the user being logged in
    * */
@@ -50,6 +51,7 @@ public abstract class BaseAuthFragment extends Fragment {
 
   /*
    * Method to register a new user and call all proper pre and post hooks
+   *
    * @param username username of the account being created
    * @param email    email of the account being created
    * @param password password of the user being created
@@ -75,7 +77,7 @@ public abstract class BaseAuthFragment extends Fragment {
   }
 
   /*
-   * Interface implemented so parent Activity to be notified on authentication status
+   * Interface implement for parent Activity to be notified on authentication status
    * */
   public interface AuthenticationFragmentListener {
 
