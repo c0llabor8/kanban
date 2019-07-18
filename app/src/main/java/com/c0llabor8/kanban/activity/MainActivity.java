@@ -21,7 +21,9 @@ public class MainActivity extends AppCompatActivity {
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
     Fragment[] fragments = {
-        BasicFragment.newInstance()
+        BasicFragment.newInstance(),
+        BasicFragment.newInstance(),
+        BasicFragment.newInstance(),
     };
 
     pagerAdapter = new ProjectPagerAdapter(getSupportFragmentManager(), fragments);
