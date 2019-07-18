@@ -12,7 +12,7 @@ import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.BasicFragment;
 import com.c0llabor8.kanban.fragment.BottomSheetNavFragment;
-import com.google.android.material.snackbar.Snackbar;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-    // If the menu on the bottom app bar is clicked
+    // Launch a BottomSheetNavFragment when the menu icon is clicked
     if (item.getItemId() == android.R.id.home) {
       BottomSheetNavFragment.newInstance().show(getSupportFragmentManager(), "");
       return true;
