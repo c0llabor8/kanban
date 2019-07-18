@@ -1,6 +1,8 @@
 package com.c0llabor8.kanban.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -9,6 +11,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.BasicFragment;
+import com.google.android.material.button.MaterialButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +31,18 @@ public class MainActivity extends AppCompatActivity {
 
     binding.pager.setAdapter(pagerAdapter);
     binding.tabs.setupWithViewPager(binding.pager, true);
+
+    binding.fab.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        openDialog();
+      }
+    });
+
+  }
+
+  private void openDialog() {
+    TaskCreationActivity.display(getSupportFragmentManager());
   }
 
   /*
