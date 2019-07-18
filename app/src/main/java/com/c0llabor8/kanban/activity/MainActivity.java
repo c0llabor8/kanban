@@ -1,5 +1,6 @@
 package com.c0llabor8.kanban.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.SparseArray;
@@ -20,6 +21,9 @@ import com.c0llabor8.kanban.fragment.BottomNavFragment.BottomNavSheetListener;
 import com.c0llabor8.kanban.fragment.TaskCreationDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
+import com.parse.LogOutCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity implements BottomNavSheetListener {
 
@@ -145,6 +149,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
         newProjectDialog.show(getSupportFragmentManager(), "");
         navFragment.dismiss();
         return true;
+      }
+
+      if (item.getItemId() == R.id.action_signout) {
+        ParseUser.logOutInBackground(new LogOutCallback() {
+          @Override
+          public void done(ParseException e) {
+            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+            startActivity(intent);
+            finish();
+          }
+        });
       }
 
       return false;

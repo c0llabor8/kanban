@@ -14,9 +14,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentNewProjectBinding;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
-import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 public class NewProjectDialog extends AppCompatDialogFragment {
 
@@ -72,30 +70,24 @@ public class NewProjectDialog extends AppCompatDialogFragment {
           .setMembers(1);
 
       project.saveInBackground(
-          new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-              if (e != null) {
-                e.printStackTrace();
+          e -> {
+            if (e != null) {
+              e.printStackTrace();
+              return;
+            }
+
+            Membership membership = new Membership()
+                .setUser(ParseUser.getCurrentUser())
+                .setProject(project);
+
+            membership.saveInBackground(e1 -> {
+              if (e1 != null) {
+                e1.printStackTrace();
                 return;
               }
 
-              Membership membership = new Membership()
-                  .setUser(ParseUser.getCurrentUser())
-                  .setProject(project);
-
-              membership.saveInBackground(new SaveCallback() {
-                @Override
-                public void done(ParseException e) {
-                  if (e != null) {
-                    e.printStackTrace();
-                    return;
-                  }
-
-                  dismiss();
-                }
-              });
-            }
+              dismiss();
+            });
           });
       return true;
     });
