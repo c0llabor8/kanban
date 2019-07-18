@@ -13,10 +13,6 @@ public class Task extends ParseObject {
   public static final String KEY_PROJECT = "project";
 
 
-  // public default constructor
-  public Task() {
-    super();
-  }
 
   public String getTitle() {
     return getString(KEY_TITLE);
@@ -38,7 +34,7 @@ public class Task extends ParseObject {
     return getString(KEY_ESTIMATE);
   }
 
-  public void setEstimate(String estimate) {
+  public void setEstimate(long estimate) {
     put(KEY_ESTIMATE, estimate);
   }
 
@@ -46,7 +42,7 @@ public class Task extends ParseObject {
     return getInt(KEY_PRIORITY);
   }
 
-  public void setPriority(String priority) {
+  public void setPriority(int priority) {
     put(KEY_PRIORITY, priority);
   }
 

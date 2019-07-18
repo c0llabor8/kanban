@@ -1,8 +1,10 @@
 package com.c0llabor8.kanban.model;
 
+import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+@ParseClassName("Assignment")
 public class Assignment extends ParseObject {
 
   public static final String KEY_USER = "user";
