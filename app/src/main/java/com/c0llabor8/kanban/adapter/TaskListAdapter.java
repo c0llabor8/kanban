@@ -4,22 +4,19 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.model.Task;
-import com.parse.ParseQuery;
 import java.util.ArrayList;
-import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
+public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
   private ArrayList<Task> tasks;
   private Context context;
 
-  public TaskAdapter(Context context, ArrayList<Task> tasks) {
+  public TaskListAdapter(Context context, ArrayList<Task> tasks) {
     this.context = context;
     this.tasks = tasks;
   }
@@ -27,7 +24,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.ViewHolder> {
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(context).inflate(R.layout.task_item, parent, false);
+    View view = LayoutInflater.from(context).inflate(R.layout.list_item_task, parent, false);
     return new ViewHolder(view);
   }
 

@@ -15,12 +15,11 @@ import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
-import com.c0llabor8.kanban.fragment.BasicFragment;
-import com.c0llabor8.kanban.fragment.BottomNavFragment;
-import com.c0llabor8.kanban.fragment.BottomNavFragment.BottomNavSheetListener;
-import com.c0llabor8.kanban.fragment.TaskCreationDialog;
+import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
+import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet.BottomNavSheetListener;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
@@ -30,9 +29,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
   ActivityMainBinding binding;
   Handler handler;
-  BottomNavFragment navFragment;
+  BottomNavigationSheet navFragment;
   ProjectPagerAdapter pagerAdapter;
-  TaskCreationDialog taskCreationDialog;
+  NewTaskDialog newTaskDialog;
   NewProjectDialog newProjectDialog;
   SparseArray<String> projectMenuMap = new SparseArray<>();
 
@@ -58,9 +57,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
     }, 300);
 
     Fragment[] fragments = {
-        TaskListFragment.newInstance(),
-        BasicFragment.newInstance(),
-        BasicFragment.newInstance(),
+        TaskListFragment.newInstance()
     };
 
     // Initialize the pagination of our fragments based off our initial Fragments
@@ -71,16 +68,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
     setSupportActionBar(binding.bar);
 
-    // Create and save a new instance of our BottomNavFragment
-    navFragment = BottomNavFragment.newInstance();
+    // Create and save a new instance of our BottomNavigationSheet
+    navFragment = BottomNavigationSheet.newInstance();
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
-    taskCreationDialog = TaskCreationDialog.newInstance();
+    newTaskDialog = NewTaskDialog.newInstance();
     newProjectDialog = NewProjectDialog.newInstance();
   }
 
   private void openTaskCreationDialog() {
-    taskCreationDialog.show(getSupportFragmentManager(), "");
+    newTaskDialog.show(getSupportFragmentManager(), "");
   }
 
   /*
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-    // Show our BottomNavFragment when the menu icon is clicked
+    // Show our BottomNavigationSheet when the menu icon is clicked
     if (item.getItemId() == android.R.id.home) {
       navFragment.show(getSupportFragmentManager(), "");
       return true;
@@ -107,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
   @Override
   public void onAttachFragment(@NonNull Fragment fragment) {
-    if (fragment instanceof BottomNavFragment) {
-      BottomNavFragment navFragment = (BottomNavFragment) fragment;
+    if (fragment instanceof BottomNavigationSheet) {
+      BottomNavigationSheet navFragment = (BottomNavigationSheet) fragment;
       navFragment.setListener(this);
     }
   }

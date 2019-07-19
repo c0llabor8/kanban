@@ -18,7 +18,7 @@ import com.parse.ParseUser;
 
 public class NewProjectDialog extends AppCompatDialogFragment {
 
-  FragmentNewProjectBinding binding;
+  private FragmentNewProjectBinding binding;
 
   public static NewProjectDialog newInstance() {
 

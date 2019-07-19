@@ -10,20 +10,17 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.adapter.TaskAdapter;
+import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
 import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class TaskListFragment extends Fragment {
 
-  protected TaskAdapter adapter;
+  protected TaskListAdapter adapter;
   protected ArrayList<Task> mTasks = new ArrayList<>();
   FragmentTaskListBinding binding;
 
@@ -60,7 +57,7 @@ public class TaskListFragment extends Fragment {
 
   private void setRecyclerView() {
     // Create the adapter
-    adapter = new TaskAdapter(getContext(), mTasks);
+    adapter = new TaskListAdapter(getContext(), mTasks);
     // Set the adapter on the recycler view
     binding.rvTasks.setAdapter(adapter);
     // Set the layout manager on the recycler view

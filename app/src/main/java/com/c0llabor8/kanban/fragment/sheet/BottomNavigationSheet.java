@@ -1,4 +1,4 @@
-package com.c0llabor8.kanban.fragment;
+package com.c0llabor8.kanban.fragment.sheet;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,19 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.FragmentBottomNavBinding;
+import com.c0llabor8.kanban.databinding.SheetBottomNavBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 
-public class BottomNavFragment extends BottomSheetDialogFragment {
+public class BottomNavigationSheet extends BottomSheetDialogFragment {
 
-  private FragmentBottomNavBinding binding;
+  private SheetBottomNavBinding binding;
   private BottomNavSheetListener listener;
 
-  public static BottomNavFragment newInstance() {
+  public static BottomNavigationSheet newInstance() {
     Bundle args = new Bundle();
 
-    BottomNavFragment fragment = new BottomNavFragment();
+    BottomNavigationSheet fragment = new BottomNavigationSheet();
     fragment.setArguments(args);
     return fragment;
   }
@@ -33,7 +33,7 @@ public class BottomNavFragment extends BottomSheetDialogFragment {
 
     binding = DataBindingUtil.inflate(
         inflater,
-        R.layout.fragment_bottom_nav,
+        R.layout.sheet_bottom_nav,
         container,
         false
     );
