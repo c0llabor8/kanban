@@ -88,6 +88,14 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
       return true;
     }
 
+    if (item.getItemId() == R.id.action_signout) {
+      ParseUser.logOutInBackground(e -> {
+        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+        startActivity(intent);
+        finish();
+      });
+    }
+
     return super.onOptionsItemSelected(item);
   }
 
@@ -147,14 +155,6 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
         newProjectDialog.show(getSupportFragmentManager(), "");
         navFragment.dismiss();
         return true;
-      }
-
-      if (item.getItemId() == R.id.action_signout) {
-        ParseUser.logOutInBackground(e -> {
-          Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-          startActivity(intent);
-          finish();
-        });
       }
 
       return false;
