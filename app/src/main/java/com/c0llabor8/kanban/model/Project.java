@@ -1,5 +1,6 @@
 package com.c0llabor8.kanban.model;
 
+import android.util.Log;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -10,7 +11,7 @@ import java.util.Date;
 import java.util.List;
 
 @ParseClassName("Project")
-public class Project extends ParseObject {
+public class Project<callback> extends ParseObject {
 
   public static final String KEY_NAME = "name";
   public static final String KEY_MEMBERS = "members";
@@ -34,6 +35,23 @@ public class Project extends ParseObject {
       }
 
       callback.done(projects, null);
+    });
+  }
+
+  public void getAllTasks() {
+    Task.Query query = new Task.Query();
+    query.whereProjectEquals(this);
+
+    query.findInBackground((tasks, e) -> {
+      if (e != null) {
+        e.printStackTrace();
+        return;
+      }
+
+      List<Project> task = new ArrayList<>();
+      for (Task projectTasks : tasks) {
+        task.add(projectTasks.getProject());
+      }
     });
   }
 
@@ -78,4 +96,5 @@ public class Project extends ParseObject {
       super(Project.class);
     }
   }
+
 }
