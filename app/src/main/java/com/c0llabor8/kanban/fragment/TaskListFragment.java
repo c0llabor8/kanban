@@ -41,12 +41,13 @@ public class TaskListFragment extends BaseTaskFragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    binding.rvTasks.setAdapter(listAdapter);
     binding.rvTasks.setLayoutManager(new LinearLayoutManager(getContext()));
+    binding.rvTasks.setAdapter(listAdapter);
   }
 
   @Override
   public void onTasksUpdated() {
+    Log.i("TAG", "notified " + taskList.size());
     listAdapter.notifyDataSetChanged();
   }
 }

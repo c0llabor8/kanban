@@ -8,9 +8,9 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ActivityAuthBinding;
-import com.c0llabor8.kanban.fragment.base.BaseAuthFragment;
 import com.c0llabor8.kanban.fragment.auth.LoginFragment;
 import com.c0llabor8.kanban.fragment.auth.SignUpFragment;
+import com.c0llabor8.kanban.fragment.base.BaseAuthFragment;
 import com.parse.ParseUser;
 
 public class AuthActivity extends AppCompatActivity implements

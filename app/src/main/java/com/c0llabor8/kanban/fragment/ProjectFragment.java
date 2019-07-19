@@ -14,10 +14,14 @@ import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectFragment extends Fragment {
 
+  private Project project;
   private FragmentProjectBinding binding;
   private ProjectPagerAdapter pagerAdapter;
   private ArrayList<Task> taskList = new ArrayList<>();
@@ -33,6 +37,13 @@ public class ProjectFragment extends Fragment {
     return fragment;
   }
 
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    project = getArguments().getParcelable("project");
+  }
+
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -43,6 +54,14 @@ public class ProjectFragment extends Fragment {
     // Initialize the pagination with an array of fragments
     pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), new Fragment[]{
         TaskListFragment.newInstance()
+    });
+
+    project.getAllTasks(new FindCallback<Task>() {
+      @Override
+      public void done(List<Task> objects, ParseException e) {
+        taskList.addAll(objects);
+        pagerAdapter.notifyDataSetChanged();
+      }
     });
 
     return binding.getRoot();
