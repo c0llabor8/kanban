@@ -14,11 +14,14 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentNewProjectBinding;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.util.ProjectActivityInterface;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class NewProjectDialog extends AppCompatDialogFragment {
 
   private FragmentNewProjectBinding binding;
+  private ProjectActivityInterface listener;
 
   public static NewProjectDialog newInstance() {
 
@@ -59,37 +62,56 @@ public class NewProjectDialog extends AppCompatDialogFragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+    // Dismiss the dialog when the navigation button is clicked
     binding.toolbar.setNavigationOnClickListener((View v) -> dismiss());
+
     binding.toolbar.inflateMenu(R.menu.menu_dialog_save);
     binding.toolbar.setTitle("Create new project");
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
-      Project project = new Project()
-          .setTitle(binding.etTitle.getText().toString())
-          .setTasks(0)
-          .setMembers(1);
-
-      project.saveInBackground(
-          e -> {
-            if (e != null) {
-              e.printStackTrace();
-              return;
-            }
-
-            Membership membership = new Membership()
-                .setUser(ParseUser.getCurrentUser())
-                .setProject(project);
-
-            membership.saveInBackground(e1 -> {
-              if (e1 != null) {
-                e1.printStackTrace();
-                return;
-              }
-
-              dismiss();
-            });
-          });
+      createProject();
       return true;
+    });
+  }
+
+  // Create the Project Object
+  private void createProject() {
+    Project project = new Project()
+        .setTitle(binding.etTitle.getText().toString())
+        .setTasks(0)
+        .setMembers(1);
+
+    project.saveInBackground((ParseException e) -> {
+      if (e != null) {
+        e.printStackTrace();
+        return;
+      }
+
+      joinProject(project);
+    });
+  }
+
+  // Set the class that will be listening to menu actions
+  public void setListener(ProjectActivityInterface listener) {
+    this.listener = listener;
+  }
+
+
+  // Link the user to the project
+  private void joinProject(Project project) {
+    Membership membership = new Membership()
+        .setUser(ParseUser.getCurrentUser())
+        .setProject(project);
+
+    membership.saveInBackground((ParseException e) -> {
+      if (e != null) {
+        e.printStackTrace();
+        return;
+      }
+
+      listener.loadProjects();
+      dismiss();
     });
   }
 }

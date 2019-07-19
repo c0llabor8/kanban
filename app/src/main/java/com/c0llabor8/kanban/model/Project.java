@@ -1,8 +1,13 @@
 package com.c0llabor8.kanban.model;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ParseClassName("Project")
 public class Project extends ParseObject {
@@ -12,6 +17,25 @@ public class Project extends ParseObject {
   public static final String KEY_TASKS = "tasks";
   public static final String KEY_DEADLINE = "deadline";
 
+  public static void queryUserProjects(FindCallback<Project> callback) {
+    Membership.Query query = new Membership.Query();
+    query.whereUserEquals(ParseUser.getCurrentUser());
+
+    query.findInBackground((memberships, e) -> {
+      if (e != null) {
+        e.printStackTrace();
+        return;
+      }
+
+      List<Project> projects = new ArrayList<>();
+
+      for (Membership membership : memberships) {
+        projects.add(membership.getProject());
+      }
+
+      callback.done(projects, null);
+    });
+  }
 
   public String getName() {
     return getString(KEY_NAME);
@@ -46,5 +70,12 @@ public class Project extends ParseObject {
 
   public void setDeadline(String deadline) {
     put(KEY_DEADLINE, deadline);
+  }
+
+  public static class Query extends ParseQuery<Project> {
+
+    public Query() {
+      super(Project.class);
+    }
   }
 }

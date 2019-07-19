@@ -5,14 +5,21 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import com.c0llabor8.kanban.fragment.TaskListFragment;
+import com.c0llabor8.kanban.model.Project;
 
 public class ProjectPagerAdapter extends FragmentPagerAdapter {
 
   private Fragment[] frags;
 
-  public ProjectPagerAdapter(@NonNull FragmentManager fm, Fragment[] frags) {
+  public ProjectPagerAdapter(@NonNull FragmentManager fm, Project project) {
     super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-    this.frags = frags;
+
+    if (project == null) {
+      frags = new Fragment[]{
+          TaskListFragment.newInstance()
+      };
+    }
   }
 
   @NonNull

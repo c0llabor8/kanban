@@ -1,37 +1,38 @@
 package com.c0llabor8.kanban.adapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
+import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
 import com.c0llabor8.kanban.model.Task;
-import java.util.ArrayList;
+import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
-  private ArrayList<Task> tasks;
-  private Context context;
+  private List<Task> tasks;
 
-  public TaskListAdapter(Context context, ArrayList<Task> tasks) {
-    this.context = context;
+  public TaskListAdapter(List<Task> tasks) {
     this.tasks = tasks;
   }
 
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(context).inflate(R.layout.list_item_task, parent, false);
-    return new ViewHolder(view);
+    LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+    ListItemTaskBinding binding =
+        DataBindingUtil.inflate(inflater, R.layout.list_item_task, parent, false);
+
+    return new ViewHolder(binding);
   }
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     final Task task = tasks.get(position);
-    holder.bind(task);
+    holder.update(task);
   }
 
   @Override
@@ -39,23 +40,19 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     return tasks.size();
   }
 
-  public static class ViewHolder extends RecyclerView.ViewHolder {
+  class ViewHolder extends RecyclerView.ViewHolder {
 
-    private TextView tvTitle;
-    private TextView tvDescription;
-    private TextView tvEstimate;
+    private ListItemTaskBinding binding;
 
-    public ViewHolder(@NonNull View itemView) {
-      super(itemView);
-      tvTitle = itemView.findViewById(R.id.tvTitle);
-      tvDescription = itemView.findViewById(R.id.tvDescription);
-      tvEstimate = itemView.findViewById(R.id.tvEstimate);
+    ViewHolder(ListItemTaskBinding binding) {
+      super(binding.getRoot());
+      this.binding = binding;
     }
 
-    public void bind(Task task) {
-      tvTitle.setText(task.getTitle());
-      tvDescription.setText(task.getDescription());
-      tvEstimate.setText(task.getEstimate());
+    void update(Task task) {
+      binding.tvTitle.setText(task.getTitle());
+      binding.tvDescription.setText(task.getDescription());
+      binding.tvEstimate.setText(task.getEstimate());
     }
 
   }

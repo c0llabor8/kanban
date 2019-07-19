@@ -17,12 +17,13 @@ import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
 import com.parse.ParseUser;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TaskListFragment extends Fragment {
 
-  protected TaskListAdapter adapter;
-  protected ArrayList<Task> mTasks = new ArrayList<>();
-  FragmentTaskListBinding binding;
+  private TaskListAdapter adapter;
+  private List<Task> mTasks = new ArrayList<>();
+  private FragmentTaskListBinding binding;
 
   public static TaskListFragment newInstance() {
 
@@ -57,7 +58,7 @@ public class TaskListFragment extends Fragment {
 
   private void setRecyclerView() {
     // Create the adapter
-    adapter = new TaskListAdapter(getContext(), mTasks);
+    adapter = new TaskListAdapter(mTasks);
     // Set the adapter on the recycler view
     binding.rvTasks.setAdapter(adapter);
     // Set the layout manager on the recycler view
@@ -67,7 +68,6 @@ public class TaskListFragment extends Fragment {
   private void queryAssignments(FindCallback<Assignment> callback) {
     Assignment.Query assignmentQuery = new Assignment.Query();
     assignmentQuery.whereUserEquals(ParseUser.getCurrentUser());
-
     assignmentQuery.findInBackground(callback);
   }
 

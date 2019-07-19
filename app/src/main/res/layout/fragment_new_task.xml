@@ -24,89 +24,78 @@
       android:layout_height="match_parent"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-      <EditText
-        android:id="@+id/etTitle"
-        android:textStyle="bold"
+      <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:hint="Task Title"/>
-
-
-      <EditText
-        android:id="@+id/etDescription"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:hint="Task Description"/>
-
-      <EditText
-        android:id="@+id/etDate"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="180dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:clickable="true"
-        android:editable="false"
-        android:focusable="false"
-        android:hint="mm/dd/yyyy"
-        android:inputType="number"/>
-
-      <TextView
-        android:id="@+id/tvPriority"
-        android:textStyle="bold"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="290dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:text="Priority Level"
-        android:textColor="#202020"
-        android:textSize="18sp"/>
-
-      <RadioGroup
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checkedButton="@+id/rgHigh"
+        android:layout_marginStart="@dimen/activity_default_margin"
+        android:layout_marginEnd="@dimen/activity_default_margin"
         android:orientation="vertical">
 
-        <RadioButton
-          android:id="@+id/rgHigh"
-          android:layout_width="wrap_content"
+        <EditText
+          android:id="@+id/etTitle"
+          android:textStyle="bold"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="330dp"
-          android:layout_marginLeft="16dp"
-          android:buttonTint="#E94347"
-          android:text="High Priority"
-          android:textSize="15dp"/>
+          android:hint="Task Title"/>
 
-        <RadioButton
-          android:id="@+id/rgMedium"
-          android:layout_width="wrap_content"
+        <EditText
+          android:id="@+id/etDescription"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
-          android:layout_marginLeft="16dp"
-          android:buttonTint="#FCA91B"
-          android:text="Medium Priority"
-          android:textSize="15dp"/>
+          android:hint="Task Description"/>
 
-        <RadioButton
-          android:id="@+id/rgLow"
-          android:layout_width="wrap_content"
+        <EditText
+          android:id="@+id/etDate"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginTop="10dp"
-          android:layout_marginLeft="16dp"
-          android:buttonTint="#91C659"
-          android:text="Low Priority"
-          android:textSize="15dp"/>
+          android:clickable="true"
+          android:editable="false"
+          android:focusable="false"
+          android:hint="mm/dd/yyyy"
+          android:inputType="number"/>
 
-      </RadioGroup>
+        <TextView
+          android:id="@+id/tvPriority"
+          android:textStyle="bold"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="Priority Level"
+          android:textColor="#202020"
+          android:textSize="18sp"/>
 
+        <RadioGroup
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:checkedButton="@+id/rgHigh"
+          android:orientation="vertical">
+
+          <RadioButton
+            android:id="@+id/rgHigh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#E94347"
+            android:text="High Priority"
+            android:textSize="15dp"/>
+
+          <RadioButton
+            android:id="@+id/rgMedium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#FCA91B"
+            android:text="Medium Priority"
+            android:textSize="15dp"/>
+
+          <RadioButton
+            android:id="@+id/rgLow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="#91C659"
+            android:text="Low Priority"
+            android:textSize="15dp"/>
+
+        </RadioGroup>
+
+      </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
   </androidx.coordinatorlayout.widget.CoordinatorLayout>

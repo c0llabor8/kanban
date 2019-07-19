@@ -2,7 +2,6 @@ package com.c0llabor8.kanban.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,65 +14,58 @@ import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
-import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
-import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet.BottomNavSheetListener;
+import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.util.ProjectActivityInterface;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
-import com.parse.LogOutCallback;
-import com.parse.ParseException;
 import com.parse.ParseUser;
 
-public class MainActivity extends AppCompatActivity implements BottomNavSheetListener {
+public class MainActivity extends AppCompatActivity implements ProjectActivityInterface {
 
   ActivityMainBinding binding;
-  Handler handler;
-  BottomNavigationSheet navFragment;
   ProjectPagerAdapter pagerAdapter;
+
   NewTaskDialog newTaskDialog;
   NewProjectDialog newProjectDialog;
-  SparseArray<String> projectMenuMap = new SparseArray<>();
+  BottomNavigationSheet navFragment;
+
+  SparseArray<Project> projectMenuMap = new SparseArray<>();
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    handler = new Handler();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-    // Simulate a request for all projects the user is a member
-    String[] projects = {
-        "Demo Project",
-        "Facebook Project",
-        "School Project"
-    };
-
-    // Using a handler to simulate network requests
-    handler.postDelayed(() -> {
-      for (int i = 0; i < projects.length; i++) {
-        projectMenuMap.put(Menu.FIRST + i, projects[i]);
-      }
-    }, 300);
-
-    Fragment[] fragments = {
-        TaskListFragment.newInstance()
-    };
-
     // Initialize the pagination of our fragments based off our initial Fragments
-    pagerAdapter = new ProjectPagerAdapter(getSupportFragmentManager(), fragments);
+    pagerAdapter = new ProjectPagerAdapter(getSupportFragmentManager(), null);
 
     binding.pager.setAdapter(pagerAdapter);
     binding.tabs.setupWithViewPager(binding.pager, true);
 
-    setSupportActionBar(binding.bar);
-
-    // Create and save a new instance of our BottomNavigationSheet
-    navFragment = BottomNavigationSheet.newInstance();
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
-    newTaskDialog = NewTaskDialog.newInstance();
+    navFragment = BottomNavigationSheet.newInstance();
     newProjectDialog = NewProjectDialog.newInstance();
+    newTaskDialog = NewTaskDialog.newInstance();
+
+    setSupportActionBar(binding.bar);
+
+    loadProjects();
+  }
+
+  @Override
+  public void loadProjects() {
+
+    // Query for all projects the current user is a member of and add them
+    Project.queryUserProjects((projects, e) -> {
+      projectMenuMap.clear();
+
+      for (int i = 0; i < projects.size(); i++) {
+        projectMenuMap.put(Menu.FIRST + i, projects.get(i));
+      }
+    });
   }
 
   private void openTaskCreationDialog() {
@@ -82,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
   /*
    * Sets the text for TextView(R.id.bottom_title) within the BottomAppBar
-   *
    * @param title text to display in as the title
    * */
   @Override
@@ -108,6 +99,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
       BottomNavigationSheet navFragment = (BottomNavigationSheet) fragment;
       navFragment.setListener(this);
     }
+
+    if (fragment instanceof NewProjectDialog) {
+      NewProjectDialog projectDialog = (NewProjectDialog) fragment;
+      projectDialog.setListener(this);
+    }
   }
 
   /*
@@ -118,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
   public void populateProjects(SubMenu subMenu) {
     for (int i = 0; i < projectMenuMap.size(); i++) {
       int key = projectMenuMap.keyAt(i);
-      subMenu.add(Menu.NONE, key, key, projectMenuMap.get(key));
+      subMenu.add(Menu.NONE, key, key, projectMenuMap.get(key).getName());
     }
   }
 
@@ -138,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
 
       // if the selected item's id is in our HashSet<int(menuID), String(Project)>
       if (projectMenuMap.indexOfKey(item.getItemId()) > -1) {
-        setTitle(projectMenuMap.get(item.getItemId()));
+        setTitle(projectMenuMap.get(item.getItemId()).getName());
         navFragment.dismiss();
         return true;
       }
@@ -150,13 +146,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
       }
 
       if (item.getItemId() == R.id.action_signout) {
-        ParseUser.logOutInBackground(new LogOutCallback() {
-          @Override
-          public void done(ParseException e) {
-            Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-            startActivity(intent);
-            finish();
-          }
+        ParseUser.logOutInBackground(e -> {
+          Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+          startActivity(intent);
+          finish();
         });
       }
 
