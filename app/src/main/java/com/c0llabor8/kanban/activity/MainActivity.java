@@ -79,15 +79,6 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
     newTaskDialog.show(getSupportFragmentManager(), "");
   }
 
-  /*
-   * Sets the text for TextView(R.id.bottom_title) within the BottomAppBar
-   * @param title text to display in as the title
-   * */
-  @Override
-  public void setTitle(CharSequence title) {
-    binding.bottomTitle.setText(title);
-  }
-
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
