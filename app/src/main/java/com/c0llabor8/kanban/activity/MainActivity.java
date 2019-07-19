@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
+import com.c0llabor8.kanban.fragment.PersonalTaskFragment;
 import com.c0llabor8.kanban.fragment.ProjectFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
     newTaskDialog = NewTaskDialog.newInstance();
 
     setSupportActionBar(binding.bar);
+    showPersonalTask();
 
     loadProjects();
   }
@@ -54,6 +56,14 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
 
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
     transaction.replace(binding.content.getId(), projectFragment);
+    transaction.commit();
+  }
+
+  public void showPersonalTask() {
+    PersonalTaskFragment personalTaskFragment = PersonalTaskFragment.newInstance();
+
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.replace(binding.content.getId(), personalTaskFragment);
     transaction.commit();
   }
 
