@@ -1,8 +1,8 @@
 package com.c0llabor8.kanban;
 
+import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.Parse;
 import com.parse.ParseObject;

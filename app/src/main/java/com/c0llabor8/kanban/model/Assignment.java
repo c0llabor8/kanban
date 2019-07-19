@@ -1,6 +1,5 @@
 package com.c0llabor8.kanban.model;
 
-import com.c0llabor8.kanban.model.Task.Query;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;

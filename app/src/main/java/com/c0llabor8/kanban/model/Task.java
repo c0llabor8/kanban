@@ -14,7 +14,6 @@ public class Task extends ParseObject {
   public static final String KEY_PROJECT = "project";
 
 
-
   public String getTitle() {
     return getString(KEY_TITLE);
   }

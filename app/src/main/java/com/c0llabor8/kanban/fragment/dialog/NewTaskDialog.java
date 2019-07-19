@@ -2,24 +2,24 @@ package com.c0llabor8.kanban.fragment.dialog;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.util.Log;
-import android.widget.RadioButton;
-import com.c0llabor8.kanban.model.Assignment;
-import com.c0llabor8.kanban.model.Task;
-import com.parse.ParseException;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
-import java.text.SimpleDateFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import com.c0llabor8.kanban.R;
+import com.c0llabor8.kanban.model.Assignment;
+import com.c0llabor8.kanban.model.Task;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -73,7 +73,6 @@ public class NewTaskDialog extends DialogFragment {
     super.onCreateView(inflater, container, savedInstanceState);
     View view = inflater.inflate(R.layout.fragment_new_task, container, false);
 
-
     etDate = view.findViewById(R.id.etDate);
     toolbar = view.findViewById(R.id.toolbar);
     etDescription = view.findViewById(R.id.etDescription);
@@ -82,7 +81,6 @@ public class NewTaskDialog extends DialogFragment {
     high = view.findViewById(R.id.rgHigh);
     medium = view.findViewById(R.id.rgMedium);
     low = view.findViewById(R.id.rgLow);
-
 
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
@@ -161,7 +159,6 @@ public class NewTaskDialog extends DialogFragment {
     task.setDescription(taskDescription);
     task.setEstimate(date);
     task.setPriority(priority);
-
 
     task.saveInBackground(new SaveCallback() {
       @Override
