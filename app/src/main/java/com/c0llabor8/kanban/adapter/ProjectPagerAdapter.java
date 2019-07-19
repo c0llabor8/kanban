@@ -7,19 +7,17 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.model.Task;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProjectPagerAdapter extends FragmentPagerAdapter {
 
   private Fragment[] frags;
 
-  public ProjectPagerAdapter(@NonNull FragmentManager fm, Project project) {
+  public ProjectPagerAdapter(@NonNull FragmentManager fm, Fragment[] frags) {
     super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-
-    if (project == null) {
-      frags = new Fragment[]{
-          TaskListFragment.newInstance()
-      };
-    }
+    this.frags = frags;
   }
 
   @NonNull

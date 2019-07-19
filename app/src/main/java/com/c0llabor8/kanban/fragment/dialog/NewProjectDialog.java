@@ -97,7 +97,6 @@ public class NewProjectDialog extends AppCompatDialogFragment {
     this.listener = listener;
   }
 
-
   // Link the user to the project
   private void joinProject(Project project) {
     Membership membership = new Membership()

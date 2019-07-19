@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentLoginBinding;
+import com.c0llabor8.kanban.fragment.base.BaseAuthFragment;
 
 public class LoginFragment extends BaseAuthFragment {
 
@@ -45,14 +46,14 @@ public class LoginFragment extends BaseAuthFragment {
   }
 
   @Override
-  void postAuthFailure(String msg) {
+  public void postAuthFailure(String msg) {
     binding.authButton.setEnabled(true);
     binding.authMessage.setText(msg);
     binding.authMessage.setVisibility(View.VISIBLE);
   }
 
   @Override
-  void postAuthSuccess() {
+  public void postAuthSuccess() {
     binding.authButton.setEnabled(true);
     binding.authMessage.setVisibility(View.GONE);
   }
