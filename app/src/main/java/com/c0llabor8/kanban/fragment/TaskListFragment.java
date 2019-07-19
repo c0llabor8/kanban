@@ -1,32 +1,25 @@
 package com.c0llabor8.kanban.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
-import com.c0llabor8.kanban.model.Assignment;
-import com.c0llabor8.kanban.model.Task;
-import com.parse.FindCallback;
-import com.parse.ParseUser;
-import java.util.ArrayList;
-import java.util.List;
+import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 
-public class TaskListFragment extends Fragment {
+public class TaskListFragment extends BaseTaskFragment {
 
-  private TaskListAdapter adapter;
-  private List<Task> mTasks = new ArrayList<>();
+  private TaskListAdapter listAdapter;
   private FragmentTaskListBinding binding;
 
   public static TaskListFragment newInstance() {
-
     Bundle args = new Bundle();
 
     args.putString("title", "Tasks");
@@ -40,40 +33,20 @@ public class TaskListFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+
+    listAdapter = new TaskListAdapter(taskList);
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
     return binding.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    // Create the data source
-
-    queryAssignments((objects, e) -> {
-      for (Assignment assignment : objects) {
-        mTasks.add(assignment.getTask());
-        setRecyclerView();
-      }
-    });
-  }
-
-  private void setRecyclerView() {
-    // Create the adapter
-    adapter = new TaskListAdapter(mTasks);
-    // Set the adapter on the recycler view
-    binding.rvTasks.setAdapter(adapter);
-    // Set the layout manager on the recycler view
+    binding.rvTasks.setAdapter(listAdapter);
     binding.rvTasks.setLayoutManager(new LinearLayoutManager(getContext()));
   }
 
-  private void queryAssignments(FindCallback<Assignment> callback) {
-    Assignment.Query assignmentQuery = new Assignment.Query();
-    assignmentQuery.whereUserEquals(ParseUser.getCurrentUser());
-    assignmentQuery.findInBackground(callback);
+  @Override
+  public void onTasksUpdated() {
+    listAdapter.notifyDataSetChanged();
   }
-
-  private void queryTask() {
-    Task.Query tasksQuery = new Task.Query();
-    tasksQuery.sortAscending();
-  }
-
 }

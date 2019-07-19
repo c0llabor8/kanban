@@ -11,9 +11,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
+import com.c0llabor8.kanban.fragment.ProjectFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
@@ -25,7 +26,6 @@ import com.parse.ParseUser;
 public class MainActivity extends AppCompatActivity implements ProjectActivityInterface {
 
   ActivityMainBinding binding;
-  ProjectPagerAdapter pagerAdapter;
 
   NewTaskDialog newTaskDialog;
   NewProjectDialog newProjectDialog;
@@ -38,12 +38,6 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
     super.onCreate(savedInstanceState);
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-    // Initialize the pagination of our fragments based off our initial Fragments
-    pagerAdapter = new ProjectPagerAdapter(getSupportFragmentManager(), null);
-
-    binding.pager.setAdapter(pagerAdapter);
-    binding.tabs.setupWithViewPager(binding.pager, true);
-
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
     navFragment = BottomNavigationSheet.newInstance();
@@ -53,6 +47,14 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
     setSupportActionBar(binding.bar);
 
     loadProjects();
+  }
+
+  public void switchProjectScope(Project project) {
+    ProjectFragment projectFragment = ProjectFragment.newInstance(project);
+
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.replace(binding.content.getId(), projectFragment);
+    transaction.commit();
   }
 
   /*
@@ -146,7 +148,10 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
 
       // if the selected item's id is in our HashSet<int(menuID), String(Project)>
       if (projectMenuMap.indexOfKey(item.getItemId()) > -1) {
-        setTitle(projectMenuMap.get(item.getItemId()).getName());
+        Project project = projectMenuMap.get(item.getItemId());
+
+        setTitle(project.getName());
+        switchProjectScope(project);
         navFragment.dismiss();
         return true;
       }
