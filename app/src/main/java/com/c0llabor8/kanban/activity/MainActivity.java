@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
         return;
       }
 
+      projectMenuMap.clear();
+
       for (int i = 0; i < projects.size(); i++) {
         projectMenuMap.put(Menu.FIRST + i, projects.get(i));
       }
