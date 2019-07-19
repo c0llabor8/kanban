@@ -8,20 +8,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
+import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
+import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
+import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
+import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import java.util.ArrayList;
 
 public class PersonalTaskFragment extends Fragment {
 
-  private ArrayList<Task> personalTask = new ArrayList<>();
-  private FragmentTaskListBinding binding;
+  private FragmentProjectBinding binding;
+  private ProjectPagerAdapter pagerAdapter;
+  private ArrayList<Task> taskList = new ArrayList<>();
 
   public static PersonalTaskFragment newInstance() {
+
     Bundle args = new Bundle();
-    args.putString("title", "Personal Tasks");
 
     PersonalTaskFragment fragment = new PersonalTaskFragment();
     fragment.setArguments(args);
@@ -32,12 +35,28 @@ public class PersonalTaskFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
+
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
+
+    // Initialize the pagination with an array of fragments
+    pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), new Fragment[]{
+        TaskListFragment.newInstance()
+    });
+
     return binding.getRoot();
   }
 
   @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+  public void onAttachFragment(@NonNull Fragment childFragment) {
+    if (childFragment instanceof BaseTaskFragment) {
+      BaseTaskFragment fragment = (BaseTaskFragment) childFragment;
+      fragment.setTasks(taskList);
+    }
+  }
 
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    binding.pager.setAdapter(pagerAdapter);
+    binding.tabs.setupWithViewPager(binding.pager, true);
   }
 }
