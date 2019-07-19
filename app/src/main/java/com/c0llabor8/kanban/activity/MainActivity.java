@@ -18,6 +18,7 @@ import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.util.ProjectActivityInterface;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 import com.parse.ParseUser;
@@ -67,13 +68,12 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
         return;
       }
 
-      projectMenuMap.clear();
-
       for (int i = 0; i < projects.size(); i++) {
         projectMenuMap.put(Menu.FIRST + i, projects.get(i));
       }
     });
   }
+
 
   private void openTaskCreationDialog() {
     newTaskDialog.show(getSupportFragmentManager(), "");

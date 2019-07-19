@@ -1,8 +1,12 @@
 package com.c0llabor8.kanban.model;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import java.util.ArrayList;
+import java.util.List;
 
 @ParseClassName("Task")
 public class Task extends ParseObject {
@@ -46,8 +50,8 @@ public class Task extends ParseObject {
     put(KEY_PRIORITY, priority);
   }
 
-  public ParseObject getProject() {
-    return getParseObject(KEY_PROJECT);
+  public Project getProject() {
+    return (Project) getParseObject(KEY_PROJECT);
   }
 
   public void setProject(ParseObject project) {
@@ -64,6 +68,30 @@ public class Task extends ParseObject {
       addAscendingOrder(KEY_ESTIMATE);
       return this;
     }
+
+    public Query whereProjectEquals(Project project) {
+      whereEqualTo(KEY_PROJECT, project);
+      return this;
+    }
+  }
+
+  public static void queryUserTasks(FindCallback<Task> callback) {
+    Assignment.Query query = new Assignment.Query();
+    query.whereUserEquals(ParseUser.getCurrentUser());
+
+    query.findInBackground((assignments, e) -> {
+      if (e != null) {
+        callback.done(null, e);
+        return;
+      }
+
+      List<Task> tasks = new ArrayList<>();
+
+      for (Assignment assignment : assignments) {
+        tasks.add(assignment.getTask());
+      }
+      callback.done(tasks, null);
+    });
   }
 
 }
