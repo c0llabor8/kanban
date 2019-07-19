@@ -17,6 +17,26 @@ public class Project extends ParseObject {
   public static final String KEY_TASKS = "tasks";
   public static final String KEY_DEADLINE = "deadline";
 
+  public static void queryUserProjects(FindCallback<Project> callback) {
+    Membership.Query query = new Membership.Query();
+    query.whereUserEquals(ParseUser.getCurrentUser());
+
+    query.findInBackground((memberships, e) -> {
+      if (e != null) {
+        callback.done(null, e);
+        return;
+      }
+
+      List<Project> projects = new ArrayList<>();
+
+      for (Membership membership : memberships) {
+        projects.add(membership.getProject());
+      }
+
+      callback.done(projects, null);
+    });
+  }
+
   public String getName() {
     return getString(KEY_NAME);
   }
@@ -50,26 +70,6 @@ public class Project extends ParseObject {
 
   public void setDeadline(String deadline) {
     put(KEY_DEADLINE, deadline);
-  }
-
-  public static void queryUserProjects(FindCallback<Project> callback) {
-    Membership.Query query = new Membership.Query();
-    query.whereUserEquals(ParseUser.getCurrentUser());
-
-    query.findInBackground((memberships, e) -> {
-      if (e != null) {
-        callback.done(null, e);
-        return;
-      }
-
-      List<Project> projects = new ArrayList<>();
-
-      for (Membership membership : memberships) {
-        projects.add(membership.getProject());
-      }
-
-      callback.done(projects, null);
-    });
   }
 
   public static class Query extends ParseQuery<Project> {
