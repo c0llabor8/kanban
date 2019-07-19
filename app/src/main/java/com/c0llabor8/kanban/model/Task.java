@@ -17,6 +17,24 @@ public class Task extends ParseObject {
   public static final String KEY_PRIORITY = "priority";
   public static final String KEY_PROJECT = "project";
 
+  public static void queryUserTasks(FindCallback<Task> callback) {
+    Assignment.Query query = new Assignment.Query();
+    query.whereUserEquals(ParseUser.getCurrentUser());
+
+    query.findInBackground((assignments, e) -> {
+      if (e != null) {
+        callback.done(null, e);
+        return;
+      }
+
+      List<Task> tasks = new ArrayList<>();
+
+      for (Assignment assignment : assignments) {
+        tasks.add(assignment.getTask());
+      }
+      callback.done(tasks, null);
+    });
+  }
 
   public String getTitle() {
     return getString(KEY_TITLE);
@@ -62,6 +80,9 @@ public class Task extends ParseObject {
 
     public Query() {
       super(Task.class);
+      include(KEY_DESCRIPTION);
+      include(KEY_TITLE);
+      include(KEY_PROJECT);
     }
 
     public Query sortAscending() {
@@ -73,25 +94,6 @@ public class Task extends ParseObject {
       whereEqualTo(KEY_PROJECT, project);
       return this;
     }
-  }
-
-  public static void queryUserTasks(FindCallback<Task> callback) {
-    Assignment.Query query = new Assignment.Query();
-    query.whereUserEquals(ParseUser.getCurrentUser());
-
-    query.findInBackground((assignments, e) -> {
-      if (e != null) {
-        callback.done(null, e);
-        return;
-      }
-
-      List<Task> tasks = new ArrayList<>();
-
-      for (Assignment assignment : assignments) {
-        tasks.add(assignment.getTask());
-      }
-      callback.done(tasks, null);
-    });
   }
 
 }

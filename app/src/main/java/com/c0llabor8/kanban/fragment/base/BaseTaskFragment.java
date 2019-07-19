@@ -5,6 +5,7 @@ import com.c0llabor8.kanban.model.Task;
 import java.util.List;
 
 public abstract class BaseTaskFragment extends Fragment {
+
   protected List<Task> taskList;
 
   public void setTasks(List<Task> tasks) {

@@ -5,11 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.c0llabor8.kanban.fragment.TaskListFragment;
-import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.model.Task;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProjectPagerAdapter extends FragmentPagerAdapter {
 

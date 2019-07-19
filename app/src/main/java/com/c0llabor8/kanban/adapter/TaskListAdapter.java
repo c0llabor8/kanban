@@ -3,9 +3,7 @@ package com.c0llabor8.kanban.adapter;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
-import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
 import com.c0llabor8.kanban.model.Task;
 import java.util.List;
@@ -24,7 +22,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
     ListItemTaskBinding binding =
-        DataBindingUtil.inflate(inflater, R.layout.list_item_task, parent, false);
+        ListItemTaskBinding.inflate(inflater, parent, false);
 
     return new ViewHolder(binding);
   }

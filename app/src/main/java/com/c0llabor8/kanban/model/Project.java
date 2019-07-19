@@ -1,6 +1,5 @@
 package com.c0llabor8.kanban.model;
 
-import android.util.Log;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
@@ -38,21 +37,9 @@ public class Project<callback> extends ParseObject {
     });
   }
 
-  public void getAllTasks() {
-    Task.Query query = new Task.Query();
-    query.whereProjectEquals(this);
-
-    query.findInBackground((tasks, e) -> {
-      if (e != null) {
-        e.printStackTrace();
-        return;
-      }
-
-      List<Project> task = new ArrayList<>();
-      for (Task projectTasks : tasks) {
-        task.add(projectTasks.getProject());
-      }
-    });
+  public void getAllTasks(FindCallback<Task> callback) {
+    (new Task.Query()).whereProjectEquals(this)
+        .findInBackground(callback);
   }
 
   public String getName() {
