@@ -1,4 +1,4 @@
-package com.c0llabor8.kanban.fragment;
+package com.c0llabor8.kanban.fragment.auth;
 
 import androidx.fragment.app.Fragment;
 import com.parse.ParseException;

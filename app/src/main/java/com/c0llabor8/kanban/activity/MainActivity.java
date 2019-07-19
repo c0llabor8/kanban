@@ -55,11 +55,18 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
     loadProjects();
   }
 
+  /*
+   * Query for all projects the current user is a member of and add them
+   * */
   @Override
   public void loadProjects() {
 
-    // Query for all projects the current user is a member of and add them
     Project.queryUserProjects((projects, e) -> {
+      if (e != null) {
+        e.printStackTrace();
+        return;
+      }
+
       projectMenuMap.clear();
 
       for (int i = 0; i < projects.size(); i++) {

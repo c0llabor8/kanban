@@ -9,6 +9,7 @@
     <androidx.core.widget.NestedScrollView
       android:layout_width="0dp"
       android:layout_height="0dp"
+      android:overScrollMode="never"
       android:padding="@dimen/activity_default_margin"
       app:layout_constraintBottom_toTopOf="@id/login_card"
       app:layout_constraintEnd_toEndOf="parent"

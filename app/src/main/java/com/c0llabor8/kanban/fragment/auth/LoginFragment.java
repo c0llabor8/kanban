@@ -1,4 +1,4 @@
-package com.c0llabor8.kanban.fragment;
+package com.c0llabor8.kanban.fragment.auth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
