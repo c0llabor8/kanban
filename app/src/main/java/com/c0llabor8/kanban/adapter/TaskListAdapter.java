@@ -50,7 +50,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     void update(Task task) {
       binding.tvTitle.setText(task.getTitle());
       binding.tvDescription.setText(task.getDescription());
-      binding.tvEstimate.setText(task.getEstimate());
+      binding.tvEstimate.setText(Long.toString(task.getEstimate()));
     }
 
   }

@@ -52,8 +52,8 @@ public class Task extends ParseObject {
     put(KEY_DESCRIPTION, description);
   }
 
-  public String getEstimate() {
-    return getString(KEY_ESTIMATE);
+  public long getEstimate() {
+    return getLong(KEY_ESTIMATE);
   }
 
   public void setEstimate(long estimate) {
