@@ -22,16 +22,9 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
       android:layout_gravity="bottom"
-      app:fabAlignmentMode="end"
+      app:fabAlignmentMode="center"
       app:fabCradleMargin="0dp"
-      app:navigationIcon="@drawable/ic_menu_24dp">
-
-      <TextView
-        android:id="@+id/bottom_title"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"/>
-    </com.google.android.material.bottomappbar.BottomAppBar>
+      app:navigationIcon="@drawable/ic_menu_24dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
       android:id="@+id/fab"

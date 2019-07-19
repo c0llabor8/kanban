@@ -42,7 +42,7 @@ public class BottomNavigationSheet extends BottomSheetDialogFragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    binding.navigationView.inflateMenu(R.menu.menu_main);
+    binding.navigationView.inflateMenu(R.menu.menu_project_main);
 
     // Once the view is created, pass the project menu to be populated by the listening class
     listener.populateProjects(

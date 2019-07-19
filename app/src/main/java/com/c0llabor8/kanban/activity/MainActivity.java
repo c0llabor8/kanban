@@ -101,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements ProjectActivityIn
   }
 
   @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+  }
+
+  @Override
   public void onAttachFragment(@NonNull Fragment fragment) {
     if (fragment instanceof BottomNavigationSheet) {
       BottomNavigationSheet navFragment = (BottomNavigationSheet) fragment;
