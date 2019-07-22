@@ -7,7 +7,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
-import com.c0llabor8.kanban.model.Project;
 
 public class ProjectPagerAdapter extends FragmentPagerAdapter {
 
@@ -16,10 +15,10 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
   public ProjectPagerAdapter(@NonNull FragmentManager fm, Bundle taskBundle) {
     super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-    TaskListFragment taskListFragment = TaskListFragment.newInstance();
-    taskListFragment.getArguments().putAll(taskBundle);
+    TaskListFragment taskListFragment =
+        TaskListFragment.newInstance(taskBundle);
 
-    fragments = new Fragment[] {
+    fragments = new Fragment[]{
         taskListFragment
     };
   }

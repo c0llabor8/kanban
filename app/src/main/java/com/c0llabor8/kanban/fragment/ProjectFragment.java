@@ -56,7 +56,6 @@ public class ProjectFragment extends Fragment {
         Bundle taskBundle = new Bundle();
         taskBundle.putParcelableArrayList("tasks", new ArrayList<>(tasks));
 
-        // Initialize the pagination with an array of fragments
         pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
         binding.pager.setAdapter(pagerAdapter);
         binding.tabs.setupWithViewPager(binding.pager, true);

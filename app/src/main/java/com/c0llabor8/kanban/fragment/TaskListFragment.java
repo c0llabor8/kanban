@@ -20,8 +20,10 @@ public class TaskListFragment extends BaseTaskFragment {
   private FragmentTaskListBinding binding;
 
   public static TaskListFragment newInstance() {
-    Bundle args = new Bundle();
+    return newInstance(new Bundle());
+  }
 
+  public static TaskListFragment newInstance(Bundle args) {
     args.putString("title", "Tasks");
 
     TaskListFragment fragment = new TaskListFragment();
