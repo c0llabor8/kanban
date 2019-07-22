@@ -11,10 +11,11 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
+import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
-public class ProgressFragment extends Fragment {
+public class ProgressFragment extends BaseTaskFragment {
 
   private FragmentProjectBinding binding;
   private Project project;
@@ -26,12 +27,12 @@ public class ProgressFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_progress, container, false);
-
-    // Do I need an adapter?
+    return binding.getRoot();
+    // Do I need an adapter? yes
     // get the total # of tasks from a given project
     // count the # of tasks I got done vs the ones that are left in a given project
 
-    return binding.getRoot();
+
   }
 
   public void setAllTasks(FindCallback<Task> callback) {
