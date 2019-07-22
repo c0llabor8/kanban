@@ -14,8 +14,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
-import com.c0llabor8.kanban.fragment.PersonalTaskFragment;
 import com.c0llabor8.kanban.fragment.ProjectFragment;
+import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog.ProjectCreatedListener;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       // If the selected item is the user's personal tasks
       if (item.getItemId() == R.id.my_tasks) {
         setTitle(item.getTitle());
+        switchProjectScope(null);
         navFragment.dismiss();
         return true;
       }
@@ -81,24 +82,17 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     newTaskDialog = NewTaskDialog.newInstance();
 
     setSupportActionBar(binding.bar);
-    showPersonalTask();
+    switchProjectScope(null);
 
     loadProjects();
   }
 
   public void switchProjectScope(Project project) {
-    ProjectFragment projectFragment = ProjectFragment.newInstance(project);
+    Fragment fragment = (project == null) ? TaskListFragment.newInstance() :
+        ProjectFragment.newInstance(project);
 
     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-    transaction.replace(binding.content.getId(), projectFragment);
-    transaction.commit();
-  }
-
-  public void showPersonalTask() {
-    PersonalTaskFragment personalTaskFragment = PersonalTaskFragment.newInstance();
-
-    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-    transaction.replace(binding.content.getId(), personalTaskFragment);
+    transaction.replace(binding.content.getId(), fragment);
     transaction.commit();
   }
 
