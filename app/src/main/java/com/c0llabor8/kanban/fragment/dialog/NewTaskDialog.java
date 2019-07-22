@@ -21,6 +21,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 public class NewTaskDialog extends DialogFragment {
@@ -33,7 +34,7 @@ public class NewTaskDialog extends DialogFragment {
   private Toolbar toolbar;
   private EditText etDescription;
   private EditText etTitle;
-  private Long estimate;
+  public Long estimate;
   private int priorityValue;
   private RadioButton high;
   private RadioButton medium;
@@ -77,7 +78,6 @@ public class NewTaskDialog extends DialogFragment {
     toolbar = view.findViewById(R.id.toolbar);
     etDescription = view.findViewById(R.id.etDescription);
     etTitle = view.findViewById(R.id.etTitle);
-    estimate = calendar.getTimeInMillis();
     high = view.findViewById(R.id.rgHigh);
     medium = view.findViewById(R.id.rgMedium);
     low = view.findViewById(R.id.rgLow);
@@ -90,6 +90,13 @@ public class NewTaskDialog extends DialogFragment {
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, monthOfYear);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        estimate = calendar.getTimeInMillis();
+        Log.e("date", estimate.toString());
         updateLabel();
       }
 
@@ -151,7 +158,7 @@ public class NewTaskDialog extends DialogFragment {
     etDate.setText(sdf.format(calendar.getTime()));
   }
 
-  private void createTask(String taskTitle, String taskDescription, long date, int priority) {
+  private void createTask(String taskTitle, String taskDescription, Long date, int priority) {
     Assignment assignment = new Assignment();
     assignment.setUser(ParseUser.getCurrentUser());
     Task task = new Task();
