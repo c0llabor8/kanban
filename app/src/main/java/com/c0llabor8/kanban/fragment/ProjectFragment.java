@@ -58,15 +58,11 @@ public class ProjectFragment extends Fragment {
 
         // Initialize the pagination with an array of fragments
         pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
+        binding.pager.setAdapter(pagerAdapter);
+        binding.tabs.setupWithViewPager(binding.pager, true);
       }
     });
 
     return binding.getRoot();
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    binding.pager.setAdapter(pagerAdapter);
-    binding.tabs.setupWithViewPager(binding.pager, true);
   }
 }

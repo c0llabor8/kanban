@@ -16,8 +16,8 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
   public ProjectPagerAdapter(@NonNull FragmentManager fm, Bundle taskBundle) {
     super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-    TaskListFragment taskListFragment = new TaskListFragment();
-    taskListFragment.setArguments(taskBundle);
+    TaskListFragment taskListFragment = TaskListFragment.newInstance();
+    taskListFragment.getArguments().putAll(taskBundle);
 
     fragments = new Fragment[] {
         taskListFragment
