@@ -24,7 +24,6 @@ public class ProjectFragment extends Fragment {
   private Project project;
   private FragmentProjectBinding binding;
   private ProjectPagerAdapter pagerAdapter;
-  private ArrayList<Task> taskList = new ArrayList<>();
 
   public static ProjectFragment newInstance(Project project) {
 
@@ -51,28 +50,18 @@ public class ProjectFragment extends Fragment {
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
 
-    // Initialize the pagination with an array of fragments
-    pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), new Fragment[]{
-        TaskListFragment.newInstance()
-    });
-
     project.getAllTasks(new FindCallback<Task>() {
       @Override
-      public void done(List<Task> objects, ParseException e) {
-        taskList.addAll(objects);
-        pagerAdapter.notifyDataSetChanged();
+      public void done(List<Task> tasks, ParseException e) {
+        Bundle taskBundle = new Bundle();
+        taskBundle.putParcelableArrayList("tasks", new ArrayList<>(tasks));
+
+        // Initialize the pagination with an array of fragments
+        pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
       }
     });
 
     return binding.getRoot();
-  }
-
-  @Override
-  public void onAttachFragment(@NonNull Fragment childFragment) {
-    if (childFragment instanceof BaseTaskFragment) {
-      BaseTaskFragment fragment = (BaseTaskFragment) childFragment;
-      fragment.setTasks(taskList);
-    }
   }
 
   @Override

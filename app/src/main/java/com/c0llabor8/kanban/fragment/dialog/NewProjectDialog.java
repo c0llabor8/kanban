@@ -14,14 +14,13 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentNewProjectBinding;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.util.ProjectActivityInterface;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class NewProjectDialog extends AppCompatDialogFragment {
 
   private FragmentNewProjectBinding binding;
-  private ProjectActivityInterface listener;
+  private ProjectCreatedListener listener;
 
   public static NewProjectDialog newInstance() {
 
@@ -92,8 +91,8 @@ public class NewProjectDialog extends AppCompatDialogFragment {
     });
   }
 
-  // Set the class that will be listening to menu actions
-  public void setListener(ProjectActivityInterface listener) {
+  // Set the class that will be listening for when a project is created
+  public void setProjectCreatedListener(ProjectCreatedListener listener) {
     this.listener = listener;
   }
 
@@ -109,8 +108,12 @@ public class NewProjectDialog extends AppCompatDialogFragment {
         return;
       }
 
-      listener.loadProjects();
+      listener.onProjectCreated(project);
       dismiss();
     });
+  }
+
+  public interface ProjectCreatedListener {
+    void onProjectCreated(Project project);
   }
 }
