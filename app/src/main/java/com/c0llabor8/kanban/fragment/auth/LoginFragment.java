@@ -22,6 +22,9 @@ public class LoginFragment extends BaseAuthFragment {
     loginUser(username, password);
   };
 
+  /*
+   *  Constructs a new Bundle to pass into a new fragment and returns that same fragment
+   */
   public static LoginFragment newInstance() {
     Bundle args = new Bundle();
 
@@ -30,6 +33,9 @@ public class LoginFragment extends BaseAuthFragment {
     return fragment;
   }
 
+  /*
+   * Inflates the view into the fragment and returns the root
+   */
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -39,12 +45,16 @@ public class LoginFragment extends BaseAuthFragment {
     return binding.getRoot();
   }
 
+
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     binding.signupCard.setOnClickListener((View v) -> listener.toSignUp());
     binding.authButton.setOnClickListener(loginOnClick);
   }
 
+  /*
+   * Shows message for the user when login fails
+   */
   @Override
   public void postAuthFailure(String msg) {
     binding.authButton.setEnabled(true);
@@ -52,12 +62,18 @@ public class LoginFragment extends BaseAuthFragment {
     binding.authMessage.setVisibility(View.VISIBLE);
   }
 
+  /*
+   * Enables the login buttontriihrvnnkbdnignbthflnjiuekjfnkk
+   */
   @Override
   public void postAuthSuccess() {
     binding.authButton.setEnabled(true);
     binding.authMessage.setVisibility(View.GONE);
   }
 
+ /*
+  * Clears the authentication message and disables the login button
+  */
   @Override
   public void preAuthAction() {
     binding.authMessage.setText("");
