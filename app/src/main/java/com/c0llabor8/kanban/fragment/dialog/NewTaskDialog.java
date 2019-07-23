@@ -11,10 +11,15 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.model.Assignment;
+import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -28,6 +33,7 @@ public class NewTaskDialog extends DialogFragment {
 
   public static final String TAG = "task_creation";
   final Calendar calendar = Calendar.getInstance();
+  Project project;
 
 
   private EditText etDate;
@@ -53,6 +59,12 @@ public class NewTaskDialog extends DialogFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppTheme);
+  }
+
+  public void show(@NonNull FragmentManager manager, Project project) {
+    this.project = project;
+
+    super.show(manager, "");
   }
 
   @Override
@@ -167,18 +179,15 @@ public class NewTaskDialog extends DialogFragment {
     task.setEstimate(date);
     task.setPriority(priority);
 
-    task.saveInBackground(new SaveCallback() {
-      @Override
-      public void done(ParseException e) {
-        if (e != null) {
-          Log.d("TaskCreationActivity", "Error while saving task");
-          e.printStackTrace();
-          return;
-        }
-        Log.d("TaskCreationActivity", "Task saved successfully!");
-        assignment.setTask(task);
-        saveTask(assignment);
+    task.saveInBackground(e -> {
+      if (e != null) {
+        Log.d("TaskCreationActivity", "Error while saving task");
+        e.printStackTrace();
+        return;
       }
+      Log.d("TaskCreationActivity", "Task saved successfully!");
+      assignment.setTask(task);
+      saveTask(assignment);
     });
   }
 

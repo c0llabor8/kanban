@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   NewTaskDialog newTaskDialog;
   NewProjectDialog newProjectDialog;
   BottomNavigationSheet navFragment;
+  Project currentProject;
   ProjectBottomActionSheet navActionFragment;
   // SparseArray maps integers and Objects, more memory efficient than HashMap
   SparseArray<Project> projectMenuMap = new SparseArray<>();
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
    * switches fragment from personal task to that project fragment
    */
   public void switchProjectScope(Project project) {
+    currentProject = project;
+
     Fragment fragment = (project == null) ? TaskListFragment.newInstance() :
         ProjectFragment.newInstance(project);
 
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
   //opens a new dialog for task creation
   private void openTaskCreationDialog() {
-    newTaskDialog.show(getSupportFragmentManager(), "");
+    newTaskDialog.show(getSupportFragmentManager(), currentProject);
   }
 
   @Override
@@ -80,7 +83,8 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     }
 
     if (item.getItemId() == R.id.action_more) {
-
+      navActionFragment.show(getSupportFragmentManager(), currentProject);
+      return true;
     }
 
     return super.onOptionsItemSelected(item);

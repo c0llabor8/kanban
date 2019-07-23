@@ -7,11 +7,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.FragmentManager;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.SheetBottomNavBinding;
+import com.c0llabor8.kanban.model.Project;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
+  private Project project;
   private SheetBottomNavBinding binding;
   private ProjectSheetListener listener;
 
@@ -35,7 +38,16 @@ public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
         false
     );
 
+    // Have the view hide the header layout
+    binding.setHeader(false);
+
     return binding.getRoot();
+  }
+
+  public void show(@NonNull FragmentManager manager, Project project) {
+    this.project = project;
+
+    super.show(manager, "");
   }
 
   @Override
@@ -45,6 +57,11 @@ public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
     // Listen for navigation item clicks using the listener from the listening class
     binding.navigationView.setNavigationItemSelectedListener(
         item -> listener.onProjectItemSelected(item));
+
+    if (project == null) {
+      binding.navigationView.getMenu().findItem(R.id.action_rename_project).setEnabled(false);
+      binding.navigationView.getMenu().findItem(R.id.action_leave_project).setEnabled(false);
+    }
   }
 
   // Set the class that will be listening to this menu
