@@ -15,11 +15,19 @@ import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
+
 public class ProgressFragment extends BaseTaskFragment {
 
   private FragmentProjectBinding binding;
   private Project project;
   private ProjectPagerAdapter pagerAdapter;
+
+
+  //TODO: Create an instance
+  public static ProgressFragment newInstance() {
+
+    return newInstance();
+  }
 
   @Nullable
   @Override
@@ -30,14 +38,13 @@ public class ProgressFragment extends BaseTaskFragment {
     return binding.getRoot();
     // Do I need an adapter? yes
     // get the total # of tasks from a given project
+
     // count the # of tasks I got done vs the ones that are left in a given project
-
-
   }
 
-  public void setAllTasks(FindCallback<Task> callback) {
+
     // Get the new value from project
-    project.getAllTasks(callback);
+    //project.getAllTasks(callback);
   }
 
   public void setTasksDone() {
