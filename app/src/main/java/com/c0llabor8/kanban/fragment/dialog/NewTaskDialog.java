@@ -12,11 +12,9 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Project;
@@ -26,21 +24,18 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class NewTaskDialog extends DialogFragment {
 
   public static final String TAG = "task_creation";
   final Calendar calendar = Calendar.getInstance();
-  Project project;
-
-
+  public Long estimate;
+  private Project project;
   private EditText etDate;
   private Toolbar toolbar;
   private EditText etDescription;
   private EditText etTitle;
-  public Long estimate;
   private int priorityValue;
   private RadioButton high;
   private RadioButton medium;
@@ -179,6 +174,10 @@ public class NewTaskDialog extends DialogFragment {
     task.setEstimate(date);
     task.setPriority(priority);
 
+    if (project != null) {
+      task.setProject(project);
+    }
+
     task.saveInBackground(e -> {
       if (e != null) {
         Log.d("TaskCreationActivity", "Error while saving task");
@@ -203,5 +202,10 @@ public class NewTaskDialog extends DialogFragment {
         Log.d("TaskCreationActivity", "Task saved successfully!");
       }
     });
+  }
+
+  public interface TaskCreatedListener {
+
+    void onTaskCreated(Project project);
   }
 }
