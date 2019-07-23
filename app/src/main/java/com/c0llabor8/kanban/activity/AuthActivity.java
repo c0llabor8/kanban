@@ -13,6 +13,10 @@ import com.c0llabor8.kanban.fragment.auth.SignUpFragment;
 import com.c0llabor8.kanban.fragment.base.BaseAuthFragment;
 import com.parse.ParseUser;
 
+/*
+* This class is the host activity for the sign up and login fragments
+* */
+
 public class AuthActivity extends AppCompatActivity implements
     BaseAuthFragment.AuthenticationFragmentListener {
 
@@ -31,12 +35,18 @@ public class AuthActivity extends AppCompatActivity implements
       startMainAndFinish();
     }
 
+    // Create new instances of the login and signup fragments
     loginFragment = LoginFragment.newInstance();
     signUpFragment = SignUpFragment.newInstance();
 
+    // Start by displaying the login form fragment
     setFragment(loginFragment);
   }
 
+  /*
+   * This method is used to switch the active fragment within the activity
+   * @param fragment The fragment we are switching to
+   * */
   private void setFragment(BaseAuthFragment fragment) {
 
     getSupportFragmentManager()
@@ -54,6 +64,9 @@ public class AuthActivity extends AppCompatActivity implements
     finish();
   }
 
+  /*
+   * Have this class listen to the currently attached BaseAuthFragment
+   * */
   @Override
   public void onAttachFragment(@NonNull Fragment fragment) {
     if (fragment instanceof BaseAuthFragment) {
@@ -62,16 +75,25 @@ public class AuthActivity extends AppCompatActivity implements
     }
   }
 
+  /*
+   * This method is called once the user is successfully authenticated
+   * */
   @Override
   public void onAuthenticated() {
     startMainAndFinish();
   }
 
+  /*
+   * This method switches the current fragment to the sign up form
+   * */
   @Override
   public void toSignUp() {
     setFragment(signUpFragment);
   }
 
+  /*
+   * This method switches the current fragment to the login form
+   * */
   @Override
   public void toLogin() {
     setFragment(loginFragment);
