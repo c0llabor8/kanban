@@ -41,6 +41,8 @@ public class NewTaskDialog extends DialogFragment {
   private RadioButton medium;
   private RadioButton low;
 
+  TaskCreatedListener listener;
+
   public static NewTaskDialog newInstance() {
 
     Bundle args = new Bundle();
@@ -191,21 +193,24 @@ public class NewTaskDialog extends DialogFragment {
   }
 
   private void saveTask(Assignment assignment) {
-    assignment.saveInBackground(new SaveCallback() {
-      @Override
-      public void done(ParseException e) {
-        if (e != null) {
-          Log.d("TaskCreationActivity", "Error while saving task");
-          e.printStackTrace();
-          return;
-        }
-        Log.d("TaskCreationActivity", "Task saved successfully!");
+    assignment.saveInBackground(e -> {
+      if (e != null) {
+        Log.d("TaskCreationActivity", "Error while saving task");
+        e.printStackTrace();
+        return;
       }
+
+      listener.onTaskCreated();
+      Log.d("TaskCreationActivity", "Task saved successfully!");
     });
+  }
+
+  public void setListener(TaskCreatedListener listener) {
+    this.listener = listener;
   }
 
   public interface TaskCreatedListener {
 
-    void onTaskCreated(Project project);
+    void onTaskCreated();
   }
 }

@@ -64,7 +64,7 @@ public class TaskListFragment extends BaseTaskFragment implements TaskCreatedLis
   }
 
   @Override
-  public void onTaskCreated(Project project) {
+  public void onTaskCreated() {
     refreshTasks();
   }
 }

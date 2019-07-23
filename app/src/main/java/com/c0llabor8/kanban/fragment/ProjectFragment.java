@@ -55,6 +55,7 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
       taskBundle.putParcelableArrayList("tasks", new ArrayList<>(tasks));
 
       pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
+
       binding.pager.setAdapter(pagerAdapter);
       binding.tabs.setupWithViewPager(binding.pager, true);
     });
@@ -63,7 +64,7 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
   }
 
   @Override
-  public void onTaskCreated(Project project) {
-
+  public void onTaskCreated() {
+    // TODO: Refresh the tasks for all pages being adapted
   }
 }

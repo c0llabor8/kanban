@@ -18,6 +18,7 @@ import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog.ProjectCreatedListener;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
@@ -28,11 +29,10 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
   ActivityMainBinding binding;
 
-  NewTaskDialog newTaskDialog;
-  NewProjectDialog newProjectDialog;
   BottomNavigationSheet navFragment;
   Project currentProject;
   ProjectBottomActionSheet navActionFragment;
+  TaskCreatedListener taskCreatedListener;
   // SparseArray maps integers and Objects, more memory efficient than HashMap
   SparseArray<Project> projectMenuMap = new SparseArray<>();
 
@@ -44,8 +44,6 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     navActionFragment = ProjectBottomActionSheet.newInstance();
     navFragment = BottomNavigationSheet.newInstance();
-    newProjectDialog = NewProjectDialog.newInstance();
-    newTaskDialog = NewTaskDialog.newInstance();
 
     setSupportActionBar(binding.bar);
     //not within a project scope in the initial screen, so keep it at null
@@ -63,14 +61,18 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     Fragment fragment = (project == null) ? TaskListFragment.newInstance() :
         ProjectFragment.newInstance(project);
 
-    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-    transaction.replace(binding.content.getId(), fragment);
-    transaction.commit();
+    if (fragment != null) {
+      taskCreatedListener = (TaskCreatedListener) fragment;
+
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(binding.content.getId(), fragment);
+      transaction.commit();
+    }
   }
 
   //opens a new dialog for task creation
   private void openTaskCreationDialog() {
-    newTaskDialog.show(getSupportFragmentManager(), currentProject);
+    NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject);
   }
 
   @Override
@@ -114,6 +116,11 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       NewProjectDialog projectDialog = (NewProjectDialog) fragment;
       projectDialog.setProjectCreatedListener(this);
     }
+
+    if (fragment instanceof NewTaskDialog) {
+      NewTaskDialog taskDialog = (NewTaskDialog) fragment;
+      taskDialog.setListener(taskCreatedListener);
+    }
   }
 
   /*
@@ -151,8 +158,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     //when new project is selected, dialog is launched to create new project
     if (item.getItemId() == R.id.new_project) {
-      newProjectDialog.show(getSupportFragmentManager(), "");
-      navFragment.dismiss();
+      NewProjectDialog fragment = NewProjectDialog.newInstance();
+      fragment.show(getSupportFragmentManager(), "");
+      fragment.dismiss();
       return true;
     }
 
