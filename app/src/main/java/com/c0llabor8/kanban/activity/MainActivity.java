@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   NewTaskDialog newTaskDialog;
   NewProjectDialog newProjectDialog;
   BottomNavigationSheet navFragment;
+  ProjectBottomActionSheet navActionFragment;
   // SparseArray maps integers and Objects, more memory efficient than HashMap
   SparseArray<Project> projectMenuMap = new SparseArray<>();
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
+    navActionFragment = ProjectBottomActionSheet.newInstance();
     navFragment = BottomNavigationSheet.newInstance();
     newProjectDialog = NewProjectDialog.newInstance();
     newTaskDialog = NewTaskDialog.newInstance();
@@ -75,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     if (item.getItemId() == android.R.id.home) {
       navFragment.show(getSupportFragmentManager(), "");
       return true;
+    }
+
+    if (item.getItemId() == R.id.action_more) {
+
     }
 
     return super.onOptionsItemSelected(item);

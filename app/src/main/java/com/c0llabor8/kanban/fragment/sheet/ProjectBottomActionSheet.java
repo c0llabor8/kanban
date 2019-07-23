@@ -15,10 +15,10 @@ public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
   private SheetBottomNavBinding binding;
   private ProjectSheetListener listener;
 
-  public static BottomNavigationSheet newInstance() {
+  public static ProjectBottomActionSheet newInstance() {
     Bundle args = new Bundle();
 
-    BottomNavigationSheet fragment = new BottomNavigationSheet();
+    ProjectBottomActionSheet fragment = new ProjectBottomActionSheet();
     fragment.setArguments(args);
     return fragment;
   }

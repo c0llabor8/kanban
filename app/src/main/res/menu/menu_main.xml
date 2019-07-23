@@ -4,7 +4,7 @@
 
   <item
     android:icon="@drawable/ic_more_vert_24dp"
-    android:id="@+id/project_action"
+    android:id="@+id/action_more"
     android:title=""
     app:showAsAction="always"/>
 
