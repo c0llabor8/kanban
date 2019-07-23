@@ -1,4 +1,4 @@
-package com.c0llabor8.kanban;
+package com.c0llabor8.kanban.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
