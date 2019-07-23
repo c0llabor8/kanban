@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
+import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
@@ -65,6 +66,13 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
 
   @Override
   public void onTaskCreated() {
-    binding.pager.setAdapter(pagerAdapter);
+    for (int i = 0; i < pagerAdapter.getCount(); i++) {
+      Fragment fragment = pagerAdapter.getItem(i);
+
+      if (fragment instanceof BaseTaskFragment) {
+        BaseTaskFragment taskFragment = (BaseTaskFragment) fragment;
+        taskFragment.reloadTasks();
+      }
+    }
   }
 }

@@ -41,43 +41,26 @@ public class TaskListFragment extends BaseTaskFragment implements TaskCreatedLis
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    if (project == null) {
-      loadPersonalTasks();
-    } else {
-      loadProjectTasks();
-    }
-
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
     return binding.getRoot();
-  }
-
-  public void loadPersonalTasks() {
-    Task.queryUserTasks((objects, e) -> {
-      taskList.clear();
-      taskList.addAll(objects);
-      listAdapter.notifyDataSetChanged();
-    });
-  }
-
-  private void loadProjectTasks() {
-    project.getAllTasks((objects, e) -> {
-      taskList.clear();
-      taskList.addAll(objects);
-      listAdapter.notifyDataSetChanged();
-    });
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    listAdapter = new TaskListAdapter(taskList);
+    listAdapter = new TaskListAdapter(getTaskList());
     binding.rvTasks.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTasks.setAdapter(listAdapter);
   }
 
   @Override
+  public void onTasksLoaded() {
+    listAdapter.notifyDataSetChanged();
+  }
+
+  @Override
   public void onTaskCreated() {
-    loadPersonalTasks();
+    reloadTasks();
   }
 }

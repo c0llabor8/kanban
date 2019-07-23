@@ -11,13 +11,35 @@ import java.util.List;
 public abstract class BaseTaskFragment extends Fragment {
 
   protected Project project;
-  protected List<Task> taskList;
+  private List<Task> taskList = new ArrayList<>();
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
     project = getArguments().getParcelable("project");
-    taskList = new ArrayList<>();
+    reloadTasks();
   }
+
+  protected List<Task> getTaskList() {
+    return taskList;
+  }
+
+  public void reloadTasks() {
+    if (project == null) {
+      Task.queryUserTasks((objects, e) -> {
+        taskList.clear();
+        taskList.addAll(objects);
+        onTasksLoaded();
+      });
+    } else {
+      project.getAllTasks((objects, e) -> {
+        taskList.clear();
+        taskList.addAll(objects);
+        onTasksLoaded();
+      });
+    }
+  }
+
+  public abstract void onTasksLoaded();
 }
