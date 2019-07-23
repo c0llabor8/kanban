@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   NewTaskDialog newTaskDialog;
   NewProjectDialog newProjectDialog;
   BottomNavigationSheet navFragment;
-
+ // SparseArray maps integers and Objects, more memory efficient than HashMap
   SparseArray<Project> projectMenuMap = new SparseArray<>();
 
   /*
@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       // If the selected item is the user's personal tasks
       if (item.getItemId() == R.id.my_tasks) {
         setTitle(item.getTitle());
+        //this is null because personal tasks are not within the scope of projects
         switchProjectScope(null);
         navFragment.dismiss();
         return true;
@@ -60,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
         return true;
       }
 
+      //when new project is selected, dialog is launched to create new project
       if (item.getItemId() == R.id.new_project) {
         newProjectDialog.show(getSupportFragmentManager(), "");
         navFragment.dismiss();
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
     navFragment = BottomNavigationSheet.newInstance();
@@ -82,11 +83,15 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     newTaskDialog = NewTaskDialog.newInstance();
 
     setSupportActionBar(binding.bar);
+    //not within a project scope in the initial screen, so keep it at null
     switchProjectScope(null);
 
     loadProjects();
   }
 
+  /**
+   * switches fragment from personal task to that project fragment
+   */
   public void switchProjectScope(Project project) {
     Fragment fragment = (project == null) ? TaskListFragment.newInstance() :
         ProjectFragment.newInstance(project);
@@ -96,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     transaction.commit();
   }
 
+  //opens a new dialog for task creation
   private void openTaskCreationDialog() {
     newTaskDialog.show(getSupportFragmentManager(), "");
   }
@@ -109,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       return true;
     }
 
+    //user is able to log out when signOut is clicked
     if (item.getItemId() == R.id.action_signout) {
       ParseUser.logOutInBackground(e -> {
         Intent intent = new Intent(MainActivity.this, AuthActivity.class);
