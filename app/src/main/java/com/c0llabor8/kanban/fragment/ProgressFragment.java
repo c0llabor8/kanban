@@ -43,11 +43,6 @@ public class ProgressFragment extends BaseTaskFragment {
     // count the # of tasks I got done vs the ones that are left in a given project
   }
 
-
-    // Get the new value from project
-    //project.getAllTasks(callback);
-  }
-
   public void setTasksDone() {
     // Get the new value from user checking off tasks
 

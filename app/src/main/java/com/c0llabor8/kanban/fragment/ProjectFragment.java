@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
-import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
@@ -50,16 +49,13 @@ public class ProjectFragment extends Fragment {
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
 
-    project.getAllTasks(new FindCallback<Task>() {
-      @Override
-      public void done(List<Task> tasks, ParseException e) {
-        Bundle taskBundle = new Bundle();
-        taskBundle.putParcelableArrayList("tasks", new ArrayList<>(tasks));
+    project.getAllTasks((tasks, e) -> {
+      Bundle taskBundle = new Bundle();
+      taskBundle.putParcelableArrayList("tasks", new ArrayList<>(tasks));
 
-        pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
-        binding.pager.setAdapter(pagerAdapter);
-        binding.tabs.setupWithViewPager(binding.pager, true);
-      }
+      pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
+      binding.pager.setAdapter(pagerAdapter);
+      binding.tabs.setupWithViewPager(binding.pager, true);
     });
 
     return binding.getRoot();

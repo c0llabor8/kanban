@@ -2,7 +2,6 @@ package com.c0llabor8.kanban.fragment.sheet;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -11,10 +10,8 @@ import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.SheetBottomNavBinding;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
 
-public class BottomNavigationSheet extends BottomSheetDialogFragment {
-
+public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
   private SheetBottomNavBinding binding;
   private ProjectSheetListener listener;
 
@@ -43,12 +40,7 @@ public class BottomNavigationSheet extends BottomSheetDialogFragment {
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    binding.navigationView.inflateMenu(R.menu.menu_project_main);
-
-    // Once the view is created, pass the project menu to be populated by the listening class
-    listener.onPrepareProjectMenu(
-        binding.navigationView.getMenu().findItem(R.id.project_list).getSubMenu()
-    );
+    binding.navigationView.inflateMenu(R.menu.menu_project_action);
 
     // Listen for navigation item clicks using the listener from the listening class
     binding.navigationView.setNavigationItemSelectedListener(
