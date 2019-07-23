@@ -51,10 +51,10 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
 
     project.getAllTasks((tasks, e) -> {
-      Bundle taskBundle = new Bundle();
-      taskBundle.putParcelableArrayList("tasks", new ArrayList<>(tasks));
+      Bundle projectBundle = new Bundle();
+      projectBundle.putParcelable("project", project);
 
-      pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
+      pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), projectBundle);
 
       binding.pager.setAdapter(pagerAdapter);
       binding.tabs.setupWithViewPager(binding.pager, true);
@@ -65,6 +65,6 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
 
   @Override
   public void onTaskCreated() {
-    // TODO: Refresh the tasks for all pages being adapted
+    binding.pager.setAdapter(pagerAdapter);
   }
 }

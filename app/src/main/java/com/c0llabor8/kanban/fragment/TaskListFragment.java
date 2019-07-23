@@ -15,6 +15,9 @@ import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import java.util.List;
 
 public class TaskListFragment extends BaseTaskFragment implements TaskCreatedListener {
 
@@ -38,16 +41,26 @@ public class TaskListFragment extends BaseTaskFragment implements TaskCreatedLis
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    if (isPersonal) {
-      refreshTasks();
+    if (project == null) {
+      loadPersonalTasks();
+    } else {
+      loadProjectTasks();
     }
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
     return binding.getRoot();
   }
 
-  public void refreshTasks() {
+  public void loadPersonalTasks() {
     Task.queryUserTasks((objects, e) -> {
+      taskList.clear();
+      taskList.addAll(objects);
+      listAdapter.notifyDataSetChanged();
+    });
+  }
+
+  private void loadProjectTasks() {
+    project.getAllTasks((objects, e) -> {
       taskList.clear();
       taskList.addAll(objects);
       listAdapter.notifyDataSetChanged();
@@ -65,6 +78,6 @@ public class TaskListFragment extends BaseTaskFragment implements TaskCreatedLis
 
   @Override
   public void onTaskCreated() {
-    refreshTasks();
+    loadPersonalTasks();
   }
 }
