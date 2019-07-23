@@ -3,6 +3,7 @@ package com.c0llabor8.kanban.model;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 @ParseClassName("Membership")
@@ -15,17 +16,31 @@ public class Membership extends ParseObject {
     return getParseUser(KEY_USER);
   }
 
-  public void setUser(ParseUser user) {
+  public Membership setUser(ParseUser user) {
     put(KEY_USER, user);
+    return this;
   }
 
-  public ParseObject getProject() {
-    return getParseObject(KEY_PROJECT);
+  public Project getProject() {
+    return (Project) getParseObject(KEY_PROJECT);
   }
 
-  public void setProject(String project) {
+  public Membership setProject(Project project) {
     put(KEY_PROJECT, project);
+    return this;
   }
 
+  public static class Query extends ParseQuery<Membership> {
 
+    public Query() {
+      super(Membership.class);
+      include(KEY_USER);
+      include(KEY_PROJECT);
+    }
+
+    public Query whereUserEquals(ParseUser user) {
+      whereEqualTo(KEY_USER, user);
+      return this;
+    }
+  }
 }

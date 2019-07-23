@@ -1,7 +1,12 @@
 package com.c0llabor8.kanban.model;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import java.util.ArrayList;
+import java.util.List;
 
 @ParseClassName("Task")
 public class Task extends ParseObject {
@@ -12,10 +17,23 @@ public class Task extends ParseObject {
   public static final String KEY_PRIORITY = "priority";
   public static final String KEY_PROJECT = "project";
 
+  public static void queryUserTasks(FindCallback<Task> callback) {
+    Assignment.Query query = new Assignment.Query();
+    query.whereUserEquals(ParseUser.getCurrentUser());
 
-  // public default constructor
-  public Task() {
-    super();
+    query.findInBackground((assignments, e) -> {
+      if (e != null) {
+        callback.done(null, e);
+        return;
+      }
+
+      List<Task> tasks = new ArrayList<>();
+
+      for (Assignment assignment : assignments) {
+        tasks.add(assignment.getTask());
+      }
+      callback.done(tasks, null);
+    });
   }
 
   public String getTitle() {
@@ -34,11 +52,11 @@ public class Task extends ParseObject {
     put(KEY_DESCRIPTION, description);
   }
 
-  public String getEstimate() {
-    return getString(KEY_ESTIMATE);
+  public long getEstimate() {
+    return getLong(KEY_ESTIMATE);
   }
 
-  public void setEstimate(String estimate) {
+  public void setEstimate(long estimate) {
     put(KEY_ESTIMATE, estimate);
   }
 
@@ -46,16 +64,36 @@ public class Task extends ParseObject {
     return getInt(KEY_PRIORITY);
   }
 
-  public void setPriority(String priority) {
+  public void setPriority(int priority) {
     put(KEY_PRIORITY, priority);
   }
 
-  public ParseObject getProject() {
-    return getParseObject(KEY_PROJECT);
+  public Project getProject() {
+    return (Project) getParseObject(KEY_PROJECT);
   }
 
   public void setProject(ParseObject project) {
     put(KEY_PROJECT, project);
+  }
+
+  public static class Query extends ParseQuery<Task> {
+
+    public Query() {
+      super(Task.class);
+      include(KEY_DESCRIPTION);
+      include(KEY_TITLE);
+      include(KEY_PROJECT);
+    }
+
+    public Query sortAscending() {
+      addAscendingOrder(KEY_ESTIMATE);
+      return this;
+    }
+
+    public Query whereProjectEquals(Project project) {
+      whereEqualTo(KEY_PROJECT, project);
+      return this;
+    }
   }
 
 }

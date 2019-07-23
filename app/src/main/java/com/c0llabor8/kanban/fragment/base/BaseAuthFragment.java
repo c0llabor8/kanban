@@ -1,4 +1,4 @@
-package com.c0llabor8.kanban.fragment;
+package com.c0llabor8.kanban.fragment.base;
 
 import androidx.fragment.app.Fragment;
 import com.parse.ParseException;
@@ -7,7 +7,7 @@ import com.parse.ParseUser;
 public abstract class BaseAuthFragment extends Fragment {
 
   // Interface to communicate authentication status
-  AuthenticationFragmentListener listener;
+  protected AuthenticationFragmentListener listener;
 
   public void setOnAuthenticationListener(AuthenticationFragmentListener listener) {
     this.listener = listener;
@@ -16,17 +16,17 @@ public abstract class BaseAuthFragment extends Fragment {
   /*
    * Method called once authentication is unsuccessful
    * */
-  abstract void postAuthFailure(String msg);
+  protected abstract void postAuthFailure(String msg);
 
   /*
    * Method called once authentication is successful
    * */
-  abstract void postAuthSuccess();
+  protected abstract void postAuthSuccess();
 
   /*
    * Method called before authentication
    * */
-  abstract void preAuthAction();
+  protected abstract void preAuthAction();
 
 
   /*
@@ -35,7 +35,7 @@ public abstract class BaseAuthFragment extends Fragment {
    * @param username username of the account being logged in
    * @param password password of the user being logged in
    * */
-  void loginUser(String username, String password) {
+  protected void loginUser(String username, String password) {
 
     preAuthAction();
 
@@ -56,7 +56,7 @@ public abstract class BaseAuthFragment extends Fragment {
    * @param email    email of the account being created
    * @param password password of the user being created
    * */
-  void registerUser(String username, String email, String password) {
+  protected void registerUser(String username, String email, String password) {
 
     preAuthAction();
 

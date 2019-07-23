@@ -10,7 +10,8 @@
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:padding="@dimen/activity_default_margin"
-      app:layout_constraintBottom_toTopOf="@id/login_card"
+      android:overScrollMode="never"
+      app:layout_constraintBottom_toTopOf="@id/signup_card"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent">
@@ -49,21 +50,6 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/layout_default_margin"
-          android:hint="Email address">
-
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
-            android:singleLine="true"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/layout_default_margin"
           android:hint="Password">
 
           <com.google.android.material.textfield.TextInputEditText
@@ -80,7 +66,7 @@
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_margin="@dimen/layout_default_margin"
-          android:text="Sign up"/>
+          android:text="Login"/>
 
         <TextView
           android:id="@+id/auth_message"
@@ -95,7 +81,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.card.MaterialCardView
-      android:id="@+id/login_card"
+      android:id="@+id/signup_card"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
       app:cardCornerRadius="0dp"
@@ -113,7 +99,7 @@
         <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="Already have an account?"/>
+          android:text="Don't have an account?"/>
 
         <TextView
           android:textStyle="bold"
@@ -121,7 +107,7 @@
           android:layout_height="wrap_content"
           android:paddingStart="@dimen/layout_default_margin"
           android:paddingEnd="0dp"
-          android:text="Login"/>
+          android:text="Sign up"/>
       </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

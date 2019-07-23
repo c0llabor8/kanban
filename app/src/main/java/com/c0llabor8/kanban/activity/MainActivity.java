@@ -1,7 +1,7 @@
 package com.c0llabor8.kanban.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,97 +11,133 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
-import com.c0llabor8.kanban.fragment.BasicFragment;
-import com.c0llabor8.kanban.fragment.BottomSheetNavFragment;
-import com.c0llabor8.kanban.fragment.BottomSheetNavFragment.BottomNavSheetListener;
-import com.c0llabor8.kanban.fragment.TaskCreationDialog;
+import com.c0llabor8.kanban.fragment.ProjectFragment;
+import com.c0llabor8.kanban.fragment.TaskListFragment;
+import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
+import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog.ProjectCreatedListener;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
+import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
+import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet.ProjectSheetListener;
+import com.c0llabor8.kanban.model.Project;
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
+import com.parse.ParseUser;
 
-public class MainActivity extends AppCompatActivity implements BottomNavSheetListener {
+public class MainActivity extends AppCompatActivity implements ProjectSheetListener,
+    ProjectCreatedListener {
 
   ActivityMainBinding binding;
-  Handler handler;
-  BottomSheetNavFragment navFragment;
-  ProjectPagerAdapter pagerAdapter;
-  TaskCreationDialog taskCreationDialog;
-  SparseArray<String> projectMenuMap = new SparseArray<>();
+
+  NewTaskDialog newTaskDialog;
+  NewProjectDialog newProjectDialog;
+  BottomNavigationSheet navFragment;
+
+  SparseArray<Project> projectMenuMap = new SparseArray<>();
+
+  /*
+   * Listener used by the BottomNavSheet to determine which navigation item was selected
+   * */
+  OnNavigationItemSelectedListener bottomSheetListener = new OnNavigationItemSelectedListener() {
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+      // If the selected item is the user's personal tasks
+      if (item.getItemId() == R.id.my_tasks) {
+        setTitle(item.getTitle());
+        switchProjectScope(null);
+        navFragment.dismiss();
+        return true;
+      }
+
+      // if the selected item's id is in our HashSet<int(menuID), String(Project)>
+      if (projectMenuMap.indexOfKey(item.getItemId()) > -1) {
+        Project project = projectMenuMap.get(item.getItemId());
+
+        setTitle(project.getName());
+        switchProjectScope(project);
+        navFragment.dismiss();
+        return true;
+      }
+
+      if (item.getItemId() == R.id.new_project) {
+        newProjectDialog.show(getSupportFragmentManager(), "");
+        navFragment.dismiss();
+        return true;
+      }
+
+      return false;
+    }
+  };
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    handler = new Handler();
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-    // Simulate a request for all projects the user is a member
-    String[] projects = {
-        "Demo Project",
-        "Facebook Project",
-        "School Project"
-    };
-
-    // Using a handler to simulate network requests
-    handler.postDelayed(() -> {
-      for (int i = 0; i < projects.length; i++) {
-        projectMenuMap.put(Menu.FIRST + i, projects[i]);
-      }
-    }, 300);
-
-    Fragment[] fragments = {
-        BasicFragment.newInstance(),
-        BasicFragment.newInstance(),
-        BasicFragment.newInstance(),
-    };
-
-    // Initialize the pagination of our fragments based off our initial Fragments
-    pagerAdapter = new ProjectPagerAdapter(getSupportFragmentManager(), fragments);
-
-    binding.pager.setAdapter(pagerAdapter);
-    binding.tabs.setupWithViewPager(binding.pager, true);
-
-    setSupportActionBar(binding.bar);
-
-    // Create and save a new instance of our BottomSheetNavFragment
-    navFragment = BottomSheetNavFragment.newInstance();
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
-    taskCreationDialog = TaskCreationDialog.newInstance();
+    navFragment = BottomNavigationSheet.newInstance();
+    newProjectDialog = NewProjectDialog.newInstance();
+    newTaskDialog = NewTaskDialog.newInstance();
+
+    setSupportActionBar(binding.bar);
+    switchProjectScope(null);
+
+    loadProjects();
+  }
+
+  public void switchProjectScope(Project project) {
+    Fragment fragment = (project == null) ? TaskListFragment.newInstance() :
+        ProjectFragment.newInstance(project);
+
+    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+    transaction.replace(binding.content.getId(), fragment);
+    transaction.commit();
   }
 
   private void openTaskCreationDialog() {
-    taskCreationDialog.show(getSupportFragmentManager(), "");
-  }
-
-  /*
-   * Sets the text for TextView(R.id.bottom_title) within the BottomAppBar
-   *
-   * @param title text to display in as the title
-   * */
-  @Override
-  public void setTitle(CharSequence title) {
-    binding.bottomTitle.setText(title);
+    newTaskDialog.show(getSupportFragmentManager(), "");
   }
 
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 
-    // Show our BottomSheetNavFragment when the menu icon is clicked
+    // Show our BottomNavigationSheet when the menu icon is clicked
     if (item.getItemId() == android.R.id.home) {
       navFragment.show(getSupportFragmentManager(), "");
       return true;
+    }
+
+    if (item.getItemId() == R.id.action_signout) {
+      ParseUser.logOutInBackground(e -> {
+        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
+        startActivity(intent);
+        finish();
+      });
     }
 
     return super.onOptionsItemSelected(item);
   }
 
   @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+  }
+
+  @Override
   public void onAttachFragment(@NonNull Fragment fragment) {
-    if (fragment instanceof BottomSheetNavFragment) {
-      BottomSheetNavFragment navFragment = (BottomSheetNavFragment) fragment;
-      navFragment.setListener(this);
+    if (fragment instanceof BottomNavigationSheet) {
+      BottomNavigationSheet navFragment = (BottomNavigationSheet) fragment;
+
+      navFragment.setProjectNavigationListener(this);
+      navFragment.setOnNavigationItemSelectedListener(bottomSheetListener);
+    }
+
+    if (fragment instanceof NewProjectDialog) {
+      NewProjectDialog projectDialog = (NewProjectDialog) fragment;
+      projectDialog.setProjectCreatedListener(this);
     }
   }
 
@@ -110,35 +146,34 @@ public class MainActivity extends AppCompatActivity implements BottomNavSheetLis
    * (SparseArray)
    * */
   @Override
-  public void populateProjects(SubMenu subMenu) {
+  public void onPrepareProjectMenu(SubMenu subMenu) {
     for (int i = 0; i < projectMenuMap.size(); i++) {
       int key = projectMenuMap.keyAt(i);
-      subMenu.add(Menu.NONE, key, key, projectMenuMap.get(key));
+      subMenu.add(Menu.NONE, key, key, projectMenuMap.get(key).getName());
     }
   }
 
   /*
-   * Listener used by the BottomNavSheet to determine which navigation item was selected
-   * */
+  * Called once a project was created
+  * */
   @Override
-  public OnNavigationItemSelectedListener onBottomNavItemSelected() {
-    return item -> {
+  public void onProjectCreated(Project project) {
+    projectMenuMap.put(Menu.FIRST + projectMenuMap.size(), project);
+  }
 
-      // If the selected item is the user's personal tasks
-      if (item.getItemId() == R.id.my_tasks) {
-        setTitle(item.getTitle());
-        navFragment.dismiss();
-        return true;
+  /*
+   * Query for all projects the current user is a member of and store them
+   * */
+  public void loadProjects() {
+    Project.queryUserProjects((projects, e) -> {
+      if (e != null) {
+        e.printStackTrace();
+        return;
       }
 
-      // if the selected item's id is in our HashSet<int(menuID), String(Project)>
-      if (projectMenuMap.indexOfKey(item.getItemId()) > -1) {
-        setTitle(projectMenuMap.get(item.getItemId()));
-        navFragment.dismiss();
-        return true;
+      for (int i = 0; i < projects.size(); i++) {
+        projectMenuMap.put(Menu.FIRST + i, projects.get(i));
       }
-
-      return false;
-    };
+    });
   }
 }

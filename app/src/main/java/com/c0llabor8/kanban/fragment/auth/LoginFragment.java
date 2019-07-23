@@ -1,4 +1,4 @@
-package com.c0llabor8.kanban.fragment;
+package com.c0llabor8.kanban.fragment.auth;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,24 +9,23 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.AuthFragmentSignupBinding;
+import com.c0llabor8.kanban.databinding.FragmentLoginBinding;
+import com.c0llabor8.kanban.fragment.base.BaseAuthFragment;
 
-public class SignUpFragment extends BaseAuthFragment {
+public class LoginFragment extends BaseAuthFragment {
 
-  private AuthFragmentSignupBinding binding;
+  private FragmentLoginBinding binding;
 
-  private OnClickListener signUpOnClick = (View view) -> {
+  private OnClickListener loginOnClick = (View view) -> {
     final String username = binding.etUsername.getText().toString();
     final String password = binding.etPassword.getText().toString();
-    final String email = binding.etEmail.getText().toString();
-
-    registerUser(username, email, password);
+    loginUser(username, password);
   };
 
-  public static SignUpFragment newInstance() {
+  public static LoginFragment newInstance() {
     Bundle args = new Bundle();
 
-    SignUpFragment fragment = new SignUpFragment();
+    LoginFragment fragment = new LoginFragment();
     fragment.setArguments(args);
     return fragment;
   }
@@ -36,25 +35,25 @@ public class SignUpFragment extends BaseAuthFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    binding = DataBindingUtil.inflate(inflater, R.layout.auth_fragment_signup, container, false);
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false);
     return binding.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    binding.loginCard.setOnClickListener((View v) -> listener.toLogin());
-    binding.authButton.setOnClickListener(signUpOnClick);
+    binding.signupCard.setOnClickListener((View v) -> listener.toSignUp());
+    binding.authButton.setOnClickListener(loginOnClick);
   }
 
   @Override
-  void postAuthFailure(String msg) {
+  public void postAuthFailure(String msg) {
     binding.authButton.setEnabled(true);
     binding.authMessage.setText(msg);
     binding.authMessage.setVisibility(View.VISIBLE);
   }
 
   @Override
-  void postAuthSuccess() {
+  public void postAuthSuccess() {
     binding.authButton.setEnabled(true);
     binding.authMessage.setVisibility(View.GONE);
   }
