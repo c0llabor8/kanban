@@ -8,13 +8,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
-import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
+import com.c0llabor8.kanban.databinding.FragmentProgressBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
-import com.c0llabor8.kanban.model.Project;
-import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -24,12 +20,12 @@ import java.util.ArrayList;
 
 public class ProgressFragment extends BaseTaskFragment {
 
-  private FragmentProjectBinding binding;
-  private PieChart mChart;
+  private FragmentProgressBinding binding;
 
   public ProgressFragment() {
     // Required empty public constructor
   }
+
   /* *
    * Creates an instance
    */
@@ -37,8 +33,8 @@ public class ProgressFragment extends BaseTaskFragment {
     return newInstance(new Bundle());
   }
 
-  private static ProgressFragment newInstance(Bundle args) {
-    args.putString("title", "Tasks");
+  public static ProgressFragment newInstance(Bundle args) {
+    args.putString("title", "Progress");
 
     ProgressFragment fragment = new ProgressFragment();
     fragment.setArguments(args);
@@ -54,7 +50,6 @@ public class ProgressFragment extends BaseTaskFragment {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_progress, container, false);
     // reference the piechart with binding view:  PieChart pieChart = (PieChart) view.findViewById
     // (R.id.chart);
-    drawChart();
     return binding.getRoot();
   }
 
@@ -73,21 +68,20 @@ public class ProgressFragment extends BaseTaskFragment {
     // .invalidate() may make it update
     // Get the new value from user checking off tasks
     // Update the old value
-    mChart.setUsePercentValues(true);
+    binding.pieChart.setUsePercentValues(true);
 
     ArrayList<PieEntry> pieData = new ArrayList<>();
-    pieData.add(new PieEntry(40f, "Tasks completed", taskList.size()));
+    pieData.add(new PieEntry(40f, "Tasks completed", getTaskList().size()));
     pieData.add(new PieEntry(60f, "", 1));
 
-
-    PieDataSet dataSet = new PieDataSet(pieData,"");
+    PieDataSet dataSet = new PieDataSet(pieData, "");
     PieData data = new PieData(dataSet);
 
     data.setValueFormatter(new PercentFormatter());
-    mChart.setData(data);
-    mChart.setDrawHoleEnabled(true);
-    mChart.setTransparentCircleRadius(58f);
-    mChart.setHoleRadius(58f);
+    binding.pieChart.setData(data);
+    binding.pieChart.setDrawHoleEnabled(true);
+    binding.pieChart.setTransparentCircleRadius(58f);
+    binding.pieChart.setHoleRadius(58f);
     dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
     data.setValueTextSize(13f);
     data.setValueTextColor(Color.DKGRAY);
@@ -96,7 +90,7 @@ public class ProgressFragment extends BaseTaskFragment {
 
   @Override
   public void onTasksLoaded() {
-
+    drawChart();
   }
 }
 

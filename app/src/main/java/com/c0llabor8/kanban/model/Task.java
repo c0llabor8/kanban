@@ -16,6 +16,7 @@ public class Task extends ParseObject {
   public static final String KEY_ESTIMATE = "estimate";
   public static final String KEY_PRIORITY = "priority";
   public static final String KEY_PROJECT = "project";
+  public static final String KEY_COMPLETED = "completed";
 
   public static void queryUserTasks(FindCallback<Task> callback) {
     Assignment.Query query = new Assignment.Query();
@@ -34,6 +35,18 @@ public class Task extends ParseObject {
       }
       callback.done(tasks, null);
     });
+  }
+
+  public void setCompleted() {
+    put(KEY_COMPLETED, true);
+  }
+
+  public void setInomplete() {
+    put(KEY_COMPLETED, false);
+  }
+
+  public boolean getCompleted() {
+    return getBoolean(KEY_COMPLETED);
   }
 
   public String getTitle() {
