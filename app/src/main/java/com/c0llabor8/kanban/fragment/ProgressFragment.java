@@ -93,5 +93,10 @@ public class ProgressFragment extends BaseTaskFragment {
     data.setValueTextColor(Color.DKGRAY);
     return data;
   }
+
+  @Override
+  public void onTasksLoaded() {
+
+  }
 }
 

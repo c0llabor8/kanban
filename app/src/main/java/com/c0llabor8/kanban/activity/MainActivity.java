@@ -1,6 +1,5 @@
 package com.c0llabor8.kanban.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.SparseArray;
 import android.view.Menu;
@@ -19,58 +18,23 @@ import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog.ProjectCreatedListener;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
-import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet.ProjectSheetListener;
+import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
+import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Project;
-import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener;
-import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity implements ProjectSheetListener,
     ProjectCreatedListener {
 
   ActivityMainBinding binding;
 
-  NewTaskDialog newTaskDialog;
-  NewProjectDialog newProjectDialog;
   BottomNavigationSheet navFragment;
- // SparseArray maps integers and Objects, more memory efficient than HashMap
+  Project currentProject;
+  ProjectBottomActionSheet navActionFragment;
+  TaskCreatedListener taskCreatedListener;
+  // SparseArray maps integers and Objects, more memory efficient than HashMap
   SparseArray<Project> projectMenuMap = new SparseArray<>();
-
-  /*
-   * Listener used by the BottomNavSheet to determine which navigation item was selected
-   * */
-  OnNavigationItemSelectedListener bottomSheetListener = new OnNavigationItemSelectedListener() {
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-      // If the selected item is the user's personal tasks
-      if (item.getItemId() == R.id.my_tasks) {
-        setTitle(item.getTitle());
-        //this is null because personal tasks are not within the scope of projects
-        switchProjectScope(null);
-        navFragment.dismiss();
-        return true;
-      }
-
-      // if the selected item's id is in our HashSet<int(menuID), String(Project)>
-      if (projectMenuMap.indexOfKey(item.getItemId()) > -1) {
-        Project project = projectMenuMap.get(item.getItemId());
-
-        setTitle(project.getName());
-        switchProjectScope(project);
-        navFragment.dismiss();
-        return true;
-      }
-
-      //when new project is selected, dialog is launched to create new project
-      if (item.getItemId() == R.id.new_project) {
-        newProjectDialog.show(getSupportFragmentManager(), "");
-        navFragment.dismiss();
-        return true;
-      }
-
-      return false;
-    }
-  };
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,9 +42,8 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
     binding.fab.setOnClickListener(view -> openTaskCreationDialog());
 
+    navActionFragment = ProjectBottomActionSheet.newInstance();
     navFragment = BottomNavigationSheet.newInstance();
-    newProjectDialog = NewProjectDialog.newInstance();
-    newTaskDialog = NewTaskDialog.newInstance();
 
     setSupportActionBar(binding.bar);
     //not within a project scope in the initial screen, so keep it at null
@@ -93,17 +56,23 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
    * switches fragment from personal task to that project fragment
    */
   public void switchProjectScope(Project project) {
+    currentProject = project;
+
     Fragment fragment = (project == null) ? TaskListFragment.newInstance() :
         ProjectFragment.newInstance(project);
 
-    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-    transaction.replace(binding.content.getId(), fragment);
-    transaction.commit();
+    if (fragment != null) {
+      taskCreatedListener = (TaskCreatedListener) fragment;
+
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(binding.content.getId(), fragment);
+      transaction.commit();
+    }
   }
 
   //opens a new dialog for task creation
   private void openTaskCreationDialog() {
-    newTaskDialog.show(getSupportFragmentManager(), "");
+    NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject);
   }
 
   @Override
@@ -115,13 +84,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       return true;
     }
 
-    //user is able to log out when signOut is clicked
-    if (item.getItemId() == R.id.action_signout) {
-      ParseUser.logOutInBackground(e -> {
-        Intent intent = new Intent(MainActivity.this, AuthActivity.class);
-        startActivity(intent);
-        finish();
-      });
+    if (item.getItemId() == R.id.action_more) {
+      navActionFragment.show(getSupportFragmentManager(), currentProject);
+      return true;
     }
 
     return super.onOptionsItemSelected(item);
@@ -139,12 +104,22 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       BottomNavigationSheet navFragment = (BottomNavigationSheet) fragment;
 
       navFragment.setProjectNavigationListener(this);
-      navFragment.setOnNavigationItemSelectedListener(bottomSheetListener);
+    }
+
+    if (fragment instanceof ProjectBottomActionSheet) {
+      ProjectBottomActionSheet navFragment = (ProjectBottomActionSheet) fragment;
+
+      navFragment.setProjectNavigationListener(this);
     }
 
     if (fragment instanceof NewProjectDialog) {
       NewProjectDialog projectDialog = (NewProjectDialog) fragment;
       projectDialog.setProjectCreatedListener(this);
+    }
+
+    if (fragment instanceof NewTaskDialog) {
+      NewTaskDialog taskDialog = (NewTaskDialog) fragment;
+      taskDialog.setListener(taskCreatedListener);
     }
   }
 
@@ -160,9 +135,41 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     }
   }
 
+  @Override
+  public boolean onProjectItemSelected(MenuItem item) {
+    // If the selected item is the user's personal tasks
+    if (item.getItemId() == R.id.my_tasks) {
+      setTitle(item.getTitle());
+      //this is null because personal tasks are not within the scope of projects
+      switchProjectScope(null);
+      navFragment.dismiss();
+      return true;
+    }
+
+    // if the selected item's id is in our HashSet<int(menuID), String(Project)>
+    if (projectMenuMap.indexOfKey(item.getItemId()) > -1) {
+      Project project = projectMenuMap.get(item.getItemId());
+
+      setTitle(project.getName());
+      switchProjectScope(project);
+      navFragment.dismiss();
+      return true;
+    }
+
+    //when new project is selected, dialog is launched to create new project
+    if (item.getItemId() == R.id.new_project) {
+      NewProjectDialog fragment = NewProjectDialog.newInstance();
+      fragment.show(getSupportFragmentManager(), "");
+      fragment.dismiss();
+      return true;
+    }
+
+    return false;
+  }
+
   /*
-  * Called once a project was created
-  * */
+   * Called once a project was created
+   * */
   @Override
   public void onProjectCreated(Project project) {
     projectMenuMap.put(Menu.FIRST + projectMenuMap.size(), project);

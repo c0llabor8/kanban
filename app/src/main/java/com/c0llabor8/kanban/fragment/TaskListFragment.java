@@ -12,9 +12,14 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
+import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import java.util.List;
 
-public class TaskListFragment extends BaseTaskFragment {
+public class TaskListFragment extends BaseTaskFragment implements TaskCreatedListener {
 
   private TaskListAdapter listAdapter;
   private FragmentTaskListBinding binding;
@@ -36,13 +41,6 @@ public class TaskListFragment extends BaseTaskFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    if (isPersonal) {
-      Task.queryUserTasks((objects, e) -> {
-        taskList.addAll(objects);
-        listAdapter.notifyDataSetChanged();
-      });
-    }
-
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
     return binding.getRoot();
   }
@@ -51,8 +49,18 @@ public class TaskListFragment extends BaseTaskFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    listAdapter = new TaskListAdapter(taskList);
+    listAdapter = new TaskListAdapter(getTaskList());
     binding.rvTasks.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTasks.setAdapter(listAdapter);
+  }
+
+  @Override
+  public void onTasksLoaded() {
+    listAdapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void onTaskCreated() {
+    reloadTasks();
   }
 }

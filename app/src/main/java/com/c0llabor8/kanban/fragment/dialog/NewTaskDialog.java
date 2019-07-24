@@ -11,34 +11,37 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.model.Assignment;
+import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 public class NewTaskDialog extends DialogFragment {
 
   public static final String TAG = "task_creation";
   final Calendar calendar = Calendar.getInstance();
-
-
+  public Long estimate;
+  private Project project;
   private EditText etDate;
   private Toolbar toolbar;
   private EditText etDescription;
   private EditText etTitle;
-  public Long estimate;
   private int priorityValue;
   private RadioButton high;
   private RadioButton medium;
   private RadioButton low;
+
+  TaskCreatedListener listener;
 
   public static NewTaskDialog newInstance() {
 
@@ -53,6 +56,12 @@ public class NewTaskDialog extends DialogFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setStyle(DialogFragment.STYLE_NO_FRAME, R.style.AppTheme);
+  }
+
+  public void show(@NonNull FragmentManager manager, Project project) {
+    this.project = project;
+
+    super.show(manager, "");
   }
 
   @Override
@@ -167,32 +176,41 @@ public class NewTaskDialog extends DialogFragment {
     task.setEstimate(date);
     task.setPriority(priority);
 
-    task.saveInBackground(new SaveCallback() {
-      @Override
-      public void done(ParseException e) {
-        if (e != null) {
-          Log.d("TaskCreationActivity", "Error while saving task");
-          e.printStackTrace();
-          return;
-        }
-        Log.d("TaskCreationActivity", "Task saved successfully!");
-        assignment.setTask(task);
-        saveTask(assignment);
+    if (project != null) {
+      task.setProject(project);
+    }
+
+    task.saveInBackground(e -> {
+      if (e != null) {
+        Log.d("TaskCreationActivity", "Error while saving task");
+        e.printStackTrace();
+        return;
       }
+      Log.d("TaskCreationActivity", "Task saved successfully!");
+      assignment.setTask(task);
+      saveTask(assignment);
     });
   }
 
   private void saveTask(Assignment assignment) {
-    assignment.saveInBackground(new SaveCallback() {
-      @Override
-      public void done(ParseException e) {
-        if (e != null) {
-          Log.d("TaskCreationActivity", "Error while saving task");
-          e.printStackTrace();
-          return;
-        }
-        Log.d("TaskCreationActivity", "Task saved successfully!");
+    assignment.saveInBackground(e -> {
+      if (e != null) {
+        Log.d("TaskCreationActivity", "Error while saving task");
+        e.printStackTrace();
+        return;
       }
+
+      listener.onTaskCreated();
+      Log.d("TaskCreationActivity", "Task saved successfully!");
     });
+  }
+
+  public void setListener(TaskCreatedListener listener) {
+    this.listener = listener;
+  }
+
+  public interface TaskCreatedListener {
+
+    void onTaskCreated();
   }
 }
