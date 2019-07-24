@@ -51,15 +51,10 @@ public class ProgressFragment extends BaseTaskFragment {
     // reference the piechart with binding view:  PieChart pieChart = (PieChart) view.findViewById
     // (R.id.chart);
     return binding.getRoot();
-  }
+    // Do I need an adapter? yes
+    // get the total # of tasks from a given project
 
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    //pagerAdapter = new ProjectPagerAdapter();
-    //binding..setLayoutManager(new LinearLayoutManager(getContext()));
-    //binding..setAdapter(pagerAdapter);
-    //PieChart pieChart = findViewById(R.id.pieChart);
+    // count the # of tasks I got done vs the ones that are left in a given project
   }
 
   // Calculate the slice size and update the pie chart
