@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import com.c0llabor8.kanban.fragment.ProgressFragment;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
+import com.c0llabor8.kanban.fragment.TimelineFragment;
 
 /*
  * Version of the pager to page through fragments as a set of tabs
@@ -25,14 +26,6 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
 
     TaskListFragment taskListFragment =
         TaskListFragment.newInstance(taskBundle);
-
-    ProgressFragment progressFragment =
-        ProgressFragment.newInstance(taskBundle);
-
-    fragments = new Fragment[]{
-        taskListFragment,
-        progressFragment
-    };
   }
 
   /*

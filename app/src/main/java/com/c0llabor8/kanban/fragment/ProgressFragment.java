@@ -53,15 +53,6 @@ public class ProgressFragment extends BaseTaskFragment {
     return binding.getRoot();
   }
 
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    //pagerAdapter = new ProjectPagerAdapter();
-    //binding..setLayoutManager(new LinearLayoutManager(getContext()));
-    //binding..setAdapter(pagerAdapter);
-    //PieChart pieChart = findViewById(R.id.pieChart);
-  }
-
   // Calculate the slice size and update the pie chart
   // Returns data and passes that data inside model
   private PieData drawChart() {
