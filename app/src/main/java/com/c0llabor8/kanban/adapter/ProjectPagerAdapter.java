@@ -26,6 +26,13 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
 
     TaskListFragment taskListFragment =
         TaskListFragment.newInstance(taskBundle);
+
+    TimelineFragment timelineFragment = TimelineFragment.newInstance(taskBundle);
+
+    fragments = new Fragment[]{
+        taskListFragment,
+        timelineFragment
+    };
   }
 
   /*
