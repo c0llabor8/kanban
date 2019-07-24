@@ -15,7 +15,7 @@ import com.c0llabor8.kanban.fragment.TimelineFragment;
  */
 public class ProjectPagerAdapter extends FragmentPagerAdapter {
 
-  private Fragment[] fragments;
+  private Bundle taskBundle;
 
   /*
    * Passes the tasks as a Bundle into a new instance
@@ -24,15 +24,7 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
   public ProjectPagerAdapter(@NonNull FragmentManager fm, Bundle taskBundle) {
     super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
 
-    TaskListFragment taskListFragment =
-        TaskListFragment.newInstance(taskBundle);
-
-    TimelineFragment timelineFragment = TimelineFragment.newInstance(taskBundle);
-
-    fragments = new Fragment[]{
-        taskListFragment,
-        timelineFragment
-    };
+    this.taskBundle = taskBundle;
   }
 
   /*
@@ -41,7 +33,16 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
   @NonNull
   @Override
   public Fragment getItem(int pos) {
-    return fragments[pos];
+    switch (pos) {
+      case 0:
+        return TaskListFragment.newInstance(taskBundle);
+      case 1:
+        return TimelineFragment.newInstance(taskBundle);
+      case 2:
+        return ProgressFragment.newInstance(taskBundle);
+      default:
+        return TaskListFragment.newInstance();
+    }
   }
 
   /*
@@ -49,7 +50,7 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
    */
   @Override
   public int getCount() {
-    return fragments.length;
+    return 3;
   }
 
   /*
@@ -58,6 +59,15 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
   @Nullable
   @Override
   public CharSequence getPageTitle(int pos) {
-    return fragments[pos].getArguments().getString("title", "");
+    switch (pos) {
+      case 0:
+        return "Tasks";
+      case 1:
+        return "Timeline";
+      case 2:
+        return "Progress";
+      default:
+        return "";
+    }
   }
 }

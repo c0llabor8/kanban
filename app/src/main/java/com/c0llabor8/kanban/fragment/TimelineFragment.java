@@ -7,21 +7,21 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TimelineAdapter;
-import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
 import com.c0llabor8.kanban.databinding.FragmentTimelineBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
-import com.c0llabor8.kanban.model.Task;
-import java.util.List;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
 
-public class TimelineFragment extends Fragment {
+public class TimelineFragment extends BaseTaskFragment implements TaskCreatedListener {
 
   private TimelineAdapter timelineAdapter;
   private FragmentTimelineBinding binding;
-  private List<Task> tasks;
+
+  public static TimelineFragment newInstance() {
+    return newInstance(new Bundle());
+  }
 
   public static TimelineFragment newInstance(Bundle args) {
     args.putString("title", "Timeline");
@@ -35,16 +35,27 @@ public class TimelineFragment extends Fragment {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timeline,
-        container, false);
+
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_timeline, container, false);
     return binding.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    timelineAdapter = new TimelineAdapter(tasks);
+
+    timelineAdapter = new TimelineAdapter(getTaskList());
     binding.rvTimeline.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTimeline.setAdapter(timelineAdapter);
+  }
+
+  @Override
+  public void onTasksLoaded() {
+    timelineAdapter.notifyDataSetChanged();
+  }
+
+  @Override
+  public void onTaskCreated() {
+    reloadTasks();
   }
 }

@@ -13,11 +13,6 @@ import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
-import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.model.Task;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import java.util.List;
 
 public class TaskListFragment extends BaseTaskFragment implements TaskCreatedListener {
 
