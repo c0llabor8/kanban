@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+  <!-- line_bg_top.xml -->
+  <shape xmlns:android="http://schemas.android.com/apk/res/android">
+  <solid android:color="#8e99f3"/>
+  <corners
+    android:topLeftRadius="15dp"
+    android:topRightRadius="15dp"/>
+  </shape>
+</selector>

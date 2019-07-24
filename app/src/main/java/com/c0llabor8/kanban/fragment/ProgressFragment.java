@@ -46,7 +46,6 @@ public class ProgressFragment extends BaseTaskFragment {
 
     // Get the new value from project
     //project.getAllTasks(callback);
-  }
 
   public void setTasksDone() {
     // Get the new value from user checking off tasks
