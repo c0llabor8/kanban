@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+  <item
+    android:id="@+id/action_invite"
+    android:title="Invite a new member"/>
+  <item
+    android:id="@+id/action_rename_project"
+    android:title="Rename project"/>
+  <item
+    android:id="@+id/action_leave_project"
+    android:title="Leave project"/>
+</menu>

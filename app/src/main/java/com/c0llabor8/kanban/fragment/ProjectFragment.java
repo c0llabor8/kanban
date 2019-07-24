@@ -12,6 +12,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
@@ -19,7 +20,7 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectFragment extends Fragment {
+public class ProjectFragment extends Fragment implements TaskCreatedListener {
 
   private Project project;
   private FragmentProjectBinding binding;
@@ -49,19 +50,33 @@ public class ProjectFragment extends Fragment {
       @Nullable Bundle savedInstanceState) {
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
-
-    project.getAllTasks(new FindCallback<Task>() {
-      @Override
-      public void done(List<Task> tasks, ParseException e) {
-        Bundle taskBundle = new Bundle();
-        taskBundle.putParcelableArrayList("tasks", new ArrayList<>(tasks));
-
-        pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), taskBundle);
-        binding.pager.setAdapter(pagerAdapter);
-        binding.tabs.setupWithViewPager(binding.pager, true);
-      }
-    });
-
     return binding.getRoot();
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+
+    project.getAllTasks((tasks, e) -> {
+      Bundle projectBundle = new Bundle();
+      projectBundle.putParcelable("project", project);
+
+      pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), projectBundle);
+
+      binding.pager.setAdapter(pagerAdapter);
+      binding.tabs.setupWithViewPager(binding.pager, true);
+    });
+  }
+
+  @Override
+  public void onTaskCreated() {
+    for (int i = 0; i < pagerAdapter.getCount(); i++) {
+      Fragment fragment = pagerAdapter.getItem(i);
+
+      if (fragment instanceof BaseTaskFragment) {
+        BaseTaskFragment taskFragment = (BaseTaskFragment) fragment;
+        taskFragment.reloadTasks();
+      }
+    }
   }
 }

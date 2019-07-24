@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @ParseClassName("Project")
-public class Project<callback> extends ParseObject {
+public class Project extends ParseObject {
 
   public static final String KEY_NAME = "name";
   public static final String KEY_MEMBERS = "members";
