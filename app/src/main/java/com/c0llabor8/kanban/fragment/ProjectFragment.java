@@ -50,6 +50,12 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
       @Nullable Bundle savedInstanceState) {
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
+    return binding.getRoot();
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
 
     project.getAllTasks((tasks, e) -> {
       Bundle projectBundle = new Bundle();
@@ -60,8 +66,6 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
       binding.pager.setAdapter(pagerAdapter);
       binding.tabs.setupWithViewPager(binding.pager, true);
     });
-
-    return binding.getRoot();
   }
 
   @Override

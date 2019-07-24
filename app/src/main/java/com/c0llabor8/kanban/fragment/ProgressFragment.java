@@ -57,4 +57,9 @@ public class ProgressFragment extends BaseTaskFragment {
     //int progress
     //pieChart.setProgress(progress);
   }
+
+  @Override
+  public void onTasksLoaded() {
+
+  }
 }
