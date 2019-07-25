@@ -212,13 +212,15 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
           currentProject.invite(result, (ParseException e) -> {
             if (e != null) {
               e.printStackTrace();
+
+              Snackbar.make(binding.getRoot(), e.getMessage(), Snackbar.LENGTH_SHORT).show();
               return;
             }
 
             Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
                 currentProject.getName()), Snackbar.LENGTH_SHORT).show();
-            dialog.dismiss();
           });
+          dialog.dismiss();
         }
     );
 

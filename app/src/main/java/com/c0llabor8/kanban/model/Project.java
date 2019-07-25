@@ -69,6 +69,11 @@ public class Project extends ParseObject {
             return;
           }
 
+          if (objects.size() == 0) {
+            callback.done(new ParseException(0, "Sorry, user not found"));
+            return;
+          }
+
           Membership.join(objects.get(0), project, callback);
           project.increment(KEY_MEMBERS, 1);
           project.saveInBackground();
