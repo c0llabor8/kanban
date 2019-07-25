@@ -2,12 +2,9 @@ package com.c0llabor8.kanban.adapter;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
 import com.c0llabor8.kanban.databinding.TimelineItemBinding;
 import com.c0llabor8.kanban.model.Task;
 import java.text.SimpleDateFormat;
@@ -23,9 +20,16 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
   private static final int VIEW_TYPE_BOTTOM = 2;
 
   private List<Task> tasks;
+  private List<Task> orderedTask;
 
   public TimelineAdapter(List<Task> tasks) {
     this.tasks = tasks;
+  }
+
+  @Override
+  public void onBindViewHolder(@NonNull ViewHolder holder, int position,
+      @NonNull List<Object> payloads) {
+    super.onBindViewHolder(holder, position, payloads);
   }
 
 
@@ -78,6 +82,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
       binding.itemTitle.setText(task.getTitle());
       binding.itemDescription.setText(task.getDescription());
       binding.itemDate.setText(updateTime(task.getEstimate()));
+      setPriority(task);
 
       switch (type) {
         case VIEW_TYPE_TOP:
@@ -92,6 +97,16 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
           //also rounded the bottom
           binding.itemLine.setBackgroundResource(R.drawable.line_bg_bottom);
           break;
+      }
+    }
+
+    private void setPriority(Task task) {
+      if(task.getPriority() == 0) {
+        binding.ivPriority.setImageResource(R.drawable.circle_priority_low);
+      } else if (task.getPriority() == 1) {
+        binding.ivPriority.setImageResource(R.drawable.circle_priority_medium);
+      } else {
+        binding.ivPriority.setImageResource(R.drawable.circle_priority_high);
       }
     }
 
