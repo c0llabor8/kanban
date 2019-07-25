@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentProgressBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
+import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.util.TaskProvider;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -24,21 +26,11 @@ import java.util.ArrayList;
 public class ProgressFragment extends BaseTaskFragment {
 
   private FragmentProgressBinding binding;
-
-  public ProgressFragment() {
-    // Required empty public constructor
-  }
-
-  /* *
-   * Creates an instance and Constructs a new Bundle to pass
-   * into a new fragment and returns that same fragment
-   */
-  public static ProgressFragment newInstance() {
-    return newInstance(new Bundle());
-  }
-
-  public static ProgressFragment newInstance(Bundle args) {
+  
+  public static ProgressFragment newInstance(Project project) {
+    Bundle args = new Bundle();
     args.putString("title", "Progress");
+    args.putParcelable("project", project);
 
     ProgressFragment fragment = new ProgressFragment();
     fragment.setArguments(args);
@@ -90,8 +82,8 @@ public class ProgressFragment extends BaseTaskFragment {
 
   // get the total # of tasks from a given project
   @Override
-  public void onTasksLoaded() {
-    drawChart();
+  public void onTaskRefresh() {
+    // TODO: Refresh the data
   }
 }
 

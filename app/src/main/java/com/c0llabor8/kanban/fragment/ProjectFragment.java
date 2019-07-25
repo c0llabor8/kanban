@@ -1,5 +1,6 @@
 package com.c0llabor8.kanban.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,25 +12,18 @@ import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
-import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
-import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.model.Task;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import java.util.ArrayList;
-import java.util.List;
+import com.c0llabor8.kanban.util.TaskProvider;
 
-public class ProjectFragment extends Fragment implements TaskCreatedListener {
+public class ProjectFragment extends Fragment implements TaskRefreshListener {
 
   private Project project;
   private FragmentProjectBinding binding;
   private ProjectPagerAdapter pagerAdapter;
 
   public static ProjectFragment newInstance(Project project) {
-
     Bundle args = new Bundle();
-
     args.putParcelable("project", project);
 
     ProjectFragment fragment = new ProjectFragment();
@@ -41,6 +35,7 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    // Get the project object passed in from the parent activity
     project = getArguments().getParcelable("project");
   }
 
@@ -49,34 +44,48 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
+    // Inflate the layout of the tab layout and view pager
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
     return binding.getRoot();
   }
 
   @Override
-  public void onStart() {
-    super.onStart();
+  public void onAttach(@NonNull Context context) {
+    super.onAttach(context);
 
-    project.getAllTasks((tasks, e) -> {
-      Bundle projectBundle = new Bundle();
-      projectBundle.putParcelable("project", project);
-
-      pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), projectBundle);
-
-      binding.pager.setAdapter(pagerAdapter);
-      binding.tabs.setupWithViewPager(binding.pager, true);
-    });
+    // Once this fragment is attached initialize the pager adapter with the project scope
+    Bundle projectBundle = new Bundle();
+    projectBundle.putParcelable("project", project);
+    pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), project);
   }
 
   @Override
-  public void onTaskCreated() {
-    for (int i = 0; i < pagerAdapter.getCount(); i++) {
-      Fragment fragment = pagerAdapter.getItem(i);
+  public void onResume() {
+    super.onResume();
+    onTaskRefresh();
+  }
 
-      if (fragment instanceof BaseTaskFragment) {
-        BaseTaskFragment taskFragment = (BaseTaskFragment) fragment;
-        taskFragment.reloadTasks();
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    // Initialize the view pager and tabs with our pager adapter
+    binding.pager.setAdapter(pagerAdapter);
+    binding.tabs.setupWithViewPager(binding.pager, true);
+  }
+
+  @Override
+  public void onTaskRefresh() {
+    // Once this is called loop through all pages and have them refresh their tasks
+    TaskProvider.getInstance().updateTasks(project, (objects, e) -> {
+      for (int i = 0; i < pagerAdapter.getCount(); i++) {
+        Fragment fragment = pagerAdapter.getItem(i);
+
+        if (fragment instanceof TaskRefreshListener) {
+          TaskRefreshListener taskFragment = (TaskRefreshListener) fragment;
+          taskFragment.onTaskRefresh();
+        }
       }
-    }
+    });
   }
 }

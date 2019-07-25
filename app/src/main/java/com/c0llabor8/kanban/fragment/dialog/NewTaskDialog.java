@@ -19,9 +19,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
-import com.parse.ParseException;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -41,7 +39,7 @@ public class NewTaskDialog extends DialogFragment {
   private RadioButton medium;
   private RadioButton low;
 
-  TaskCreatedListener listener;
+  TaskRefreshListener listener;
 
   public static NewTaskDialog newInstance() {
 
@@ -200,17 +198,17 @@ public class NewTaskDialog extends DialogFragment {
         return;
       }
 
-      listener.onTaskCreated();
+      listener.onTaskRefresh();
       Log.d("TaskCreationActivity", "Task saved successfully!");
     });
   }
 
-  public void setListener(TaskCreatedListener listener) {
+  public void setListener(TaskRefreshListener listener) {
     this.listener = listener;
   }
 
-  public interface TaskCreatedListener {
+  public interface TaskRefreshListener {
 
-    void onTaskCreated();
+    void onTaskRefresh();
   }
 }
