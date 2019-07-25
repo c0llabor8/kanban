@@ -36,7 +36,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
     super.onCreate(savedInstanceState);
 
     // Get the project object passed in from the parent activity
-    project = getArguments().getParcelable("project");
+    pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), project);
   }
 
   @Nullable
@@ -52,11 +52,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   @Override
   public void onAttach(@NonNull Context context) {
     super.onAttach(context);
-
-    // Once this fragment is attached initialize the pager adapter with the project scope
-    Bundle projectBundle = new Bundle();
-    projectBundle.putParcelable("project", project);
-    pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), project);
+    project = getArguments().getParcelable("project");
   }
 
   @Override
