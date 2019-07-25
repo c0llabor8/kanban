@@ -14,10 +14,7 @@ import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.util.TaskProvider;
-import com.parse.ParseException;
-import java.util.List;
 
 public class ProjectFragment extends Fragment implements TaskRefreshListener {
 
@@ -37,6 +34,8 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    // Get the project object passed in from the parent activity
     project = getArguments().getParcelable("project");
   }
 
@@ -45,6 +44,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
+    // Inflate the layout of the tab layout and view pager
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_project, container, false);
     return binding.getRoot();
   }
@@ -53,6 +53,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   public void onAttach(@NonNull Context context) {
     super.onAttach(context);
 
+    // Once this fragment is attached initialize the pager adapter with the project scope
     Bundle projectBundle = new Bundle();
     projectBundle.putParcelable("project", project);
     pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), project);
@@ -68,12 +69,14 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
+    // Initialize the view pager and tabs with our pager adapter
     binding.pager.setAdapter(pagerAdapter);
     binding.tabs.setupWithViewPager(binding.pager, true);
   }
 
   @Override
   public void onTaskRefresh() {
+    // Once this is called loop through all pages and have them refresh their tasks
     TaskProvider.getInstance().updateTasks(project, (objects, e) -> {
       for (int i = 0; i < pagerAdapter.getCount(); i++) {
         Fragment fragment = pagerAdapter.getItem(i);
