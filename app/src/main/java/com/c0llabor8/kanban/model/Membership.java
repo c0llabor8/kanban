@@ -1,10 +1,12 @@
 package com.c0llabor8.kanban.model;
 
 
+import android.media.MediaMetadata;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 @ParseClassName("Membership")
 public class Membership extends ParseObject {
@@ -30,6 +32,14 @@ public class Membership extends ParseObject {
     return this;
   }
 
+  public static void join(ParseUser user, Project project, SaveCallback callback) {
+    Membership membership = new Membership()
+        .setUser(user)
+        .setProject(project);
+
+    membership.saveInBackground(callback);
+  }
+
   public static class Query extends ParseQuery<Membership> {
 
     public Query() {
@@ -40,6 +50,11 @@ public class Membership extends ParseObject {
 
     public Query whereUserEquals(ParseUser user) {
       whereEqualTo(KEY_USER, user);
+      return this;
+    }
+
+    public Query whereProjectEquals(Project project) {
+      whereEqualTo(KEY_PROJECT, project);
       return this;
     }
   }

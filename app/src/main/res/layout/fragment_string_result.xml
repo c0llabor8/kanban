@@ -31,10 +31,10 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/et_label"
           style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:hint="Project name"
           app:hintAnimationEnabled="false">
           <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_title"
