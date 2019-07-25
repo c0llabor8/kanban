@@ -12,9 +12,9 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TimelineAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTimelineBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
-import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
+import com.c0llabor8.kanban.util.TaskProvider;
 
-public class TimelineFragment extends BaseTaskFragment implements TaskCreatedListener {
+public class TimelineFragment extends BaseTaskFragment {
 
   private TimelineAdapter timelineAdapter;
   private FragmentTimelineBinding binding;
@@ -44,18 +44,13 @@ public class TimelineFragment extends BaseTaskFragment implements TaskCreatedLis
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    timelineAdapter = new TimelineAdapter(getTaskList());
+    timelineAdapter = new TimelineAdapter(TaskProvider.getInstance().getTasks(project));
     binding.rvTimeline.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTimeline.setAdapter(timelineAdapter);
   }
 
   @Override
-  public void onTasksLoaded() {
+  public void onTaskRefresh() {
     timelineAdapter.notifyDataSetChanged();
-  }
-
-  @Override
-  public void onTaskCreated() {
-    reloadTasks();
   }
 }

@@ -11,6 +11,8 @@ import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentProgressBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
+import com.c0llabor8.kanban.util.TaskProvider;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
@@ -66,7 +68,8 @@ public class ProgressFragment extends BaseTaskFragment {
     binding.pieChart.setUsePercentValues(true);
 
     ArrayList<PieEntry> pieData = new ArrayList<>();
-    pieData.add(new PieEntry(40f, "Tasks completed", getTaskList().size()));
+    pieData.add(new PieEntry(40f, "Tasks completed",
+        TaskProvider.getInstance().getTasks(project).size()));
     pieData.add(new PieEntry(60f, "", 1));
 
     PieDataSet dataSet = new PieDataSet(pieData, "");
@@ -84,8 +87,8 @@ public class ProgressFragment extends BaseTaskFragment {
   }
 
   @Override
-  public void onTasksLoaded() {
-    drawChart();
+  public void onTaskRefresh() {
+    // TODO: Refresh the data
   }
 }
 

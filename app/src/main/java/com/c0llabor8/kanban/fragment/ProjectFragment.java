@@ -11,16 +11,14 @@ import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
-import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
-import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
-import com.parse.FindCallback;
+import com.c0llabor8.kanban.util.TaskProvider;
 import com.parse.ParseException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class ProjectFragment extends Fragment implements TaskCreatedListener {
+public class ProjectFragment extends Fragment implements TaskRefreshListener {
 
   private Project project;
   private FragmentProjectBinding binding;
@@ -57,10 +55,10 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
   public void onStart() {
     super.onStart();
 
-    project.getAllTasks((tasks, e) -> {
-      Bundle projectBundle = new Bundle();
-      projectBundle.putParcelable("project", project);
+    Bundle projectBundle = new Bundle();
+    projectBundle.putParcelable("project", project);
 
+    TaskProvider.getInstance().updateTasks(project, (List<Task> objects, ParseException e) -> {
       pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), projectBundle);
 
       binding.pager.setAdapter(pagerAdapter);
@@ -69,13 +67,13 @@ public class ProjectFragment extends Fragment implements TaskCreatedListener {
   }
 
   @Override
-  public void onTaskCreated() {
+  public void onTaskRefresh() {
     for (int i = 0; i < pagerAdapter.getCount(); i++) {
       Fragment fragment = pagerAdapter.getItem(i);
 
-      if (fragment instanceof BaseTaskFragment) {
-        BaseTaskFragment taskFragment = (BaseTaskFragment) fragment;
-        taskFragment.reloadTasks();
+      if (fragment instanceof TaskRefreshListener) {
+        TaskRefreshListener taskFragment = (TaskRefreshListener) fragment;
+        taskFragment.onTaskRefresh();
       }
     }
   }

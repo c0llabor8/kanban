@@ -18,11 +18,12 @@ import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog.ProjectCreatedListener;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
-import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
+import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.util.TaskProvider;
 
 public class MainActivity extends AppCompatActivity implements ProjectSheetListener,
     ProjectCreatedListener {
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   BottomNavigationSheet navFragment;
   Project currentProject;
   ProjectBottomActionSheet navActionFragment;
-  TaskCreatedListener taskCreatedListener;
+  TaskRefreshListener taskRefreshListener;
   // SparseArray maps integers and Objects, more memory efficient than HashMap
   SparseArray<Project> projectMenuMap = new SparseArray<>();
 
@@ -45,10 +46,10 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     navActionFragment = ProjectBottomActionSheet.newInstance();
     navFragment = BottomNavigationSheet.newInstance();
 
-    setSupportActionBar(binding.bar);
     //not within a project scope in the initial screen, so keep it at null
-    switchProjectScope(null);
+    TaskProvider.getInstance().updateTasks(null, (objects, e) -> switchProjectScope(null));
 
+    setSupportActionBar(binding.bar);
     loadProjects();
   }
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
         ProjectFragment.newInstance(project);
 
     if (fragment != null) {
-      taskCreatedListener = (TaskCreatedListener) fragment;
+      taskRefreshListener = (TaskRefreshListener) fragment;
 
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(binding.content.getId(), fragment);
@@ -119,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     if (fragment instanceof NewTaskDialog) {
       NewTaskDialog taskDialog = (NewTaskDialog) fragment;
-      taskDialog.setListener(taskCreatedListener);
+      taskDialog.setListener(taskRefreshListener);
     }
   }
 

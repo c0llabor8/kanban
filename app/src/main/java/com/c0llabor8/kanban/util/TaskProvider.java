@@ -4,15 +4,14 @@ import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class TaskProvider {
 
   private static TaskProvider instance;
-  private HashMap<Project, Set<Task>> taskMap;
+  private HashMap<Project, List<Task>> taskMap;
 
   private TaskProvider() {
     taskMap = new HashMap<>();
@@ -34,7 +33,7 @@ public class TaskProvider {
           return;
         }
 
-        saveTasks(null, objects);
+        taskMap.put(project, objects);
         callback.done(objects, null);
       });
 
@@ -47,22 +46,28 @@ public class TaskProvider {
         return;
       }
 
-      saveTasks(null, objects);
+      taskMap.put(project, objects);
       callback.done(objects, null);
     });
   }
 
-  public Task[] getTasks(Project project) {
-    Set<Task> taskSet = taskMap.get(project);
+  public List<Task> getTasks(Project project) {
+    List<Task> taskList = taskMap.get(project);
 
-    if (taskSet == null) {
-      taskSet = new HashSet<>();
+    if (taskList == null) {
+      taskList = new ArrayList<>();
     }
 
-    return taskSet.toArray(new Task[]{});
+    return taskList;
   }
 
-  public void saveTasks(Project project, List<Task> tasks) {
-    taskMap.put(project, new HashSet<>(tasks));
+  public void saveTask(Project project, Task task) {
+    List<Task> taskList = taskMap.get(project);
+
+    if (taskList == null) {
+      taskList = new ArrayList<>();
+    }
+
+    taskList.add(task);
   }
 }

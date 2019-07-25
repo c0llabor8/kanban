@@ -12,9 +12,9 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
-import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskCreatedListener;
+import com.c0llabor8.kanban.util.TaskProvider;
 
-public class TaskListFragment extends BaseTaskFragment implements TaskCreatedListener {
+public class TaskListFragment extends BaseTaskFragment {
 
   private TaskListAdapter listAdapter;
   private FragmentTaskListBinding binding;
@@ -44,18 +44,13 @@ public class TaskListFragment extends BaseTaskFragment implements TaskCreatedLis
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    listAdapter = new TaskListAdapter(getTaskList());
+    listAdapter = new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
     binding.rvTasks.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTasks.setAdapter(listAdapter);
   }
 
   @Override
-  public void onTasksLoaded() {
+  public void onTaskRefresh() {
     listAdapter.notifyDataSetChanged();
-  }
-
-  @Override
-  public void onTaskCreated() {
-    reloadTasks();
   }
 }
