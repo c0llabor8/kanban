@@ -8,6 +8,12 @@
   android:orientation="vertical"
   tools:ignore="HardcodedText" >
 
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rvMembers"
+    android:layout_width="match_parent"
+    android:layout_height="73dp"
+    android:orientation="horizontal"/>
+
   <com.github.mikephil.charting.charts.PieChart
     android:id="@+id/pieChart"
     android:layout_width="match_parent"

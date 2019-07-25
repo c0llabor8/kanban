@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentProgressBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
@@ -51,6 +53,8 @@ public class ProgressFragment extends BaseTaskFragment {
     // Inflate the layout for this fragment
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_progress,
         container, false);
+    binding.rvMembers.setLayoutManager(new LinearLayoutManager(getContext(),
+        LinearLayoutManager.HORIZONTAL, false));
     // reference the piechart with binding view
     return binding.getRoot();
   }
