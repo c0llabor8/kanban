@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.util.TaskProvider;
+import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +29,12 @@ public abstract class BaseTaskFragment extends Fragment {
 
   public void reloadTasks() {
     if (project == null) {
-      Task.queryUserTasks((objects, e) -> {
-        taskList.clear();
-        taskList.addAll(objects);
-        onTasksLoaded();
-      });
+      TaskProvider.getInstance().updateTasks(null,
+          (List<Task> objects, ParseException e) -> {
+            taskList.clear();
+            taskList.addAll(objects);
+            onTasksLoaded();
+          });
     } else {
       project.getAllTasks((objects, e) -> {
         taskList.clear();
