@@ -69,6 +69,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {
+
     private TimelineItemBinding binding;
 
 
@@ -92,15 +93,15 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
       switch (type) {
         case VIEW_TYPE_TOP:
           // The top of the line has to be rounded
-          binding.itemLine.setBackgroundResource(R.drawable.line_bg_top);
+          binding.contLine.setImageResource(R.drawable.line_bg_top);
           break;
         case VIEW_TYPE_MIDDLE:
           // but a drawable can be used to make the cap rounded also here
-          binding.itemLine.setBackgroundResource(R.drawable.line_bg_middle);
+          //binding.contLine.setImageResource(R.drawable.line_bg_top);
           break;
         case VIEW_TYPE_BOTTOM:
           //also rounded the bottom
-          binding.itemLine.setBackgroundResource(R.drawable.line_bg_bottom);
+          binding.contLine.setImageResource(R.drawable.line_bg_bottom);
           break;
       }
     }
