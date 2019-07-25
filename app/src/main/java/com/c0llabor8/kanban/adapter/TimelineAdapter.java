@@ -20,7 +20,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
   private static final int VIEW_TYPE_BOTTOM = 2;
 
   private List<Task> tasks;
-  private List<Task> orderedTask;
 
   public TimelineAdapter(List<Task> tasks) {
     this.tasks = tasks;
@@ -78,7 +77,13 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
       this.binding = binding;
     }
 
+    /**
+     * takes necessary information about tasks and assigns to correct layout For different locations
+     * within the timeline, the layout should change
+     */
+
     public void populateTasks(Task task, int type) {
+      orderTask();
       binding.itemTitle.setText(task.getTitle());
       binding.itemDescription.setText(task.getDescription());
       binding.itemDate.setText(updateTime(task.getEstimate()));
@@ -100,8 +105,21 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
       }
     }
 
+    /**
+     * orders task in ascending order by date
+     */
+    private void orderTask() {
+      Task.Query taskQuery = new Task.Query();
+      taskQuery.sortAscending();
+
+    }
+
+
+    /**
+     * changes color of icon on timeline based on priority level
+     */
     private void setPriority(Task task) {
-      if(task.getPriority() == 0) {
+      if (task.getPriority() == 0) {
         binding.ivPriority.setImageResource(R.drawable.circle_priority_low);
       } else if (task.getPriority() == 1) {
         binding.ivPriority.setImageResource(R.drawable.circle_priority_medium);
@@ -110,6 +128,9 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
       }
     }
 
+    /**
+     * converts time in long to format MM/dd/yy to be displayed
+     */
     private String updateTime(long estimate) {
       Date date = new Date(estimate);
       String format = "MM/dd/yy";
@@ -120,4 +141,5 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     }
 
   }
+
 }
