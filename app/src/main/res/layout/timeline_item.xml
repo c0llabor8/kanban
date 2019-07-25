@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <!--need to get circle icon to display the priority level-->
     <ImageView
       android:id="@+id/ivPriority"
       android:layout_width="40dp"
       android:layout_height="40dp"
       android:layout_marginTop="24dp"
-      android:layout_marginLeft="14dp"
+      android:layout_marginLeft="16dp"
       android:layout_marginRight="14dp"
       android:padding="4dp"
       android:background="@drawable/circle_priority_placeholder"/>
@@ -22,43 +23,31 @@
       android:id="@+id/item_line"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
-      android:layout_marginStart="60dp"
-      android:padding="2dp">
+      android:layout_marginStart="75dp"
+      >
 
-      <!--timeline attribute; overlapping works so just need to change this to a rectangle-->
-      <!--ImageView
+      <!--timeline attribute-->
+      <ImageView
+        android:id="@+id/cont_line"
         android:layout_width="16dp"
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:scaleType="fitXY"
-        android:src="@drawable/circle_priority_low"
-        /-->
+        android:src="@drawable/timeline_rectangle"/>
 
-
-      <!--ImageView
-        android:id="@+id/timeline"
-        android:layout_width="12dp"
-        android:layout_height="match_parent"
-        android:foreground="#B4D6E7"/-->
 
       <!--small circle appear on top of timeline, goes over ImageView-->
 
       <ImageView
-        android:layout_width="12dp"
-        android:layout_height="12dp"
+        android:layout_width="13dp"
+        android:layout_height="13dp"
         android:adjustViewBounds="true"
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="3dp"
         android:elevation="10dp"
-        android:layout_centerInParent="true"
         android:scaleType="fitXY"
         android:src="@drawable/circle_timeline"/>
-      <!--View
-        android:id="@+id/timeline_bubble"
-        android:layout_width="12dp"
-        android:layout_height="12dp"
-        android:layout_marginTop="5dp"
-        android:foreground="@drawable/circle_timeline"
-        android:visibility="visible"
-        android:layout_gravity="center"/-->
+
 
     </RelativeLayout>
 
