@@ -11,22 +11,19 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.FragmentNewProjectBinding;
-import com.c0llabor8.kanban.model.Membership;
-import com.c0llabor8.kanban.model.Project;
-import com.parse.ParseException;
-import com.parse.ParseUser;
+import com.c0llabor8.kanban.databinding.FragmentStringResultBinding;
 
-public class NewProjectDialog extends AppCompatDialogFragment {
+public class StringResultDialog extends AppCompatDialogFragment {
 
-  private FragmentNewProjectBinding binding;
-  private ProjectCreatedListener listener;
+  private FragmentStringResultBinding binding;
+  private StringResultCallback listener;
 
-  public static NewProjectDialog newInstance() {
-
+  public static StringResultDialog newInstance(String title, String label) {
     Bundle args = new Bundle();
+    args.putString("title", title);
+    args.putString("label", label);
 
-    NewProjectDialog fragment = new NewProjectDialog();
+    StringResultDialog fragment = new StringResultDialog();
     fragment.setArguments(args);
     return fragment;
   }
@@ -55,7 +52,7 @@ public class NewProjectDialog extends AppCompatDialogFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
-    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_project, container, false);
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_string_result, container, false);
     return binding.getRoot();
   }
 
@@ -66,54 +63,22 @@ public class NewProjectDialog extends AppCompatDialogFragment {
     binding.toolbar.setNavigationOnClickListener((View v) -> dismiss());
 
     binding.toolbar.inflateMenu(R.menu.menu_dialog_save);
-    binding.toolbar.setTitle("Create new project");
+    binding.toolbar.setTitle(getArguments().getString("title", ""));
+    binding.etLabel.setHint(getArguments().getString("label", ""));
 
     binding.toolbar.setOnMenuItemClickListener(item -> {
-      createProject();
+      listener.done(binding.etTitle.getText().toString());
       return true;
     });
   }
 
-  // Create the Project Object
-  private void createProject() {
-    Project project = new Project()
-        .setTitle(binding.etTitle.getText().toString())
-        .setTasks(0)
-        .setMembers(1);
-
-    project.saveInBackground((ParseException e) -> {
-      if (e != null) {
-        e.printStackTrace();
-        return;
-      }
-
-      joinProject(project);
-    });
-  }
-
   // Set the class that will be listening for when a project is created
-  public void setProjectCreatedListener(ProjectCreatedListener listener) {
+  public void onStringResult(StringResultCallback listener) {
     this.listener = listener;
   }
 
-  // Link the user to the project
-  private void joinProject(Project project) {
-    Membership membership = new Membership()
-        .setUser(ParseUser.getCurrentUser())
-        .setProject(project);
+  public interface StringResultCallback {
 
-    membership.saveInBackground((ParseException e) -> {
-      if (e != null) {
-        e.printStackTrace();
-        return;
-      }
-
-      listener.onProjectCreated(project);
-      dismiss();
-    });
-  }
-
-  public interface ProjectCreatedListener {
-    void onProjectCreated(Project project);
+    void done(String string);
   }
 }

@@ -25,9 +25,6 @@ public class Application extends android.app.Application {
     httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
     builder.networkInterceptors().add(httpLoggingInterceptor);
 
-    // Enable parse's local storage of
-    Parse.enableLocalDatastore(this);
-
     // Register our data models with Parse
     ParseObject.registerSubclass(Project.class);
     ParseObject.registerSubclass(Membership.class);

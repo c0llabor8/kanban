@@ -15,18 +15,19 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.ProjectFragment;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
-import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog;
-import com.c0llabor8.kanban.fragment.dialog.NewProjectDialog.ProjectCreatedListener;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
+import com.c0llabor8.kanban.fragment.dialog.StringResultDialog;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.TaskProvider;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.parse.ParseException;
 
-public class MainActivity extends AppCompatActivity implements ProjectSheetListener,
-    ProjectCreatedListener {
+public class MainActivity extends AppCompatActivity implements ProjectSheetListener {
 
   ActivityMainBinding binding;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   ProjectBottomActionSheet navActionFragment;
   TaskRefreshListener taskRefreshListener;
   // SparseArray maps integers and Objects, more memory efficient than HashMap
-  SparseArray<Project> projectMenuMap = new SparseArray<>();
+  SparseArray<Project> projectMenuMap;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -113,11 +114,6 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       navFragment.setProjectNavigationListener(this);
     }
 
-    if (fragment instanceof NewProjectDialog) {
-      NewProjectDialog projectDialog = (NewProjectDialog) fragment;
-      projectDialog.setProjectCreatedListener(this);
-    }
-
     if (fragment instanceof NewTaskDialog) {
       NewTaskDialog taskDialog = (NewTaskDialog) fragment;
       taskDialog.setListener(taskRefreshListener);
@@ -159,27 +155,121 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     //when new project is selected, dialog is launched to create new project
     if (item.getItemId() == R.id.new_project) {
-      NewProjectDialog fragment = NewProjectDialog.newInstance();
-      fragment.show(getSupportFragmentManager(), "");
-      fragment.dismiss();
+      navFragment.dismiss();
+      promptNewProject();
+      return true;
+    }
+
+    // Have the current user leave the current project
+    if (item.getItemId() == R.id.action_leave_project) {
+      navActionFragment.dismiss();
+      promptLeaveProject();
+      return true;
+    }
+
+    if (item.getItemId() == R.id.action_rename_project) {
+      navActionFragment.dismiss();
+      promptRenameProject();
+      return true;
+    }
+
+    if (item.getItemId() == R.id.action_invite) {
+      navActionFragment.dismiss();
+      promptInviteMember();
       return true;
     }
 
     return false;
   }
 
-  /*
-   * Called once a project was created
-   * */
-  @Override
-  public void onProjectCreated(Project project) {
-    projectMenuMap.put(Menu.FIRST + projectMenuMap.size(), project);
+  public void promptNewProject() {
+    StringResultDialog dialog = StringResultDialog.newInstance("Create new project",
+        "Project name");
+
+    dialog.onStringResult(
+        (String result) -> {
+          Project.create(result, e -> {
+            if (e != null) {
+              e.printStackTrace();
+              return;
+            }
+
+            loadProjects();
+            dialog.dismiss();
+          });
+        }
+    );
+
+    dialog.show(getSupportFragmentManager(), "");
+  }
+
+  public void promptInviteMember() {
+    StringResultDialog dialog = StringResultDialog.newInstance("Invite member",
+        "Email");
+
+    dialog.onStringResult(
+        (String result) -> {
+          currentProject.invite(result, (ParseException e) -> {
+            if (e != null) {
+              e.printStackTrace();
+              return;
+            }
+
+            Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
+                currentProject.getName()), Snackbar.LENGTH_SHORT).show();
+            dialog.dismiss();
+          });
+        }
+    );
+
+    dialog.show(getSupportFragmentManager(), "");
+  }
+
+  public void promptRenameProject() {
+    StringResultDialog dialog = StringResultDialog.newInstance(String.format("Rename %s",
+        currentProject.getName()), "New project name");
+
+    dialog.onStringResult(
+        (String result) -> {
+          currentProject.rename(result, e -> {
+            if (e != null) {
+              e.printStackTrace();
+              return;
+            }
+
+            switchProjectScope(null);
+            loadProjects();
+          });
+          dialog.dismiss();
+        }
+    );
+
+    dialog.show(getSupportFragmentManager(), "");
+  }
+
+  public void promptLeaveProject() {
+    new MaterialAlertDialogBuilder(this,
+        R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
+        .setTitle(String.format("Leave %s?", currentProject.getName()))
+        .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel())
+        .setPositiveButton("Leave", (dialogInterface, i) -> {
+          currentProject.leave(e -> {
+            if (e != null) {
+              e.printStackTrace();
+            }
+
+            switchProjectScope(null);
+            loadProjects();
+          });
+        }).show();
   }
 
   /*
    * Query for all projects the current user is a member of and store them
    * */
   public void loadProjects() {
+    projectMenuMap = new SparseArray<>();
+
     Project.queryUserProjects((projects, e) -> {
       if (e != null) {
         e.printStackTrace();
