@@ -14,6 +14,7 @@ import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ public class ProgressFragment extends BaseTaskFragment {
   }
 
   /* *
-   * Creates an instance
+   * Creates an instance and Constructs a new Bundle to pass
+   * into a new fragment and returns that same fragment
    */
   public static ProgressFragment newInstance() {
     return newInstance(new Bundle());
@@ -47,42 +49,42 @@ public class ProgressFragment extends BaseTaskFragment {
       @Nullable Bundle savedInstanceState) {
 
     // Inflate the layout for this fragment
-    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_progress, container, false);
-    // reference the piechart with binding view:  PieChart pieChart = (PieChart) view.findViewById
-    // (R.id.chart);
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_progress,
+        container, false);
+    // reference the piechart with binding view
     return binding.getRoot();
-    // Do I need an adapter? yes
-    // get the total # of tasks from a given project
-
-    // count the # of tasks I got done vs the ones that are left in a given project
   }
 
-  // Calculate the slice size and update the pie chart
+  // Calculates the slice size and update the pie chart
   // Returns data and passes that data inside model
+  // NOTE: Use an ArrayList is to store x-axis labels.
+  //       Pass the X-values Array and dataset into a new object PieData.
   private PieData drawChart() {
     // .invalidate() may make it update
     // Get the new value from user checking off tasks
     // Update the old value
-    binding.pieChart.setUsePercentValues(true);
+    binding.pieChart.setUsePercentValues(false);
 
     ArrayList<PieEntry> pieData = new ArrayList<>();
-    pieData.add(new PieEntry(40f, "Tasks completed", getTaskList().size()));
+    pieData.add(new PieEntry(40f, "Tasks: " + getTaskList().size(), 2));
     pieData.add(new PieEntry(60f, "", 1));
 
     PieDataSet dataSet = new PieDataSet(pieData, "");
     PieData data = new PieData(dataSet);
 
-    data.setValueFormatter(new PercentFormatter());
-    binding.pieChart.setData(data);
+    data.setValueFormatter(new DefaultValueFormatter(getTaskList().size()));
+    dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+    binding.pieChart.setData(data); // Creates pieChart with data
+    // Enables hole in pieChart
     binding.pieChart.setDrawHoleEnabled(true);
-    binding.pieChart.setTransparentCircleRadius(58f);
     binding.pieChart.setHoleRadius(58f);
-    dataSet.setColors(ColorTemplate.VORDIPLOM_COLORS);
-    data.setValueTextSize(13f);
-    data.setValueTextColor(Color.DKGRAY);
+    binding.pieChart.setTransparentCircleRadius(58f);
+    data.setValueTextSize(15f);
+    data.setValueTextColor(Color.BLACK);
     return data;
   }
 
+  // get the total # of tasks from a given project
   @Override
   public void onTasksLoaded() {
     drawChart();
