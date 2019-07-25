@@ -36,7 +36,7 @@ public class NewTaskDialog extends DialogFragment {
   private Toolbar toolbar;
   private EditText etDescription;
   private EditText etTitle;
-  private int priorityValue;
+  private int priorityValue = 2;
   private RadioButton high;
   private RadioButton medium;
   private RadioButton low;
