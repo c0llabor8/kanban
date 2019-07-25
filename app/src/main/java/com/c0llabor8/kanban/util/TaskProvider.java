@@ -33,7 +33,8 @@ public class TaskProvider {
           return;
         }
 
-        taskMap.put(project, objects);
+        getTasks(project).clear();
+        getTasks(project).addAll(objects);
         callback.done(objects, null);
       });
 
@@ -46,28 +47,18 @@ public class TaskProvider {
         return;
       }
 
-      taskMap.put(project, objects);
+      getTasks(project).clear();
+      getTasks(project).addAll(objects);
       callback.done(objects, null);
     });
   }
 
   public List<Task> getTasks(Project project) {
-    List<Task> taskList = taskMap.get(project);
 
-    if (taskList == null) {
-      taskList = new ArrayList<>();
+    if (taskMap.get(project) == null) {
+      taskMap.put(project, new ArrayList<>());
     }
 
-    return taskList;
-  }
-
-  public void saveTask(Project project, Task task) {
-    List<Task> taskList = taskMap.get(project);
-
-    if (taskList == null) {
-      taskList = new ArrayList<>();
-    }
-
-    taskList.add(task);
+    return taskMap.get(project);
   }
 }

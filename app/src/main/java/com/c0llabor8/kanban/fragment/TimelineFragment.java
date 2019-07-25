@@ -12,6 +12,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TimelineAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTimelineBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
+import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.TaskProvider;
 
 public class TimelineFragment extends BaseTaskFragment {
@@ -19,16 +20,20 @@ public class TimelineFragment extends BaseTaskFragment {
   private TimelineAdapter timelineAdapter;
   private FragmentTimelineBinding binding;
 
-  public static TimelineFragment newInstance() {
-    return newInstance(new Bundle());
-  }
-
-  public static TimelineFragment newInstance(Bundle args) {
+  public static TimelineFragment newInstance(Project project) {
+    Bundle args = new Bundle();
     args.putString("title", "Timeline");
+    args.putParcelable("project", project);
 
     TimelineFragment fragment = new TimelineFragment();
     fragment.setArguments(args);
     return fragment;
+  }
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    timelineAdapter = new TimelineAdapter(TaskProvider.getInstance().getTasks(project));
   }
 
   @Nullable
@@ -44,7 +49,6 @@ public class TimelineFragment extends BaseTaskFragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
 
-    timelineAdapter = new TimelineAdapter(TaskProvider.getInstance().getTasks(project));
     binding.rvTimeline.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTimeline.setAdapter(timelineAdapter);
   }

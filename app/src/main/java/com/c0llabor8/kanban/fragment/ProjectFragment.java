@@ -1,5 +1,6 @@
 package com.c0llabor8.kanban.fragment;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +26,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   private ProjectPagerAdapter pagerAdapter;
 
   public static ProjectFragment newInstance(Project project) {
-
     Bundle args = new Bundle();
-
     args.putParcelable("project", project);
 
     ProjectFragment fragment = new ProjectFragment();
@@ -38,7 +37,6 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     project = getArguments().getParcelable("project");
   }
 
@@ -52,29 +50,39 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   }
 
   @Override
-  public void onStart() {
-    super.onStart();
+  public void onAttach(@NonNull Context context) {
+    super.onAttach(context);
 
     Bundle projectBundle = new Bundle();
     projectBundle.putParcelable("project", project);
+    pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), project);
+  }
 
-    TaskProvider.getInstance().updateTasks(project, (List<Task> objects, ParseException e) -> {
-      pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), projectBundle);
+  @Override
+  public void onResume() {
+    super.onResume();
+    onTaskRefresh();
+  }
 
-      binding.pager.setAdapter(pagerAdapter);
-      binding.tabs.setupWithViewPager(binding.pager, true);
-    });
+  @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+
+    binding.pager.setAdapter(pagerAdapter);
+    binding.tabs.setupWithViewPager(binding.pager, true);
   }
 
   @Override
   public void onTaskRefresh() {
-    for (int i = 0; i < pagerAdapter.getCount(); i++) {
-      Fragment fragment = pagerAdapter.getItem(i);
+    TaskProvider.getInstance().updateTasks(project, (objects, e) -> {
+      for (int i = 0; i < pagerAdapter.getCount(); i++) {
+        Fragment fragment = pagerAdapter.getItem(i);
 
-      if (fragment instanceof TaskRefreshListener) {
-        TaskRefreshListener taskFragment = (TaskRefreshListener) fragment;
-        taskFragment.onTaskRefresh();
+        if (fragment instanceof TaskRefreshListener) {
+          TaskRefreshListener taskFragment = (TaskRefreshListener) fragment;
+          taskFragment.onTaskRefresh();
+        }
       }
-    }
+    });
   }
 }

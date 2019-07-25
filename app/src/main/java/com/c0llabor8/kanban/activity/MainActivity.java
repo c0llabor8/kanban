@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   public void switchProjectScope(Project project) {
     currentProject = project;
 
-    Fragment fragment = (project == null) ? TaskListFragment.newInstance() :
+    Fragment fragment = (project == null) ? TaskListFragment.newInstance(null) :
         ProjectFragment.newInstance(project);
 
     if (fragment != null) {

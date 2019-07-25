@@ -18,7 +18,6 @@ public abstract class BaseTaskFragment extends Fragment implements TaskRefreshLi
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
     project = getArguments().getParcelable("project");
   }
 }

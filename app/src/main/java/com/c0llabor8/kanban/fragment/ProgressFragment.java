@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentProgressBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
-import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
+import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.TaskProvider;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -24,19 +24,10 @@ public class ProgressFragment extends BaseTaskFragment {
 
   private FragmentProgressBinding binding;
 
-  public ProgressFragment() {
-    // Required empty public constructor
-  }
-
-  /* *
-   * Creates an instance
-   */
-  public static ProgressFragment newInstance() {
-    return newInstance(new Bundle());
-  }
-
-  public static ProgressFragment newInstance(Bundle args) {
+  public static ProgressFragment newInstance(Project project) {
+    Bundle args = new Bundle();
     args.putString("title", "Progress");
+    args.putParcelable("project", project);
 
     ProgressFragment fragment = new ProgressFragment();
     fragment.setArguments(args);
