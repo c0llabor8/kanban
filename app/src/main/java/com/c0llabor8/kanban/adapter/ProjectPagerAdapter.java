@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.c0llabor8.kanban.fragment.ProgressFragment;
+import com.c0llabor8.kanban.fragment.SummaryFragment;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.TimelineFragment;
 import com.c0llabor8.kanban.model.Project;
@@ -27,7 +27,7 @@ public class ProjectPagerAdapter extends FragmentPagerAdapter {
     pages = new Fragment[]{
         TaskListFragment.newInstance(project),
         TimelineFragment.newInstance(project),
-        ProgressFragment.newInstance(project)
+        SummaryFragment.newInstance(project)
     };
   }
 
