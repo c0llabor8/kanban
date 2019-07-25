@@ -18,24 +18,49 @@
 
 
     <!--the actual timeline-->
-    <FrameLayout
+    <RelativeLayout
       android:id="@+id/item_line"
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
       android:layout_marginStart="60dp"
       android:padding="2dp">
 
-      <!--semi-transparent circle on timeline-->
+      <!--timeline attribute; overlapping works so just need to change this to a rectangle-->
+      <!--ImageView
+        android:layout_width="16dp"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/circle_priority_low"
+        /-->
 
-      <View
-      android:id="@+id/timeline_bubble"
-      android:layout_width="12dp"
-      android:layout_height="12dp"
-      android:layout_marginTop="5dp"
-      android:foreground="@drawable/circle_timeline"
-      android:visibility="visible"/>
 
-    </FrameLayout>
+      <!--ImageView
+        android:id="@+id/timeline"
+        android:layout_width="12dp"
+        android:layout_height="match_parent"
+        android:foreground="#B4D6E7"/-->
+
+      <!--small circle appear on top of timeline, goes over ImageView-->
+
+      <ImageView
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:adjustViewBounds="true"
+        android:elevation="10dp"
+        android:layout_centerInParent="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/circle_timeline"/>
+      <!--View
+        android:id="@+id/timeline_bubble"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginTop="5dp"
+        android:foreground="@drawable/circle_timeline"
+        android:visibility="visible"
+        android:layout_gravity="center"/-->
+
+    </RelativeLayout>
 
     <LinearLayout
       android:id="@+id/linearLayout"
