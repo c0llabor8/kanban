@@ -13,23 +13,23 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 /*
-* This class is the adapter used to display tasks into a task list
-* */
+ * This class is the adapter used to display tasks into a task list
+ * */
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
   private List<Task> tasks;
 
   /*
-  * Constructor method stores a reference to a list of tasks to adapt into a RecyclerView
-  * */
+   * Constructor method stores a reference to a list of tasks to adapt into a RecyclerView
+   * */
   public TaskListAdapter(List<Task> tasks) {
     this.tasks = tasks;
   }
 
   /*
-  * Inflates the view binding object then stores it into the ViewHolder
-  * */
+   * Inflates the view binding object then stores it into the ViewHolder
+   * */
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -42,8 +42,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
   }
 
   /*
-  * Bind the task at the list position to the list item view
-  * */
+   * Bind the task at the list position to the list item view
+   * */
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     final Task task = tasks.get(position);
@@ -56,8 +56,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
   }
 
   /*
-  * This method return the formatted date string of a timestamp
-  * */
+   * This method return the formatted date string of a timestamp
+   * */
   public String updateTime(Long unixTime) {
     Date date = new Date(unixTime);
     String format = "MM/dd/yy";
@@ -68,8 +68,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
   }
 
   /*
-  * This class is used to store the view bindings for each of the list items
-  * */
+   * This class is used to store the view bindings for each of the list items
+   * */
   class ViewHolder extends RecyclerView.ViewHolder {
 
     private ListItemTaskBinding binding;

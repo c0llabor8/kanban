@@ -35,6 +35,7 @@ public class SummaryFragment extends BaseTaskFragment {
     super.onCreate(savedInstanceState);
     //memberProfileAdapter = new MemberProfileAdapter();
   }
+
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

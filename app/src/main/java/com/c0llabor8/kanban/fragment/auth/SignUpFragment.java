@@ -71,7 +71,7 @@ public class SignUpFragment extends BaseAuthFragment {
   }
 
   /**
-   *  disable the button and sets text to empty string
+   * disable the button and sets text to empty string
    */
   @Override
   public void preAuthAction() {

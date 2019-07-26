@@ -71,9 +71,9 @@ public class LoginFragment extends BaseAuthFragment {
     binding.authMessage.setVisibility(View.GONE);
   }
 
- /*
-  * Clears the authentication message and disables the login button
-  */
+  /*
+   * Clears the authentication message and disables the login button
+   */
   @Override
   public void preAuthAction() {
     binding.authMessage.setText("");

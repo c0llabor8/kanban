@@ -14,6 +14,7 @@ import com.c0llabor8.kanban.model.Project;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
+
   private Project project;
   private SheetBottomNavBinding binding;
   private ProjectSheetListener listener;
@@ -59,8 +60,10 @@ public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
         item -> listener.onProjectItemSelected(item));
 
     binding.navigationView.getMenu().findItem(R.id.action_invite).setEnabled(project != null);
-    binding.navigationView.getMenu().findItem(R.id.action_rename_project).setEnabled(project != null);
-    binding.navigationView.getMenu().findItem(R.id.action_leave_project).setEnabled(project != null);
+    binding.navigationView.getMenu().findItem(R.id.action_rename_project)
+        .setEnabled(project != null);
+    binding.navigationView.getMenu().findItem(R.id.action_leave_project)
+        .setEnabled(project != null);
 
   }
 

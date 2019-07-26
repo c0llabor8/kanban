@@ -29,6 +29,7 @@ public class NewTaskDialog extends DialogFragment {
   public static final String TAG = "task_creation";
   final Calendar calendar = Calendar.getInstance();
   public Long estimate;
+  TaskRefreshListener listener;
   private Project project;
   private EditText etDate;
   private Toolbar toolbar;
@@ -38,8 +39,6 @@ public class NewTaskDialog extends DialogFragment {
   private RadioButton high;
   private RadioButton medium;
   private RadioButton low;
-
-  TaskRefreshListener listener;
 
   public static NewTaskDialog newInstance() {
 
