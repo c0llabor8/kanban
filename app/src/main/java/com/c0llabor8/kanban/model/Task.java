@@ -17,6 +17,7 @@ public class Task extends ParseObject {
   public static final String KEY_PRIORITY = "priority";
   public static final String KEY_PROJECT = "project";
   public static final String KEY_COMPLETED = "completed";
+  public static final String KEY_CATEGORY = "category";
 
   public static void queryUserTasks(FindCallback<Task> callback) {
     Assignment.Query query = new Assignment.Query();

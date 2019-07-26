@@ -1,19 +1,17 @@
 package com.c0llabor8.kanban.util;
 
-import androidx.annotation.NonNull;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class MemberProvider {
 
   private static MemberProvider instance;
-  private HashMap<Project, Set<Membership>> memberMap;
+  private HashMap<Project, List<Membership>> memberMap;
 
   private MemberProvider() {
     memberMap = new HashMap<>();
@@ -39,14 +37,14 @@ public class MemberProvider {
         return;
       }
 
-      getMemberSet(project).addAll(objects);
+      getMemberList(project).addAll(objects);
       callback.done(objects, null);
     });
   }
 
-  public Set<Membership> getMemberSet(Project project) {
+  public List<Membership> getMemberList(Project project) {
     if (memberMap.get(project) == null) {
-      memberMap.put(project, new HashSet<>());
+      memberMap.put(project, new ArrayList<>());
     }
 
     return memberMap.get(project);
