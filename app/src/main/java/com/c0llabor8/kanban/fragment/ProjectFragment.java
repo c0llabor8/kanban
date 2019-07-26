@@ -13,8 +13,13 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
+import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import java.util.List;
 
 public class ProjectFragment extends Fragment implements TaskRefreshListener {
 

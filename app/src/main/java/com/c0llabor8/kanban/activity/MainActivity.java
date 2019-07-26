@@ -22,6 +22,7 @@ import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     navFragment = BottomNavigationSheet.newInstance();
 
     //not within a project scope in the initial screen, so keep it at null
-    TaskProvider.getInstance().updateTasks(null, (objects, e) -> switchProjectScope(null));
+    switchProjectScope(null);
 
     setSupportActionBar(binding.bar);
     loadProjects();
@@ -66,9 +67,12 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     if (fragment != null) {
       taskRefreshListener = (TaskRefreshListener) fragment;
 
-      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-      transaction.replace(binding.content.getId(), fragment);
-      transaction.commit();
+      TaskProvider.getInstance().updateTasks(currentProject, (obj, e) ->
+          MemberProvider.getInstance().updateMembers(currentProject, (objects, err) -> {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(binding.content.getId(), fragment);
+            transaction.commit();
+          }));
     }
   }
 
