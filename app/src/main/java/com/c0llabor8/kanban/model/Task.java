@@ -41,7 +41,7 @@ public class Task extends ParseObject {
     put(KEY_COMPLETED, true);
   }
 
-  public void setInomplete() {
+  public void setIncomplete() {
     put(KEY_COMPLETED, false);
   }
 
@@ -96,6 +96,7 @@ public class Task extends ParseObject {
       include(KEY_DESCRIPTION);
       include(KEY_TITLE);
       include(KEY_PROJECT);
+      include(KEY_COMPLETED);
     }
 
     public Query sortAscending() {

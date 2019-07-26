@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.databinding.TimelineItemBinding;
+import com.c0llabor8.kanban.databinding.ListItemTimelineBinding;
 import com.c0llabor8.kanban.model.Task;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -37,8 +37,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
   public TimelineAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
     LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-    TimelineItemBinding binding =
-        TimelineItemBinding.inflate(inflater, parent, false);
+    ListItemTimelineBinding binding =
+        ListItemTimelineBinding.inflate(inflater, parent, false);
 
     return new ViewHolder(binding);
 
@@ -70,10 +70,10 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
 
   class ViewHolder extends RecyclerView.ViewHolder {
 
-    private TimelineItemBinding binding;
+    private ListItemTimelineBinding binding;
 
 
-    public ViewHolder(TimelineItemBinding binding) {
+    public ViewHolder(ListItemTimelineBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
