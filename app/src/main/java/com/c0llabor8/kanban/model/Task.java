@@ -78,6 +78,15 @@ public class Task extends ParseObject {
     return getInt(KEY_PRIORITY);
   }
 
+  public Task setCategory(TaskCategory category) {
+    put(KEY_CATEGORY, category);
+    return this;
+  }
+
+  public TaskCategory getCategory() {
+    return (TaskCategory) getParseObject(KEY_CATEGORY);
+  }
+
   public void setPriority(int priority) {
     put(KEY_PRIORITY, priority);
   }
@@ -98,6 +107,7 @@ public class Task extends ParseObject {
       include(KEY_TITLE);
       include(KEY_PROJECT);
       include(KEY_COMPLETED);
+      include(KEY_CATEGORY);
     }
 
     public Query sortAscending() {
