@@ -1,17 +1,23 @@
 package com.c0llabor8.kanban.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-import com.c0llabor8.kanban.databinding.FragmentSummaryBinding;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.c0llabor8.kanban.R;
+import com.c0llabor8.kanban.databinding.ListItemMembersBinding;
 import com.c0llabor8.kanban.model.Membership;
 import java.util.List;
 
 public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdapter.ViewHolder> {
 
+  private static final String TAG = "MemberProfileAdapter";
   private List<Membership> members;
   private Context context;
 
@@ -30,24 +36,27 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
   public MemberProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
       int viewType) {
 
-    LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        ListItemMembersBinding binding = ListItemMembersBinding.inflate(inflater, parent, false);
 
-    FragmentSummaryBinding binding =
-        FragmentSummaryBinding.inflate(inflater, parent, false);
-    return new ViewHolder(binding);
-
+        return new ViewHolder(binding);
   }
 
   /**
-   * Binds the data to the view and textview in each row
+   * Binds the data to the view
    */
   @Override
   public void onBindViewHolder(@NonNull MemberProfileAdapter.ViewHolder holder, int position) {
-    Membership membership = members.get(position);
-    //holder.ivProfile.setImageResource(members.get(position).imageId);
+    Log.d(TAG, "onCreateViewHolder: called");
 
+    // getting the product from the specified position
+    Membership membership = members.get(position);
+    holder.bind(membership);
   }
 
+  /**
+   * Total number of row
+   */
   @Override
   public int getItemCount() {
     return members.size();
@@ -58,24 +67,27 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
    */
   class ViewHolder extends RecyclerView.ViewHolder {
 
-    private FragmentSummaryBinding binding;
-    private ImageView ivProfile;
-//    private TextView tvMemberName;
+    private ListItemMembersBinding binding;
 
-    public ViewHolder(@NonNull FragmentSummaryBinding binding) {
+    public ViewHolder(@NonNull ListItemMembersBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
     }
 
-    public void bind(int position) {
-      //binding.ivProfile.
-      // For Bitmaps:
-//      Glide.with()
-//          .load()
-//          .asBitmap()
-//          .centerCrop()
-//          .into(ivProfile);
-//    }
+    public void bind(Membership membership) {
+       // For Bitmaps:
+        Glide.with(context)
+            .load(R.raw.profile)
+            .apply(new RequestOptions().circleCrop())
+            .into(binding.ivProfile);
+
+        binding.tvName.setText(membership.getUser().getUsername());
+        binding.ivProfile.setOnClickListener(new OnClickListener() {
+          @Override
+          public void onClick(View view) {
+            Log.d(TAG, "onClick: clicked on an image");
+          }
+        });
+      }
     }
   }
-}

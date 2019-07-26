@@ -1,5 +1,5 @@
 package com.c0llabor8.kanban.adapter;
 
-public class CompletedTaskAdapter {
+public class CompletedTaskAdapter exte {
 
 }
