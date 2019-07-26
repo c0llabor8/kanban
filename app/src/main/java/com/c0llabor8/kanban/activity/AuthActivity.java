@@ -14,8 +14,8 @@ import com.c0llabor8.kanban.fragment.base.BaseAuthFragment;
 import com.parse.ParseUser;
 
 /*
-* This class is the host activity for the sign up and login fragments
-* */
+ * This class is the host activity for the sign up and login fragments
+ * */
 
 public class AuthActivity extends AppCompatActivity implements
     BaseAuthFragment.AuthenticationFragmentListener {

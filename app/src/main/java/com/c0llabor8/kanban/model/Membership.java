@@ -1,7 +1,6 @@
 package com.c0llabor8.kanban.model;
 
 
-import android.media.MediaMetadata;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -13,6 +12,14 @@ public class Membership extends ParseObject {
 
   public static final String KEY_USER = "user";
   public static final String KEY_PROJECT = "project";
+
+  public static void join(ParseUser user, Project project, SaveCallback callback) {
+    Membership membership = new Membership()
+        .setUser(user)
+        .setProject(project);
+
+    membership.saveInBackground(callback);
+  }
 
   public ParseUser getUser() {
     return getParseUser(KEY_USER);
@@ -30,14 +37,6 @@ public class Membership extends ParseObject {
   public Membership setProject(Project project) {
     put(KEY_PROJECT, project);
     return this;
-  }
-
-  public static void join(ParseUser user, Project project, SaveCallback callback) {
-    Membership membership = new Membership()
-        .setUser(user)
-        .setProject(project);
-
-    membership.saveInBackground(callback);
   }
 
   public static class Query extends ParseQuery<Membership> {

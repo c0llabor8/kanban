@@ -107,7 +107,7 @@ public class Project extends ParseObject {
   }
 
   public void getAllTasks(FindCallback<Task> callback) {
-    (new Task.Query()).whereProjectEquals(this)
+    (new Task.Query()).whereProjectEquals(this).sortAscending()
         .findInBackground(callback);
   }
 
