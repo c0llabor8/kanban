@@ -2,10 +2,11 @@ package com.c0llabor8.kanban.model;
 
 
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import java.util.List;
 
 @ParseClassName("Membership")
 public class Membership extends ParseObject {
@@ -13,12 +14,31 @@ public class Membership extends ParseObject {
   public static final String KEY_USER = "user";
   public static final String KEY_PROJECT = "project";
 
-  public static void join(ParseUser user, Project project, SaveCallback callback) {
-    Membership membership = new Membership()
-        .setUser(user)
-        .setProject(project);
+  /**
+   * Invite and add a user to a project by email
+   *
+   * @param callback called once the user is added
+   */
+  public static void invite(String email, Project project, SaveCallback callback) {
+    ParseUser.getQuery().whereEqualTo("email", email).findInBackground(
+        (List<ParseUser> user, ParseException e) -> {
+          if (e != null) {
+            callback.done(e);
+            return;
+          }
 
-    membership.saveInBackground(callback);
+          if (user.size() == 0) {
+            callback.done(new ParseException(0, "Sorry, user not found"));
+            return;
+          }
+
+          Membership membership = new Membership().setUser(user.get(0)).setProject(project);
+
+          project.increment(Project.KEY_MEMBERS);
+          project.saveInBackground();
+
+          membership.saveInBackground(callback);
+        });
   }
 
   public ParseUser getUser() {
@@ -37,24 +57,5 @@ public class Membership extends ParseObject {
   public Membership setProject(Project project) {
     put(KEY_PROJECT, project);
     return this;
-  }
-
-  public static class Query extends ParseQuery<Membership> {
-
-    public Query() {
-      super(Membership.class);
-      include(KEY_USER);
-      include(KEY_PROJECT);
-    }
-
-    public Query whereUserEquals(ParseUser user) {
-      whereEqualTo(KEY_USER, user);
-      return this;
-    }
-
-    public Query whereProjectEquals(Project project) {
-      whereEqualTo(KEY_PROJECT, project);
-      return this;
-    }
   }
 }

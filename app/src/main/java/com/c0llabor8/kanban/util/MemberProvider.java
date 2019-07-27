@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class is a singleton instance that store all memberships for a given project
+ */
 public class MemberProvider {
 
   private static MemberProvider instance;
@@ -16,7 +19,6 @@ public class MemberProvider {
   private MemberProvider() {
     memberMap = new HashMap<>();
   }
-
 
   public static MemberProvider getInstance() {
     if (instance == null) {
@@ -27,8 +29,9 @@ public class MemberProvider {
   }
 
   /**
-   * Finds all membership database instances for a given project and stores them in a map of
-   * Project to List<Membership>
+   * Finds all membership database instances for a given project and stores them in a map of Project
+   * to List<Membership>
+   *
    * @param project project to be used as a key
    * @param callback called once the queries are complete
    */
@@ -53,6 +56,7 @@ public class MemberProvider {
 
   /**
    * Returns a list of all memberships for a given project
+   *
    * @param project project to get memberships for
    * @return List of all memberships for a specific project
    */

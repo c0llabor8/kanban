@@ -1,12 +1,12 @@
 package com.c0llabor8.kanban.model;
 
-import com.c0llabor8.kanban.model.Membership.Query;
+import com.c0llabor8.kanban.model.query.MembershipQuery;
+import com.c0llabor8.kanban.model.query.TaskQuery;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.util.ArrayList;
@@ -21,16 +21,10 @@ public class Project extends ParseObject {
   public static final String KEY_TASKS = "tasks";
   public static final String KEY_DEADLINE = "deadline";
 
-  public void getAllMembers(FindCallback<Membership> callback) {
-    Membership.Query query = new Membership.Query().whereProjectEquals(this);
-    query.findInBackground(callback);
-  }
-
   public static void queryUserProjects(FindCallback<Project> callback) {
-    Membership.Query query = new Membership.Query();
-    query.whereUserEquals(ParseUser.getCurrentUser());
 
-    query.findInBackground((memberships, e) -> {
+    MembershipQuery query = new MembershipQuery();
+    query.whereUserEquals(ParseUser.getCurrentUser()).findInBackground((memberships, e) -> {
       if (e != null) {
         callback.done(null, e);
         return;
@@ -58,63 +52,59 @@ public class Project extends ParseObject {
         return;
       }
 
-      Membership.join(ParseUser.getCurrentUser(), project, callback);
+      Membership.invite(ParseUser.getCurrentUser().getEmail(), project, callback);
     });
+  }
+
+  public void getAllMembers(FindCallback<Membership> callback) {
+    MembershipQuery query = new MembershipQuery().whereProjectEquals(this);
+    query.findInBackground(callback);
   }
 
   public void rename(String name, SaveCallback callback) {
     this.setTitle(name).saveInBackground(callback);
   }
 
-  public void invite(String email, SaveCallback callback) {
-    Project project = this;
-    ParseUser.getQuery().whereEqualTo("email", email).findInBackground(
-        (List<ParseUser> objects, ParseException e) -> {
+  /**
+   * Have the current user leave this project
+   *
+   * @param callback called once the project is left
+   */
+  public void leave(DeleteCallback callback) {
+    MembershipQuery query = new MembershipQuery();
+
+    query.whereUserEquals(ParseUser.getCurrentUser())
+        .whereProjectEquals(this)
+        .findInBackground((List<Membership> memberships, ParseException e) -> {
           if (e != null) {
-            e.printStackTrace();
-            return;
+            callback.done(e);
           }
 
-          if (objects.size() == 0) {
-            callback.done(new ParseException(0, "Sorry, user not found"));
-            return;
-          }
+          // Delete the membership and check if the project is empty for deletion
+          memberships.get(0).deleteInBackground(err -> {
+            if (err != null) {
+              callback.done(err);
+            }
 
-          Membership.join(objects.get(0), project, callback);
-          project.increment(KEY_MEMBERS, 1);
-          project.saveInBackground();
+            this.increment(KEY_MEMBERS, -1);
+
+            if (this.getMembers() == 0) {
+              this.deleteEventually();
+            }
+
+            callback.done(null);
+          });
         });
   }
 
-  public void leave(DeleteCallback callback) {
-    Membership.Query query = new Membership.Query();
-    query.whereUserEquals(ParseUser.getCurrentUser());
-    query.whereProjectEquals(this);
-
-    query.findInBackground((objects, e) -> {
-      if (e != null) {
-        callback.done(e);
-      }
-
-      objects.get(0).deleteInBackground(err -> {
-        if (err != null) {
-          callback.done(err);
-        }
-
-        this.increment(KEY_MEMBERS, -1);
-
-        if (this.getMembers() == 0) {
-          this.deleteEventually();
-        }
-
-        callback.done(null);
-      });
-    });
-  }
-
+  /**
+   * Get all tasks within the project
+   *
+   * @param callback called with the resulting task list
+   */
   public void getAllTasks(FindCallback<Task> callback) {
-    (new Task.Query()).whereProjectEquals(this).sortAscending()
-        .findInBackground(callback);
+    TaskQuery query = new TaskQuery();
+    query.whereProjectEquals(this).findInBackground(callback);
   }
 
   public String getName() {
@@ -151,12 +141,4 @@ public class Project extends ParseObject {
   public void setDeadline(String deadline) {
     put(KEY_DEADLINE, deadline);
   }
-
-  public static class Query extends ParseQuery<Project> {
-
-    public Query() {
-      super(Project.class);
-    }
-  }
-
 }

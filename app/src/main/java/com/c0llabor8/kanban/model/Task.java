@@ -1,12 +1,8 @@
 package com.c0llabor8.kanban.model;
 
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
 @ParseClassName("Task")
 public class Task extends ParseObject {
@@ -19,23 +15,8 @@ public class Task extends ParseObject {
   public static final String KEY_COMPLETED = "completed";
   public static final String KEY_CATEGORY = "category";
 
-  public static void queryUserTasks(FindCallback<Task> callback) {
-    Assignment.Query query = new Assignment.Query();
-    query.whereUserEquals(ParseUser.getCurrentUser());
-
-    query.findInBackground((assignments, e) -> {
-      if (e != null) {
-        callback.done(null, e);
-        return;
-      }
-
-      List<Task> tasks = new ArrayList<>();
-
-      for (Assignment assignment : assignments) {
-        tasks.add(assignment.getTask());
-      }
-      callback.done(tasks, null);
-    });
+  public static Comparator<Task> taskComparator() {
+    return (task, o) -> Long.compare(task.getEstimate(), o.getEstimate());
   }
 
   public void setCompleted() {
@@ -78,17 +59,17 @@ public class Task extends ParseObject {
     return getInt(KEY_PRIORITY);
   }
 
-  public Task setCategory(TaskCategory category) {
-    put(KEY_CATEGORY, category);
-    return this;
+  public void setPriority(int priority) {
+    put(KEY_PRIORITY, priority);
   }
 
   public TaskCategory getCategory() {
     return (TaskCategory) getParseObject(KEY_CATEGORY);
   }
 
-  public void setPriority(int priority) {
-    put(KEY_PRIORITY, priority);
+  public Task setCategory(TaskCategory category) {
+    put(KEY_CATEGORY, category);
+    return this;
   }
 
   public Project getProject() {
@@ -97,28 +78,6 @@ public class Task extends ParseObject {
 
   public void setProject(ParseObject project) {
     put(KEY_PROJECT, project);
-  }
-
-  public static class Query extends ParseQuery<Task> {
-
-    public Query() {
-      super(Task.class);
-      include(KEY_DESCRIPTION);
-      include(KEY_TITLE);
-      include(KEY_PROJECT);
-      include(KEY_COMPLETED);
-      include(KEY_CATEGORY);
-    }
-
-    public Query sortAscending() {
-      addAscendingOrder(KEY_ESTIMATE);
-      return this;
-    }
-
-    public Query whereProjectEquals(Project project) {
-      whereEqualTo(KEY_PROJECT, project);
-      return this;
-    }
   }
 
 }

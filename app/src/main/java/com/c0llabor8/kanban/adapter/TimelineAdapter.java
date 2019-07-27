@@ -84,7 +84,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
      */
 
     public void populateTasks(Task task, int type) {
-      orderTask();
       binding.itemTitle.setText(task.getTitle());
       binding.itemDescription.setText(task.getDescription());
       binding.itemDate.setText(updateTime(task.getEstimate()));
@@ -105,16 +104,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
           break;
       }
     }
-
-    /**
-     * orders task in ascending order by date
-     */
-    private void orderTask() {
-      Task.Query taskQuery = new Task.Query();
-      taskQuery.sortAscending();
-
-    }
-
 
     /**
      * changes color of icon on timeline based on priority level
