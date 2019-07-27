@@ -15,10 +15,6 @@ public class Task extends ParseObject {
   public static final String KEY_COMPLETED = "completed";
   public static final String KEY_CATEGORY = "category";
 
-  public static Comparator<Task> taskComparator() {
-    return (task, o) -> Long.compare(task.getEstimate(), o.getEstimate());
-  }
-
   public void setCompleted() {
     put(KEY_COMPLETED, true);
   }
@@ -80,4 +76,40 @@ public class Task extends ParseObject {
     put(KEY_PROJECT, project);
   }
 
+  public static class SortByCategory implements Comparator<Task> {
+
+    @Override
+    public int compare(Task task, Task o) {
+      TaskCategory category = task.getCategory();
+      TaskCategory oCategory = o.getCategory();
+
+      if (category == null && oCategory == null) {
+        return Long.compare(task.getEstimate(), o.getEstimate());
+      }
+
+      if (category == null || oCategory == null) {
+        return (category == null) ? -1 : 1;
+      }
+
+      int result = - Integer.compare(category.getOrder(), oCategory.getOrder());
+
+      if (result == 0) {
+        result = category.getTitle().compareTo(oCategory.getTitle());
+
+        if (result == 0) {
+          result = Long.compare(task.getEstimate(), o.getEstimate());
+        }
+      }
+
+      return result;
+    }
+  }
+
+  public static class SortByDeadline implements Comparator<Task> {
+
+    @Override
+    public int compare(Task task, Task o) {
+      return Long.compare(task.getEstimate(), o.getEstimate());
+    }
+  }
 }

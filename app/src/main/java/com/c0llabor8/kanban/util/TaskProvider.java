@@ -17,11 +17,11 @@ public class TaskProvider {
 
   private static TaskProvider instance;
   private HashMap<Project, List<Task>> taskMap;
-  private HashMap<Project, HashMap<String, Integer>> categoryMap;
+  private HashMap<Project, List<Task>> categorizedTaskMap;
 
   private TaskProvider() {
     taskMap = new HashMap<>();
-    categoryMap = new HashMap<>();
+    categorizedTaskMap = new HashMap<>();
   }
 
   public static TaskProvider getInstance() {
@@ -50,7 +50,8 @@ public class TaskProvider {
 
         getTasks(null).clear();
         getTasks(null).addAll(tasks);
-        callback.done(tasks, null);
+        Collections.sort(getTasks(null), new Task.SortByDeadline());
+        callback.done(getTasks(null), null);
       });
 
       return;
@@ -64,26 +65,14 @@ public class TaskProvider {
       }
 
       getTasks(project).clear();
-      getCategoryCounts(project).clear();
-      Collections.sort(getTasks(project), Task.taskComparator());
+      getTasks(project).addAll(tasks);
+      getCategorizedTasks(project).clear();
+      getCategorizedTasks(project).addAll(tasks);
 
-      // For each task add them to the project's list and keep a count of each project task category
-      for (int i = 0; i < tasks.size(); i++) {
-        Task task = tasks.get(i);
-        getTasks(project).add(task);
-        String categoryId = (task.getCategory() == null) ? null : task.getCategory().getObjectId();
-
-        Integer count = getCategoryCounts(project).get(categoryId);
-
-        if (count == null) {
-          getCategoryCounts(project).put(categoryId, 1);
-          continue;
-        }
-
-        getCategoryCounts(project).put(categoryId, count + 1);
-      }
-
-      callback.done(tasks, null);
+      // Sort the tasks with category priority and deadline priority
+      Collections.sort(getTasks(project), new Task.SortByDeadline());
+      Collections.sort(getCategorizedTasks(project), new Task.SortByCategory());
+      callback.done(getTasks(project), null);
     });
   }
 
@@ -103,17 +92,17 @@ public class TaskProvider {
   }
 
   /**
-   * Gets all cached categories and counts for a given project
+   * Gets all cached tasks for a given project in categorized order
    *
-   * @param project Project to get all categories for
-   * @return A HashMap of Category to Category task count
+   * @param project Project to get all tasks for
+   * @return A list of all tasks given a project
    */
-  public HashMap<String, Integer> getCategoryCounts(Project project) {
-    // Avoid getting a null map of category counts
-    if (categoryMap.get(project) == null) {
-      categoryMap.put(project, new HashMap<>());
+  public List<Task> getCategorizedTasks(Project project) {
+    // Avoid getting a null list of tasks
+    if (categorizedTaskMap.get(project) == null) {
+      categorizedTaskMap.put(project, new ArrayList<>());
     }
 
-    return categoryMap.get(project);
+    return categorizedTaskMap.get(project);
   }
 }

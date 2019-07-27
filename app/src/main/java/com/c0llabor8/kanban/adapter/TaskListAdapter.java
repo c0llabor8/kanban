@@ -18,12 +18,18 @@ import java.util.TimeZone;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
+  private Boolean headers;
   private List<Task> tasks;
 
   /*
    * Constructor method stores a reference to a list of tasks to adapt into a RecyclerView
    * */
   public TaskListAdapter(List<Task> tasks) {
+    this(tasks, false);
+  }
+
+  public TaskListAdapter(List<Task> tasks, Boolean headers) {
+    this.headers = headers;
     this.tasks = tasks;
   }
 

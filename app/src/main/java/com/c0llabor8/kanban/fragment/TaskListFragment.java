@@ -33,7 +33,12 @@ public class TaskListFragment extends BaseTaskFragment {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    listAdapter = new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
+
+    if (project == null) {
+      listAdapter = new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
+    } else {
+      listAdapter = new TaskListAdapter(TaskProvider.getInstance().getCategorizedTasks(project));
+    }
   }
 
   @Nullable
@@ -58,8 +63,8 @@ public class TaskListFragment extends BaseTaskFragment {
     if (project == null) {
       TaskProvider.getInstance().updateTasks(project,
           (objects, e) -> listAdapter.notifyDataSetChanged());
+    } else {
+      listAdapter.notifyDataSetChanged();
     }
-
-    listAdapter.notifyDataSetChanged();
   }
 }
