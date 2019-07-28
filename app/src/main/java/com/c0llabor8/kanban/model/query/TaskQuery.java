@@ -26,6 +26,8 @@ public class TaskQuery extends ParseQuery<Task> {
     include(KEY_ESTIMATE);
     include(KEY_COMPLETED);
     include(KEY_CATEGORY);
+    include("category.title");
+    include("category.order");
   }
 
   public static void queryUserTasks(FindCallback<Task> callback) {

@@ -30,6 +30,15 @@ public class TaskCategory extends ParseObject {
     return getString(KEY_TITLE);
   }
 
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof TaskCategory) {
+      return ((TaskCategory) obj).getObjectId().equals(this.getObjectId());
+    }
+
+    return false;
+  }
+
   public void setTitle(String title) {
     put(KEY_TITLE, title);
   }

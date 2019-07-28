@@ -2,6 +2,7 @@ package com.c0llabor8.kanban.util;
 
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.model.query.TaskQuery;
 import com.parse.FindCallback;
 import com.parse.ParseException;

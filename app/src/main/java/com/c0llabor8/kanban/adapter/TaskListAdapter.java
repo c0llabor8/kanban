@@ -1,11 +1,14 @@
 package com.c0llabor8.kanban.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
 import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.model.TaskCategory;
+import com.parse.GetCallback;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -53,7 +56,22 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     final Task task = tasks.get(position);
+    final TaskCategory category = task.getCategory();
     holder.update(task);
+
+    if (category != null && headers) {
+      if (position == 0 || !category.equals(tasks.get(position - 1).getCategory())) {
+        category.fetchIfNeededInBackground(
+            (GetCallback<TaskCategory>) (object, e) -> {
+              holder.binding.sectionHeader
+                  .setText(object.getTitle());
+              holder.binding.sectionHeader.setVisibility(View.VISIBLE);
+            }
+        );
+      } else {
+        holder.binding.sectionHeader.setVisibility(View.GONE);
+      }
+    }
   }
 
   @Override
@@ -88,7 +106,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     void update(Task task) {
       binding.tvTitle.setText(task.getTitle());
       binding.tvDescription.setText(task.getDescription());
-
       binding.tvEstimate.setText(updateTime(task.getEstimate()));
     }
   }

@@ -91,7 +91,7 @@ public class Task extends ParseObject {
         return (category == null) ? -1 : 1;
       }
 
-      int result = - Integer.compare(category.getOrder(), oCategory.getOrder());
+      int result = Integer.compare(category.getOrder(), oCategory.getOrder());
 
       if (result == 0) {
         result = category.getTitle().compareTo(oCategory.getTitle());

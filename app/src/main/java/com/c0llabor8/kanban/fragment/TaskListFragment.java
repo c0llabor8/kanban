@@ -37,7 +37,8 @@ public class TaskListFragment extends BaseTaskFragment {
     if (project == null) {
       listAdapter = new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
     } else {
-      listAdapter = new TaskListAdapter(TaskProvider.getInstance().getCategorizedTasks(project));
+      listAdapter = new TaskListAdapter(TaskProvider.getInstance().getCategorizedTasks(project),
+          true);
     }
   }
 
@@ -63,8 +64,6 @@ public class TaskListFragment extends BaseTaskFragment {
     if (project == null) {
       TaskProvider.getInstance().updateTasks(project,
           (objects, e) -> listAdapter.notifyDataSetChanged());
-    } else {
-      listAdapter.notifyDataSetChanged();
     }
   }
 }
