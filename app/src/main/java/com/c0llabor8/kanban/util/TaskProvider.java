@@ -2,7 +2,6 @@ package com.c0llabor8.kanban.util;
 
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
-import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.model.query.TaskQuery;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -49,6 +48,7 @@ public class TaskProvider {
           return;
         }
 
+        // Clear all tasks within the project then insert and sort the newly fetched ones
         getTasks(null).clear();
         getTasks(null).addAll(tasks);
         Collections.sort(getTasks(null), new Task.SortByDeadline());
@@ -65,6 +65,7 @@ public class TaskProvider {
         return;
       }
 
+      // Clear all tasks within the project then insert and sort the newly fetched ones
       getTasks(project).clear();
       getTasks(project).addAll(tasks);
       getCategorizedTasks(project).clear();

@@ -48,7 +48,7 @@ public class Project extends ParseObject {
 
     project.saveInBackground((ParseException e) -> {
       if (e != null) {
-        e.printStackTrace();
+        callback.done(e);
         return;
       }
 
@@ -84,6 +84,7 @@ public class Project extends ParseObject {
           memberships.get(0).deleteInBackground(err -> {
             if (err != null) {
               callback.done(err);
+              return;
             }
 
             this.increment(KEY_MEMBERS, -1);

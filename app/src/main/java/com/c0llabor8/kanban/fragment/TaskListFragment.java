@@ -33,19 +33,21 @@ public class TaskListFragment extends BaseTaskFragment {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    if (project == null) {
-      listAdapter = new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
-    } else {
-      listAdapter = new TaskListAdapter(TaskProvider.getInstance().getCategorizedTasks(project),
-          true);
-    }
   }
 
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+
+    if (project == null) {
+      listAdapter = new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
+    } else {
+      listAdapter = new TaskListAdapter(
+          TaskProvider.getInstance().getCategorizedTasks(project),
+          true
+      );
+    }
 
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
     return binding.getRoot();
@@ -64,6 +66,8 @@ public class TaskListFragment extends BaseTaskFragment {
     if (project == null) {
       TaskProvider.getInstance().updateTasks(project,
           (objects, e) -> listAdapter.notifyDataSetChanged());
+    } else {
+      listAdapter.notifyDataSetChanged();
     }
   }
 }

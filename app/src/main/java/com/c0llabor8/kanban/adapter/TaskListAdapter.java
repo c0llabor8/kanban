@@ -21,6 +21,9 @@ import java.util.TimeZone;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
+  private static final int VIEW_WITH_HEADER = 0;
+  private static final int VIEW_WITHOUT_HEADER = 1;
+
   private Boolean headers;
   private List<Task> tasks;
 
@@ -47,7 +50,21 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     ListItemTaskBinding binding =
         ListItemTaskBinding.inflate(inflater, parent, false);
 
-    return new ViewHolder(binding);
+    return new ViewHolder(binding, viewType);
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    final Task task = tasks.get(position);
+    final TaskCategory category = task.getCategory();
+
+    if (category != null) {
+      if (position == 0 || !category.equals(tasks.get(position - 1).getCategory())) {
+        return VIEW_WITH_HEADER;
+      }
+    }
+
+    return VIEW_WITHOUT_HEADER;
   }
 
   /*
@@ -56,22 +73,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
     final Task task = tasks.get(position);
-    final TaskCategory category = task.getCategory();
     holder.update(task);
-
-    if (category != null && headers) {
-      if (position == 0 || !category.equals(tasks.get(position - 1).getCategory())) {
-        category.fetchIfNeededInBackground(
-            (GetCallback<TaskCategory>) (object, e) -> {
-              holder.binding.sectionHeader
-                  .setText(object.getTitle());
-              holder.binding.sectionHeader.setVisibility(View.VISIBLE);
-            }
-        );
-      } else {
-        holder.binding.sectionHeader.setVisibility(View.GONE);
-      }
-    }
   }
 
   @Override
@@ -96,17 +98,26 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
    * */
   class ViewHolder extends RecyclerView.ViewHolder {
 
+    private int type;
     private ListItemTaskBinding binding;
 
-    ViewHolder(ListItemTaskBinding binding) {
+    ViewHolder(ListItemTaskBinding binding, int type) {
       super(binding.getRoot());
       this.binding = binding;
+      this.type = type;
     }
 
     void update(Task task) {
       binding.tvTitle.setText(task.getTitle());
       binding.tvDescription.setText(task.getDescription());
       binding.tvEstimate.setText(updateTime(task.getEstimate()));
+
+      if (type == VIEW_WITH_HEADER && headers) {
+        task.getCategory().fetchIfNeededInBackground((GetCallback<TaskCategory>) (category, e) -> {
+          binding.sectionHeader.setText(category.getTitle());
+          binding.sectionHeader.setVisibility(View.VISIBLE);
+        });
+      }
     }
   }
 }

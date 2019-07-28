@@ -31,7 +31,7 @@ public class TaskQuery extends ParseQuery<Task> {
   }
 
   public static void queryUserTasks(FindCallback<Task> callback) {
-    Assignment.Query query = new Assignment.Query();
+    AssignmentQuery query = new AssignmentQuery();
 
     query.whereUserEquals(ParseUser.getCurrentUser()).findInBackground((assignments, e) -> {
       if (e != null) {

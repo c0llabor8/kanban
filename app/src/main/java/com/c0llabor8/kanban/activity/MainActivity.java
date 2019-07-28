@@ -232,6 +232,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     dialog.show(getSupportFragmentManager(), "");
   }
 
+  /**
+   * Opens a dialog asking for a new project name
+   */
   public void promptRenameProject() {
     StringResultDialog dialog = StringResultDialog.newInstance(String.format("Rename %s",
         currentProject.getName()), "New project name");
@@ -254,6 +257,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     dialog.show(getSupportFragmentManager(), "");
   }
 
+  /**
+   * Opens a dialog prompting the user to leave the current project
+   */
   public void promptLeaveProject() {
     new MaterialAlertDialogBuilder(this,
         R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
@@ -271,9 +277,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
         }).show();
   }
 
-  /*
+  /**
    * Query for all projects the current user is a member of and store them
-   * */
+   */
   public void loadProjects() {
     projectMenuMap = new SparseArray<>();
 
