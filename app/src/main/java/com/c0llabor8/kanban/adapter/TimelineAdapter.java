@@ -7,11 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ListItemTimelineBinding;
 import com.c0llabor8.kanban.model.Task;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.c0llabor8.kanban.util.DateTimeUtils;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
 
@@ -86,7 +83,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     public void populateTasks(Task task, int type) {
       binding.itemTitle.setText(task.getTitle());
       binding.itemDescription.setText(task.getDescription());
-      binding.itemDate.setText(updateTime(task.getEstimate()));
+      binding.itemDate.setText(DateTimeUtils.getDateString(task.getEstimate()));
       setPriority(task);
 
       switch (type) {
@@ -117,19 +114,6 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
         binding.ivPriority.setImageResource(R.drawable.circle_priority_high);
       }
     }
-
-    /**
-     * converts time in long to format MM/dd/yy to be displayed
-     */
-    private String updateTime(long estimate) {
-      Date date = new Date(estimate);
-      String format = "MM/dd/yy";
-      SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-      sdf.setTimeZone(TimeZone.getDefault());
-      String formattedDate = sdf.format(date);
-      return formattedDate;
-    }
-
   }
 
 }

@@ -8,12 +8,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
 import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.model.TaskCategory;
+import com.c0llabor8.kanban.util.DateTimeUtils;
 import com.parse.GetCallback;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 /*
  * This class is the adapter used to display tasks into a task list
@@ -82,18 +79,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
   }
 
   /*
-   * This method return the formatted date string of a timestamp
-   * */
-  public String updateTime(Long unixTime) {
-    Date date = new Date(unixTime);
-    String format = "MM/dd/yy";
-    SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-    sdf.setTimeZone(TimeZone.getDefault());
-    String formattedDate = sdf.format(date);
-    return formattedDate;
-  }
-
-  /*
    * This class is used to store the view bindings for each of the list items
    * */
   class ViewHolder extends RecyclerView.ViewHolder {
@@ -110,7 +95,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     void update(Task task) {
       binding.tvTitle.setText(task.getTitle());
       binding.tvDescription.setText(task.getDescription());
-      binding.tvEstimate.setText(updateTime(task.getEstimate()));
+      binding.tvEstimate.setText(DateTimeUtils.getDateString(task.getEstimate()));
 
       if (type == VIEW_WITH_HEADER && headers) {
         task.getCategory().fetchIfNeededInBackground((GetCallback<TaskCategory>) (category, e) -> {
