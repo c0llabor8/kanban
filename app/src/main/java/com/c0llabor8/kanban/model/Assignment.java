@@ -26,18 +26,4 @@ public class Assignment extends ParseObject {
   public void setTask(Task task) {
     put(KEY_TASK, task);
   }
-
-  public static class Query extends ParseQuery<Assignment> {
-
-    public Query() {
-      super(Assignment.class);
-      include(KEY_USER);
-      include(KEY_TASK);
-    }
-
-    public Query whereUserEquals(ParseUser user) {
-      whereEqualTo(KEY_USER, user);
-      return this;
-    }
-  }
 }

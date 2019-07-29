@@ -13,12 +13,10 @@ import com.c0llabor8.kanban.activity.TaskListDetailActivity;
 import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.c0llabor8.kanban.model.TaskCategory;
+import com.c0llabor8.kanban.util.DateTimeUtils;
+import com.parse.GetCallback;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
-import org.parceler.Parcels;
 
 /*
  * This class is the adapter used to display tasks into a task list
@@ -26,6 +24,10 @@ import org.parceler.Parcels;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHolder> {
 
+  private static final int VIEW_WITH_HEADER = 0;
+  private static final int VIEW_WITHOUT_HEADER = 1;
+
+  private Boolean headers;
   private List<Task> tasks;
   private Context context;
 
@@ -33,6 +35,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
    * Constructor method stores a reference to a list of tasks to adapt into a RecyclerView
    * */
   public TaskListAdapter(List<Task> tasks) {
+    this(tasks, false);
+  }
+
+  public TaskListAdapter(List<Task> tasks, Boolean headers) {
+    this.headers = headers;
     this.tasks = tasks;
   }
 
@@ -47,7 +54,21 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     ListItemTaskBinding binding =
         ListItemTaskBinding.inflate(inflater, parent, false);
 
-    return new ViewHolder(binding);
+    return new ViewHolder(binding, viewType);
+  }
+
+  @Override
+  public int getItemViewType(int position) {
+    final Task task = tasks.get(position);
+    final TaskCategory category = task.getCategory();
+
+    if (category != null) {
+      if (position == 0 || !category.equals(tasks.get(position - 1).getCategory())) {
+        return VIEW_WITH_HEADER;
+      }
+    }
+
+    return VIEW_WITHOUT_HEADER;
   }
 
 
@@ -66,34 +87,31 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
   }
 
   /*
-   * This method return the formatted date string of a timestamp
-   * */
-  public String updateTime(Long unixTime) {
-    Date date = new Date(unixTime);
-    String format = "MM/dd/yy";
-    SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.getDefault());
-    sdf.setTimeZone(TimeZone.getDefault());
-    String formattedDate = sdf.format(date);
-    return formattedDate;
-  }
-
-  /*
    * This class is used to store the view bindings for each of the list items
    * */
   class ViewHolder extends RecyclerView.ViewHolder {
 
+    private int type;
     private ListItemTaskBinding binding;
 
-    ViewHolder(ListItemTaskBinding binding) {
+    ViewHolder(ListItemTaskBinding binding, int type) {
       super(binding.getRoot());
       this.binding = binding;
+      this.type = type;
     }
 
     void update(Task task) {
       context = binding.tvTitle.getContext();
       binding.tvTitle.setText(task.getTitle());
       binding.tvDescription.setText(task.getDescription());
-      binding.tvEstimate.setText(updateTime(task.getEstimate()));
+      binding.tvEstimate.setText(DateTimeUtils.getDateString(task.getEstimate()));
+
+      if (type == VIEW_WITH_HEADER && headers) {
+        task.getCategory().fetchIfNeededInBackground((GetCallback<TaskCategory>) (category, e) -> {
+          binding.sectionHeader.setText(category.getTitle());
+          binding.sectionHeader.setVisibility(View.VISIBLE);
+        });
+      }
       binding.clickableBox.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View view) {

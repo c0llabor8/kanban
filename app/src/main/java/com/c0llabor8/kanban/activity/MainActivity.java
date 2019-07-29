@@ -21,6 +21,7 @@ import com.c0llabor8.kanban.fragment.dialog.StringResultDialog;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
+import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
@@ -211,9 +212,8 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     StringResultDialog dialog = StringResultDialog.newInstance("Invite member",
         "Email");
 
-    dialog.onStringResult(
-        (String result) -> {
-          currentProject.invite(result, (ParseException e) -> {
+    dialog.onStringResult((String result) -> {
+          Membership.invite(result, currentProject, (ParseException e) -> {
             if (e != null) {
               e.printStackTrace();
 
@@ -224,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
             Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
                 currentProject.getName()), Snackbar.LENGTH_SHORT).show();
           });
+
           dialog.dismiss();
         }
     );
@@ -231,13 +232,15 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     dialog.show(getSupportFragmentManager(), "");
   }
 
+  /**
+   * Opens a dialog asking for a new project name
+   */
   public void promptRenameProject() {
     StringResultDialog dialog = StringResultDialog.newInstance(String.format("Rename %s",
         currentProject.getName()), "New project name");
 
-    dialog.onStringResult(
-        (String result) -> {
-          currentProject.rename(result, e -> {
+    dialog.onStringResult((String result) -> {
+          currentProject.rename(result, (ParseException e) -> {
             if (e != null) {
               e.printStackTrace();
               return;
@@ -246,6 +249,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
             switchProjectScope(null);
             loadProjects();
           });
+
           dialog.dismiss();
         }
     );
@@ -253,6 +257,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     dialog.show(getSupportFragmentManager(), "");
   }
 
+  /**
+   * Opens a dialog prompting the user to leave the current project
+   */
   public void promptLeaveProject() {
     new MaterialAlertDialogBuilder(this,
         R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
@@ -270,9 +277,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
         }).show();
   }
 
-  /*
+  /**
    * Query for all projects the current user is a member of and store them
-   * */
+   */
   public void loadProjects() {
     projectMenuMap = new SparseArray<>();
 

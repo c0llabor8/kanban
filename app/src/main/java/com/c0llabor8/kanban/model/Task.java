@@ -1,12 +1,8 @@
 package com.c0llabor8.kanban.model;
 
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-import com.parse.ParseUser;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Comparator;
 
 @ParseClassName("Task")
 public class Task extends ParseObject {
@@ -18,25 +14,6 @@ public class Task extends ParseObject {
   public static final String KEY_PROJECT = "project";
   public static final String KEY_COMPLETED = "completed";
   public static final String KEY_CATEGORY = "category";
-
-  public static void queryUserTasks(FindCallback<Task> callback) {
-    Assignment.Query query = new Assignment.Query();
-    query.whereUserEquals(ParseUser.getCurrentUser());
-
-    query.findInBackground((assignments, e) -> {
-      if (e != null) {
-        callback.done(null, e);
-        return;
-      }
-
-      List<Task> tasks = new ArrayList<>();
-
-      for (Assignment assignment : assignments) {
-        tasks.add(assignment.getTask());
-      }
-      callback.done(tasks, null);
-    });
-  }
 
   public void setCompleted() {
     put(KEY_COMPLETED, true);
@@ -82,6 +59,15 @@ public class Task extends ParseObject {
     put(KEY_PRIORITY, priority);
   }
 
+  public TaskCategory getCategory() {
+    return (TaskCategory) getParseObject(KEY_CATEGORY);
+  }
+
+  public Task setCategory(TaskCategory category) {
+    put(KEY_CATEGORY, category);
+    return this;
+  }
+
   public Project getProject() {
     return (Project) getParseObject(KEY_PROJECT);
   }
@@ -90,25 +76,40 @@ public class Task extends ParseObject {
     put(KEY_PROJECT, project);
   }
 
-  public static class Query extends ParseQuery<Task> {
+  public static class SortByCategory implements Comparator<Task> {
 
-    public Query() {
-      super(Task.class);
-      include(KEY_DESCRIPTION);
-      include(KEY_TITLE);
-      include(KEY_PROJECT);
-      include(KEY_COMPLETED);
-    }
+    @Override
+    public int compare(Task task, Task o) {
+      TaskCategory category = task.getCategory();
+      TaskCategory oCategory = o.getCategory();
 
-    public Query sortAscending() {
-      addAscendingOrder(KEY_ESTIMATE);
-      return this;
-    }
+      if (category == null && oCategory == null) {
+        return Long.compare(task.getEstimate(), o.getEstimate());
+      }
 
-    public Query whereProjectEquals(Project project) {
-      whereEqualTo(KEY_PROJECT, project);
-      return this;
+      if (category == null || oCategory == null) {
+        return (category == null) ? -1 : 1;
+      }
+
+      int result = Integer.compare(category.getOrder(), oCategory.getOrder());
+
+      if (result == 0) {
+        result = category.getTitle().compareTo(oCategory.getTitle());
+
+        if (result == 0) {
+          result = Long.compare(task.getEstimate(), o.getEstimate());
+        }
+      }
+
+      return result;
     }
   }
 
+  public static class SortByDeadline implements Comparator<Task> {
+
+    @Override
+    public int compare(Task task, Task o) {
+      return Long.compare(task.getEstimate(), o.getEstimate());
+    }
+  }
 }
