@@ -9,6 +9,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
+import com.c0llabor8.kanban.adapter.CompletedTaskAdapter;
 import com.c0llabor8.kanban.adapter.MemberProfileAdapter;
 import com.c0llabor8.kanban.databinding.FragmentSummaryBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
@@ -18,10 +19,9 @@ import java.util.ArrayList;
 
 public class SummaryFragment extends BaseTaskFragment {
 
+  private CompletedTaskAdapter completedTaskAdapter;
   private MemberProfileAdapter memberProfileAdapter;
   private FragmentSummaryBinding binding;
-  public final static int LAYOUT_ONE = 1;
-  public final static int LAYOUT_TWO = 2;
 
   public static SummaryFragment newInstance(Project project) {
     Bundle args = new Bundle();
@@ -38,6 +38,9 @@ public class SummaryFragment extends BaseTaskFragment {
     super.onCreate(savedInstanceState);
     memberProfileAdapter =
         new MemberProfileAdapter(getActivity(), MemberProvider.getInstance().getMemberList(project));
+//    completedTaskAdapter =
+//        new CompletedTaskAdapter(getActivity(), TaskProvider.getInstance().getTasks(project));
+
   }
 
   @Nullable
