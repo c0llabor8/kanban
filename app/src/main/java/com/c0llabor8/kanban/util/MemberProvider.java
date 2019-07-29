@@ -1,19 +1,20 @@
 package com.c0llabor8.kanban.util;
 
+import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.model.Task;
 import com.parse.FindCallback;
-import com.parse.ParseUser;
+import com.parse.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
 
 public class MemberProvider {
 
   private static MemberProvider instance;
-  private HashMap<Project, Set<ParseUser>> userMap;
+  private HashMap<Project, List<Membership>> memberMap;
 
   private MemberProvider() {
-    userMap = new HashMap<>();
+    memberMap = new HashMap<>();
   }
 
   public static MemberProvider getInstance() {
@@ -24,7 +25,28 @@ public class MemberProvider {
     return instance;
   }
 
-  public void updateMembers(Project project, FindCallback<Task> callback) {
-    // TODO: Get all member for a task
+  public void updateMembers(Project project, FindCallback<Membership> callback) {
+    if (project == null) {
+      callback.done(null, null);
+      return;
+    }
+
+    project.getAllMembers((List<Membership> objects, ParseException e) -> {
+      if (e != null) {
+        callback.done(null, e);
+        return;
+      }
+
+      getMemberList(project).addAll(objects);
+      callback.done(objects, null);
+    });
+  }
+
+  public List<Membership> getMemberList(Project project) {
+    if (memberMap.get(project) == null) {
+      memberMap.put(project, new ArrayList<>());
+    }
+
+    return memberMap.get(project);
   }
 }

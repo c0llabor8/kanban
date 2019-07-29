@@ -1,5 +1,6 @@
 package com.c0llabor8.kanban.model;
 
+import com.c0llabor8.kanban.model.Membership.Query;
 import com.parse.DeleteCallback;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;
@@ -19,6 +20,11 @@ public class Project extends ParseObject {
   public static final String KEY_MEMBERS = "members";
   public static final String KEY_TASKS = "tasks";
   public static final String KEY_DEADLINE = "deadline";
+
+  public void getAllMembers(FindCallback<Membership> callback) {
+    Membership.Query query = new Membership.Query().whereProjectEquals(this);
+    query.findInBackground(callback);
+  }
 
   public static void queryUserProjects(FindCallback<Project> callback) {
     Membership.Query query = new Membership.Query();

@@ -15,10 +15,14 @@ import com.c0llabor8.kanban.activity.TaskListDetailActivity;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
+import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
-import org.parceler.Parcels;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import java.util.List;
+import com.c0llabor8.kanban.model.Task;
 
 public class ProjectFragment extends Fragment implements TaskRefreshListener {
 
