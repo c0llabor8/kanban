@@ -1,11 +1,17 @@
 package com.c0llabor8.kanban.adapter;
 
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.c0llabor8.kanban.activity.TaskListDetailActivity;
 import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
+import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.util.DateTimeUtils;
@@ -23,6 +29,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
 
   private Boolean headers;
   private List<Task> tasks;
+  private Context context;
 
   /*
    * Constructor method stores a reference to a list of tasks to adapt into a RecyclerView
@@ -64,6 +71,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     return VIEW_WITHOUT_HEADER;
   }
 
+
   /*
    * Bind the task at the list position to the list item view
    * */
@@ -93,6 +101,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
     }
 
     void update(Task task) {
+      context = binding.tvTitle.getContext();
       binding.tvTitle.setText(task.getTitle());
       binding.tvDescription.setText(task.getDescription());
       binding.tvEstimate.setText(DateTimeUtils.getDateString(task.getEstimate()));
@@ -103,6 +112,21 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
           binding.sectionHeader.setVisibility(View.VISIBLE);
         });
       }
+      binding.clickableBox.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          int position = getAdapterPosition();
+          if (position != RecyclerView.NO_POSITION) {
+            Task task = tasks.get(position);
+            Log.d("task", task.getTitle());
+            Intent intent = new Intent(context, TaskListDetailActivity.class);
+
+            intent.putExtra(Task.class.getSimpleName(), Parcels.wrap(task));
+            context.startActivity(intent);
+          }
+        }
+      });
     }
   }
+
 }

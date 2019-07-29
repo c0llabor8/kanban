@@ -1,6 +1,7 @@
 package com.c0llabor8.kanban.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +11,16 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import com.c0llabor8.kanban.R;
+import com.c0llabor8.kanban.activity.TaskListDetailActivity;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.TaskProvider;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import java.util.List;
+import com.c0llabor8.kanban.model.Task;
 
 public class ProjectFragment extends Fragment implements TaskRefreshListener {
 
@@ -53,6 +59,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   public void onAttach(@NonNull Context context) {
     super.onAttach(context);
     project = getArguments().getParcelable("project");
+
   }
 
   @Override
