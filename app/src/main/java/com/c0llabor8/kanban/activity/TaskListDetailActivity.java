@@ -1,7 +1,6 @@
 package com.c0llabor8.kanban.activity;
 
 import android.os.Bundle;
-import android.os.Parcel;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -11,10 +10,8 @@ import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.GetCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
-import org.parceler.Parcels;
 
-public class TaskListDetailActivity extends AppCompatActivity{
+public class TaskListDetailActivity extends AppCompatActivity {
 
 
   private TextView title;
@@ -28,23 +25,24 @@ public class TaskListDetailActivity extends AppCompatActivity{
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_task_list_detail);
 
-    task = (Task) Parcels.unwrap(getIntent().getParcelableExtra(Task.class.getSimpleName()));
-
+    task = getIntent().getParcelableExtra(Task.class.getSimpleName());
 
     title = findViewById(R.id.tvTitle);
     description = findViewById(R.id.tvDescription);
     projectAssignment = findViewById(R.id.tvAssignment);
     priorityLevel = findViewById(R.id.ivPriorityLevel);
 
-
     title.setText(task.getTitle());
     description.setText(task.getDescription());
-    task.getProject().fetchIfNeededInBackground(new GetCallback<Project>() {
-      @Override
-      public void done(Project project, ParseException e) {
-        projectAssignment.setText(project.getName());
-      }
-    });
+    if (task.getProject() != null) {
+      task.getProject().fetchIfNeededInBackground(new GetCallback<Project>() {
+        @Override
+        public void done(Project project, ParseException e) {
+          projectAssignment.setText(project.getName());
+        }
+      });
+    }
+
     setPriorityLevel();
   }
 
