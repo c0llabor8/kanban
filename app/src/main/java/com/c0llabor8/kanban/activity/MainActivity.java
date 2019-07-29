@@ -15,6 +15,7 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.ProjectFragment;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
+import com.c0llabor8.kanban.fragment.dialog.ManageCategoryFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
 import com.c0llabor8.kanban.fragment.dialog.StringResultDialog;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     navActionFragment = ProjectBottomActionSheet.newInstance();
     navFragment = BottomNavigationSheet.newInstance();
 
-    //not within a project scope in the initial screen, so keep it at null
+    // Not within a project scope in the initial screen, so keep it at null
     switchProjectScope(null);
 
     setSupportActionBar(binding.bar);
@@ -68,12 +69,13 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     if (fragment != null) {
       taskRefreshListener = (TaskRefreshListener) fragment;
 
-      TaskProvider.getInstance().updateTasks(currentProject, (obj, e) ->
-          MemberProvider.getInstance().updateMembers(currentProject, (objects, err) -> {
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.replace(binding.content.getId(), fragment);
-            transaction.commit();
-          }));
+      TaskProvider.getInstance().updateTasks(currentProject, (tasks, e) ->
+          TaskProvider.getInstance().updateCategories(currentProject, (categories, err) ->
+              MemberProvider.getInstance().updateMembers(currentProject, (memberships, error) -> {
+                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                transaction.replace(binding.content.getId(), fragment);
+                transaction.commit();
+              })));
     }
   }
 
@@ -158,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       return true;
     }
 
-    //when new project is selected, dialog is launched to create new project
+    // When new project is selected, dialog is launched to create new project
     if (item.getItemId() == R.id.new_project) {
       navFragment.dismiss();
       promptNewProject();
@@ -166,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     }
 
     if (item.getItemId() == R.id.action_category) {
-      navFragment.dismiss();
+      navActionFragment.dismiss();
+      promptManageCategory();
       return true;
     }
 
@@ -190,6 +193,12 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
     }
 
     return false;
+  }
+
+  public void promptManageCategory() {
+    ManageCategoryFragment fragment = ManageCategoryFragment.newInstance(currentProject);
+    fragment.setTaskRefreshListener(taskRefreshListener);
+    fragment.show(getSupportFragmentManager(), "");
   }
 
   public void promptNewProject() {

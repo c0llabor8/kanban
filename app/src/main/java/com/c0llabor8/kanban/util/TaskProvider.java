@@ -2,6 +2,8 @@ package com.c0llabor8.kanban.util;
 
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.model.TaskCategory;
+import com.c0llabor8.kanban.model.query.TaskCategoryQuery;
 import com.c0llabor8.kanban.model.query.TaskQuery;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -18,10 +20,12 @@ public class TaskProvider {
   private static TaskProvider instance;
   private HashMap<Project, List<Task>> taskMap;
   private HashMap<Project, List<Task>> categorizedTaskMap;
+  private HashMap<Project, List<TaskCategory>> taskCategoryMap;
 
   private TaskProvider() {
     taskMap = new HashMap<>();
     categorizedTaskMap = new HashMap<>();
+    taskCategoryMap = new HashMap<>();
   }
 
   public static TaskProvider getInstance() {
@@ -79,6 +83,28 @@ public class TaskProvider {
   }
 
   /**
+   * Query for all categories within a project scope
+   *
+   * @param project project to get categories for
+   * @param callback called once categories have been cached
+   */
+  public void updateCategories(Project project, FindCallback<TaskCategory> callback) {
+    if (project == null) {
+      callback.done(null, null);
+      return;
+    }
+
+    TaskCategoryQuery query = new TaskCategoryQuery();
+    query.whereProjectEquals(project).findInBackground((objects, e) -> {
+      getCategories(project).clear();
+      getCategories(project).addAll(objects);
+      Collections.sort(getCategories(project), new TaskCategory.SortComparator());
+
+      callback.done(getCategories(project), null);
+    });
+  }
+
+  /**
    * Gets all cached tasks for a given project
    *
    * @param project Project to get all tasks for
@@ -106,5 +132,13 @@ public class TaskProvider {
     }
 
     return categorizedTaskMap.get(project);
+  }
+
+  public List<TaskCategory> getCategories(Project project) {
+    if (taskCategoryMap.get(project) == null) {
+      taskCategoryMap.put(project, new ArrayList<>());
+    }
+
+    return taskCategoryMap.get(project);
   }
 }
