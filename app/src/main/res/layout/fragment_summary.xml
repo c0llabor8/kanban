@@ -1,18 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools">
-  <LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    tools:ignore="HardcodedText">
-
-    <androidx.recyclerview.widget.RecyclerView
-      android:id="@+id/rvMembers"
+  <androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:orientation="horizontal"/>
+      android:orientation="vertical">
 
-  </LinearLayout>
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMembers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"/>
+
+
+      <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+          android:id="@+id/tvCompleted"
+          android:layout_width="wrap_content"
+          android:layout_height="80dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginStart="32dp"
+          android:backgroundTint="#0300BCD4"
+          android:text="2"
+          android:textAppearance="@style/TextAppearance.MyTheme.Headline2"
+          app:layout_constraintBottom_toTopOf="@+id/textView4"
+          app:layout_constraintEnd_toStartOf="@+id/textView"
+          app:layout_constraintHorizontal_bias="0.5"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+          android:id="@+id/tvIncomplete"
+          android:layout_width="wrap_content"
+          android:layout_height="80dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginEnd="32dp"
+          android:text="TOTAL"
+          android:textAppearance="@style/TextAppearance.MyTheme.Headline2"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_bias="0.5"
+          app:layout_constraintStart_toEndOf="@+id/textView"
+          app:layout_constraintTop_toTopOf="parent"
+          />
+        <TextView
+          android:id="@+id/textView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="8dp"
+          android:layout_marginBottom="8dp"
+          android:text="Out of"
+          android:textAppearance="@style/TextAppearance.MyTheme.Headline5"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toStartOf="@+id/tvIncomplete"
+          app:layout_constraintHorizontal_bias="0.5"
+          app:layout_constraintStart_toEndOf="@+id/tvCompleted"
+          app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+          android:id="@+id/textView4"
+          android:layout_width="0dp"
+          android:layout_height="26dp"
+          android:layout_marginStart="48dp"
+          android:text="COMPLETED"
+          android:visibility="visible"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@+id/tvCompleted"/>
+
+
+      </androidx.constraintlayout.widget.ConstraintLayout>
+
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvTasksCompleted"
+        android:overScrollMode="never"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"/>
+
+    </LinearLayout>
+  </androidx.core.widget.NestedScrollView>
 </layout>
