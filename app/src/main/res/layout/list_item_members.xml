@@ -6,16 +6,18 @@
     android:padding="10dp"
     android:orientation="vertical">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageButton
       android:id="@+id/ivProfile"
-      android:layout_width="60dp"
-      android:layout_height="60dp"
-      android:padding="1dp"
-      android:background="@mipmap/ic_launcher_round"/>
+      android:layout_width="@dimen/keyline_5"
+      android:layout_height="@dimen/keyline_5"
+      android:layout_margin="@dimen/keyline_2"
+      android:background="?attr/selectableItemBackgroundBorderless"/>
+
     <TextView
       android:id="@+id/tvName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
+      android:layout_gravity="center"
       android:text="TextView"/>
 
   </LinearLayout>

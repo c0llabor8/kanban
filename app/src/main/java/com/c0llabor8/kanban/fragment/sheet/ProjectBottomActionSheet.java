@@ -64,7 +64,6 @@ public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
         .setEnabled(project != null);
     binding.navigationView.getMenu().findItem(R.id.action_leave_project)
         .setEnabled(project != null);
-
   }
 
   // Set the class that will be listening to this menu

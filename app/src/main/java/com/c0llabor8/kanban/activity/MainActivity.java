@@ -165,6 +165,11 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       return true;
     }
 
+    if (item.getItemId() == R.id.action_category) {
+      navFragment.dismiss();
+      return true;
+    }
+
     // Have the current user leave the current project
     if (item.getItemId() == R.id.action_leave_project) {
       navActionFragment.dismiss();
