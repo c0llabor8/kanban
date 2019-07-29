@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.activity.TaskListDetailActivity;
 import com.c0llabor8.kanban.databinding.ListItemTaskBinding;
-import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.util.DateTimeUtils;
@@ -112,18 +110,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
           binding.sectionHeader.setVisibility(View.VISIBLE);
         });
       }
-      binding.clickableBox.setOnClickListener(new OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          int position = getAdapterPosition();
-          if (position != RecyclerView.NO_POSITION) {
-            Task task = tasks.get(position);
-            Log.d("task", task.getTitle());
-            Intent intent = new Intent(context, TaskListDetailActivity.class);
 
-            intent.putExtra(Task.class.getSimpleName(), Parcels.wrap(task));
-            context.startActivity(intent);
-          }
+      binding.clickableBox.setOnClickListener(view -> {
+        int position = getAdapterPosition();
+        if (position != RecyclerView.NO_POSITION) {
+          Log.d("task", task.getTitle());
+          Intent intent = new Intent(context, TaskListDetailActivity.class);
+
+          intent.putExtra(Task.class.getSimpleName(), task);
+          context.startActivity(intent);
         }
       });
     }
