@@ -19,11 +19,13 @@ public class TaskProvider {
 
   private static TaskProvider instance;
   private HashMap<Project, List<Task>> taskMap;
+  private HashMap<Project, List<Task>> completedTaskMap;
   private HashMap<Project, List<Task>> categorizedTaskMap;
   private HashMap<Project, List<TaskCategory>> taskCategoryMap;
 
   private TaskProvider() {
     taskMap = new HashMap<>();
+    completedTaskMap = new HashMap<>();
     categorizedTaskMap = new HashMap<>();
     taskCategoryMap = new HashMap<>();
   }
@@ -54,7 +56,10 @@ public class TaskProvider {
 
         // Clear all tasks within the project then insert and sort the newly fetched ones
         getTasks(null).clear();
-        getTasks(null).addAll(tasks);
+        getCompletedTasks(project).clear();
+
+        insertTasks(null, tasks);
+
         Collections.sort(getTasks(null), new Task.SortByDeadline());
         callback.done(getTasks(null), null);
       });
@@ -71,15 +76,29 @@ public class TaskProvider {
 
       // Clear all tasks within the project then insert and sort the newly fetched ones
       getTasks(project).clear();
-      getTasks(project).addAll(tasks);
+      getCompletedTasks(project).clear();
       getCategorizedTasks(project).clear();
-      getCategorizedTasks(project).addAll(tasks);
+
+      insertTasks(project, tasks);
+
+      getCategorizedTasks(project).addAll(getTasks(project));
 
       // Sort the tasks with category priority and deadline priority
       Collections.sort(getTasks(project), new Task.SortByDeadline());
+      Collections.sort(getCompletedTasks(project), new Task.SortByDeadline());
       Collections.sort(getCategorizedTasks(project), new Task.SortByCategory());
       callback.done(getTasks(project), null);
     });
+  }
+
+  private void insertTasks(Project project, List<Task> tasks) {
+    for (Task task : tasks) {
+      if (task.getCompleted()) {
+        getCompletedTasks(project).add(task);
+      } else {
+        getTasks(project).add(task);
+      }
+    }
   }
 
   /**
@@ -132,6 +151,14 @@ public class TaskProvider {
     }
 
     return categorizedTaskMap.get(project);
+  }
+
+  public List<Task> getCompletedTasks(Project project) {
+    if (completedTaskMap.get(project) == null) {
+      completedTaskMap.put(project, new ArrayList<>());
+    }
+
+    return completedTaskMap.get(project);
   }
 
   public List<TaskCategory> getCategories(Project project) {

@@ -68,14 +68,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     if (fragment != null) {
       taskRefreshListener = (TaskRefreshListener) fragment;
-
-      TaskProvider.getInstance().updateTasks(currentProject, (tasks, e) ->
-          TaskProvider.getInstance().updateCategories(currentProject, (categories, err) ->
-              MemberProvider.getInstance().updateMembers(currentProject, (memberships, error) -> {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(binding.content.getId(), fragment);
-                transaction.commit();
-              })));
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(binding.content.getId(), fragment);
+      transaction.commit();
     }
   }
 

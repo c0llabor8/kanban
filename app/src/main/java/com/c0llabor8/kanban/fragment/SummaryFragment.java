@@ -16,10 +16,10 @@ import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
+import java.util.Locale;
 
 public class SummaryFragment extends BaseTaskFragment {
 
-  private static final int completed = 2;
   private TaskListAdapter taskListAdapter;
   private MemberProfileAdapter memberProfileAdapter;
   private FragmentSummaryBinding binding;
@@ -34,22 +34,20 @@ public class SummaryFragment extends BaseTaskFragment {
     return fragment;
   }
 
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    memberProfileAdapter =
-        new MemberProfileAdapter(getActivity(), MemberProvider.getInstance().getMemberList(project));
-    taskListAdapter =
-        new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
-  }
-
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
+
+    memberProfileAdapter =
+        new MemberProfileAdapter(getActivity(),
+            MemberProvider.getInstance().getMemberList(project));
+    taskListAdapter =
+        new TaskListAdapter(TaskProvider.getInstance().getCompletedTasks(project));
+
     // Inflate the layout for this fragment
-      binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary,
-          container, false);
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary,
+        container, false);
     return binding.getRoot();
   }
 
@@ -63,12 +61,22 @@ public class SummaryFragment extends BaseTaskFragment {
     binding.rvMembers.setAdapter(memberProfileAdapter);
     binding.rvTasksCompleted.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTasksCompleted.setAdapter(taskListAdapter);
-    binding.tvCompleted.setText("" + completed);
-    binding.tvIncomplete.setText("" + TaskProvider.getInstance().getTasks(project).size());
+
+    binding.tvCompleted.setText(String.format(
+        Locale.getDefault(), "%d",
+        TaskProvider.getInstance().getCompletedTasks(project).size()
+    ));
+
+    binding.tvIncomplete.setText(String.format(
+        Locale.getDefault(), "%d",
+        TaskProvider.getInstance().getTasks(project).size()
+    ));
   }
 
   @Override
   public void onTaskRefresh() {
+    taskListAdapter.notifyDataSetChanged();
+    memberProfileAdapter.notifyDataSetChanged();
   }
 }
 
