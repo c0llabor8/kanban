@@ -9,17 +9,18 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import com.c0llabor8.kanban.R;
-import com.c0llabor8.kanban.adapter.CompletedTaskAdapter;
 import com.c0llabor8.kanban.adapter.MemberProfileAdapter;
+import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentSummaryBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.MemberProvider;
-import java.util.ArrayList;
+import com.c0llabor8.kanban.util.TaskProvider;
 
 public class SummaryFragment extends BaseTaskFragment {
 
-  private CompletedTaskAdapter completedTaskAdapter;
+  private static final int completed = 2;
+  private TaskListAdapter taskListAdapter;
   private MemberProfileAdapter memberProfileAdapter;
   private FragmentSummaryBinding binding;
 
@@ -38,25 +39,17 @@ public class SummaryFragment extends BaseTaskFragment {
     super.onCreate(savedInstanceState);
     memberProfileAdapter =
         new MemberProfileAdapter(getActivity(), MemberProvider.getInstance().getMemberList(project));
-//    completedTaskAdapter =
-//        new CompletedTaskAdapter(getActivity(), TaskProvider.getInstance().getTasks(project));
-
+    taskListAdapter =
+        new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
   }
 
   @Nullable
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
-    // Data to populate the RecyclerView with
-    ArrayList<Integer> members = new ArrayList<>();
-
-
     // Inflate the layout for this fragment
       binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary,
           container, false);
-
-//    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_tasksummary,
-//        container,false);
     return binding.getRoot();
   }
 
@@ -68,16 +61,14 @@ public class SummaryFragment extends BaseTaskFragment {
         LinearLayoutManager.HORIZONTAL, false));
     // Set up the RecyclerView
     binding.rvMembers.setAdapter(memberProfileAdapter);
-    // Sets the layoutManager
+    binding.rvTasksCompleted.setLayoutManager(new LinearLayoutManager(getContext()));
+    binding.rvTasksCompleted.setAdapter(taskListAdapter);
+    binding.tvCompleted.setText("" + completed);
+    binding.tvIncomplete.setText("" + TaskProvider.getInstance().getTasks(project).size());
   }
 
   @Override
   public void onTaskRefresh() {
-//    if (project == null) {
-//      MemberProvider.getInstance().updateMembers(project,
-//          (objects, e) -> memberProfileAdapter.notifyDataSetChanged());
-//    }
-//    memberProfileAdapter.notifyDataSetChanged();
   }
 }
 
