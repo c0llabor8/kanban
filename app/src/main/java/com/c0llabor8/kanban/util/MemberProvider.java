@@ -49,6 +49,7 @@ public class MemberProvider {
         return;
       }
 
+      getMemberList(project).clear();
       getMemberList(project).addAll(objects);
       callback.done(objects, null);
     });

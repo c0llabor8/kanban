@@ -10,6 +10,7 @@ import static com.c0llabor8.kanban.model.Task.KEY_TITLE;
 import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.model.TaskCategory;
 import com.parse.FindCallback;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
@@ -50,6 +51,11 @@ public class TaskQuery extends ParseQuery<Task> {
 
   public TaskQuery whereProjectEquals(Project project) {
     whereEqualTo(KEY_PROJECT, project);
+    return this;
+  }
+
+  public TaskQuery whereCategoryEquals(TaskCategory category) {
+    whereEqualTo(KEY_CATEGORY, category);
     return this;
   }
 }

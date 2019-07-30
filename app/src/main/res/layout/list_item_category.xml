@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/keyline_3"
+    android:background="@color/color_surface"
+    android:orientation="horizontal">
+
+    <TextView
+      android:id="@+id/category_label"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_vertical|start"
+      android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"/>
+
+  </LinearLayout>
+</layout>

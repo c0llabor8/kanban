@@ -3,6 +3,8 @@
   <item
     android:id="@+id/action_invite"
     android:title="Invite a new member"/>
+  <item android:id="@+id/action_category"
+    android:title="Manage task categories"/>
   <item
     android:id="@+id/action_rename_project"
     android:title="Rename project"/>

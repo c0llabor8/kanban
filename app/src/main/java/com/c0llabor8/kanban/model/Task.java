@@ -68,6 +68,10 @@ public class Task extends ParseObject {
     return this;
   }
 
+  public void removeCategory() {
+    remove(KEY_CATEGORY);
+  }
+
   public Project getProject() {
     return (Project) getParseObject(KEY_PROJECT);
   }

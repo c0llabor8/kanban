@@ -59,12 +59,14 @@ public class ProjectBottomActionSheet extends BottomSheetDialogFragment {
     binding.navigationView.setNavigationItemSelectedListener(
         item -> listener.onProjectItemSelected(item));
 
-    binding.navigationView.getMenu().findItem(R.id.action_invite).setEnabled(project != null);
+    binding.navigationView.getMenu().findItem(R.id.action_category)
+        .setEnabled(project != null);
+    binding.navigationView.getMenu().findItem(R.id.action_invite)
+        .setEnabled(project != null);
     binding.navigationView.getMenu().findItem(R.id.action_rename_project)
         .setEnabled(project != null);
     binding.navigationView.getMenu().findItem(R.id.action_leave_project)
         .setEnabled(project != null);
-
   }
 
   // Set the class that will be listening to this menu
