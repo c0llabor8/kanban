@@ -1,8 +1,6 @@
 package com.c0llabor8.kanban.activity;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
@@ -18,15 +16,13 @@ import com.parse.ParseException;
 
 public class TaskListDetailActivity extends AppCompatActivity {
 
-
+  RecyclerView rvComments;
+  TaskDetailAdapter adapter;
   private TextView title;
   private TextView description;
   private TextView projectAssignment;
   private ImageView priorityLevel;
   private Task task;
-  RecyclerView rvComments;
-  TaskDetailAdapter adapter;
-
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +31,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
 
     //setting up recyclerView for comments
     adapter = new TaskDetailAdapter();
-    rvComments = (RecyclerView) findViewById(R.id.rvComments);
+    rvComments = findViewById(R.id.rvComments);
     rvComments.setLayoutManager(new LinearLayoutManager(this));
     rvComments.setAdapter(adapter);
 

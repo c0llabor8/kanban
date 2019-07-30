@@ -24,8 +24,6 @@ import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.util.MemberProvider;
-import com.c0llabor8.kanban.util.TaskProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseException;

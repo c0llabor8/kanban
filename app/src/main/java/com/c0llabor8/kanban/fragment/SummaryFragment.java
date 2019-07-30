@@ -79,4 +79,3 @@ public class SummaryFragment extends BaseTaskFragment {
     memberProfileAdapter.notifyDataSetChanged();
   }
 }
-

@@ -22,19 +22,19 @@
       android:id="@+id/add_category"
       android:layout_width="0dp"
       android:layout_height="wrap_content"
-      android:gravity="center"
       android:background="@color/color_primary"
+      android:gravity="center"
       android:minHeight="@dimen/keyline_5"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent">
 
       <TextView
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
         android:layout_width="wrap_content"
-        android:textColor="@color/color_on_primary"
         android:layout_height="wrap_content"
-        android:text="New Category"/>
+        android:text="New Category"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Button"
+        android:textColor="@color/color_on_primary"/>
 
     </LinearLayout>
 

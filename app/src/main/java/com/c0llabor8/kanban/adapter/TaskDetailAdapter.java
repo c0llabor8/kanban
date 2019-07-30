@@ -1,7 +1,6 @@
 package com.c0llabor8.kanban.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +13,9 @@ import com.c0llabor8.kanban.R;
 import java.util.List;
 
 public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.ViewHolder> {
+
   //list of comments
- // List<Comments> comments;
+  // List<Comments> comments;
   Context context;
 
   //public TaskDetailAdapter(List<Comments> comments) {
@@ -51,7 +51,7 @@ public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.Vi
   }
 
 
-  public class ViewHolder extends RecyclerView.ViewHolder{
+  public class ViewHolder extends RecyclerView.ViewHolder {
 
     EditText comment;
     ImageView profileImage;

@@ -22,8 +22,6 @@ import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.util.TaskProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.parse.DeleteCallback;
-import com.parse.ParseException;
 import java.util.Collections;
 import java.util.List;
 
