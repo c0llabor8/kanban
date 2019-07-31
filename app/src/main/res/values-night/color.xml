@@ -24,6 +24,7 @@
   <color name="color_primary_variant">#4867d7</color>
   <color name="color_secondary">#d74867</color>
   <color name="color_secondary_variant">#a0053d</color>
+  <color name="color_tertiary">#ffd041</color>
 
   <color name="color_background">#000000</color>
   <color name="color_surface">#121212</color>

@@ -15,8 +15,8 @@
         android:id="@+id/rvMembers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"/>
-
+        android:orientation="horizontal"
+        android:overScrollMode="never"/>
 
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

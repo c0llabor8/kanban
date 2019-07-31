@@ -37,6 +37,7 @@
   <color name="color_primary_variant">#003da5</color>
   <color name="color_secondary">#d74867</color>
   <color name="color_secondary_variant">#a0053d</color>
+  <color name="color_tertiary">#ffd041</color>
 
   <!--colorBackground appears behind scrollable content and is used for the default window-->
   <!--background. colorSurface is mapped to the surface of components such as cards, sheets-->
