@@ -1,5 +1,7 @@
 package com.c0llabor8.kanban.adapter;
 
+import android.graphics.Color;
+import android.graphics.PorterDuff.Mode;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -7,7 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ListItemTimelineBinding;
 import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.util.ColorUtil;
 import com.c0llabor8.kanban.util.DateTimeUtils;
+import com.c0llabor8.kanban.util.TaskProvider;
+import com.parse.GetCallback;
+import com.parse.ParseException;
 import java.util.List;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
@@ -106,14 +112,27 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
      * changes color of icon on timeline based on priority level
      */
     private void setPriority(Task task) {
-      if (task.getPriority() == 0) {
-        binding.ivPriority.setImageResource(R.drawable.circle_priority_low);
-      } else if (task.getPriority() == 1) {
-        binding.ivPriority.setImageResource(R.drawable.circle_priority_medium);
-      } else {
-        binding.ivPriority.setImageResource(R.drawable.circle_priority_high);
-      }
+
+      task.fetchIfNeededInBackground(new GetCallback<Task>() {
+        @Override
+        public void done(Task object, ParseException e) {
+          if (task.getCategory() != null) {
+
+            float value =
+                (float) (task.getCategory().getOrder() + 1) / (float) TaskProvider.getInstance().getCategories(task.getProject()).size();
+
+            binding.ivPriority.getDrawable().setColorFilter(
+                ColorUtil.mixTwoColors(Color.YELLOW, Color.RED, value),
+                Mode.SRC_ATOP
+            );
+          } else {
+            binding.ivPriority.getDrawable().setColorFilter(
+                ColorUtil.mixTwoColors(Color.YELLOW, Color.RED, 0f),
+                Mode.SRC_ATOP
+            );
+          }
+        }
+      });
     }
   }
-
 }
