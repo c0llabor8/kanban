@@ -18,10 +18,10 @@ import java.util.List;
 public class TaskProvider {
 
   private static TaskProvider instance;
-  private HashMap<Project, List<Task>> taskMap;
-  private HashMap<Project, List<Task>> completedTaskMap;
-  private HashMap<Project, List<Task>> categorizedTaskMap;
-  private HashMap<Project, List<TaskCategory>> taskCategoryMap;
+  private HashMap<String, List<Task>> taskMap;
+  private HashMap<String, List<Task>> completedTaskMap;
+  private HashMap<String, List<Task>> categorizedTaskMap;
+  private HashMap<String, List<TaskCategory>> taskCategoryMap;
 
   private TaskProvider() {
     taskMap = new HashMap<>();
@@ -130,12 +130,13 @@ public class TaskProvider {
    * @return A list of all tasks given a project
    */
   public List<Task> getTasks(Project project) {
+    String hash = (project == null) ? null : project.getObjectId();
     // Avoid getting a null list of tasks
-    if (taskMap.get(project) == null) {
-      taskMap.put(project, new ArrayList<>());
+    if (taskMap.get(hash) == null) {
+      taskMap.put(hash, new ArrayList<>());
     }
 
-    return taskMap.get(project);
+    return taskMap.get(hash);
   }
 
   /**
@@ -145,27 +146,32 @@ public class TaskProvider {
    * @return A list of all tasks given a project
    */
   public List<Task> getCategorizedTasks(Project project) {
+    String hash = (project == null) ? null : project.getObjectId();
     // Avoid getting a null list of tasks
-    if (categorizedTaskMap.get(project) == null) {
-      categorizedTaskMap.put(project, new ArrayList<>());
+    if (categorizedTaskMap.get(hash) == null) {
+      categorizedTaskMap.put(hash, new ArrayList<>());
     }
 
-    return categorizedTaskMap.get(project);
+    return categorizedTaskMap.get(hash);
   }
 
   public List<Task> getCompletedTasks(Project project) {
-    if (completedTaskMap.get(project) == null) {
-      completedTaskMap.put(project, new ArrayList<>());
+    String hash = (project == null) ? null : project.getObjectId();
+
+    if (completedTaskMap.get(hash) == null) {
+      completedTaskMap.put(hash, new ArrayList<>());
     }
 
-    return completedTaskMap.get(project);
+    return completedTaskMap.get(hash);
   }
 
   public List<TaskCategory> getCategories(Project project) {
-    if (taskCategoryMap.get(project) == null) {
-      taskCategoryMap.put(project, new ArrayList<>());
+    String hash = (project == null) ? null : project.getObjectId();
+
+    if (taskCategoryMap.get(hash) == null) {
+      taskCategoryMap.put(hash, new ArrayList<>());
     }
 
-    return taskCategoryMap.get(project);
+    return taskCategoryMap.get(hash);
   }
 }

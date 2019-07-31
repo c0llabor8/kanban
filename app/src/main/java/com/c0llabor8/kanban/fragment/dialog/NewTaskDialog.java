@@ -15,8 +15,6 @@ import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.parse.ParseUser;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 public class NewTaskDialog extends DialogFragment {
 
@@ -132,6 +130,7 @@ public class NewTaskDialog extends DialogFragment {
   }
 
   public interface TaskRefreshListener {
+
     void onTaskRefresh();
   }
 }

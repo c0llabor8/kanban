@@ -13,7 +13,6 @@ import com.c0llabor8.kanban.util.ColorUtil;
 import com.c0llabor8.kanban.util.DateTimeUtils;
 import com.c0llabor8.kanban.util.TaskProvider;
 import com.parse.GetCallback;
-import com.parse.ParseException;
 import java.util.List;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
@@ -113,24 +112,20 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
      */
     private void setPriority(Task task) {
 
-      task.fetchIfNeededInBackground(new GetCallback<Task>() {
-        @Override
-        public void done(Task object, ParseException e) {
-          if (task.getCategory() != null) {
+      task.fetchIfNeededInBackground((GetCallback<Task>) (object, e) -> {
+        if (task.getCategory() != null) {
 
-            float value =
-                (float) (task.getCategory().getOrder() + 1) / (float) TaskProvider.getInstance().getCategories(task.getProject()).size();
+          int categories = TaskProvider.getInstance().getCategories(task.getProject()).size();
 
-            binding.ivPriority.getDrawable().setColorFilter(
-                ColorUtil.mixTwoColors(Color.YELLOW, Color.RED, value),
-                Mode.SRC_ATOP
-            );
-          } else {
-            binding.ivPriority.getDrawable().setColorFilter(
-                ColorUtil.mixTwoColors(Color.YELLOW, Color.RED, 0f),
-                Mode.SRC_ATOP
-            );
+          float value =
+              (float) (task.getCategory().getOrder()) / (float) categories - 1;
+
+          if (categories == 1) {
+            value = 1f;
           }
+
+          binding.ivPriority
+              .setColorFilter(ColorUtil.mixTwoColors(Color.YELLOW, Color.RED, value), Mode.SRC);
         }
       });
     }

@@ -1,13 +1,8 @@
 package com.c0llabor8.kanban.model;
 
-import android.text.format.DateUtils;
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 @ParseClassName("Message")
 public class Message extends ParseObject {
