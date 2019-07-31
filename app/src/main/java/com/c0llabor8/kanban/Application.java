@@ -2,6 +2,7 @@ package com.c0llabor8.kanban;
 
 import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Membership;
+import com.c0llabor8.kanban.model.Message;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.model.TaskCategory;
@@ -32,6 +33,7 @@ public class Application extends android.app.Application {
     ParseObject.registerSubclass(Assignment.class);
     ParseObject.registerSubclass(Task.class);
     ParseObject.registerSubclass(TaskCategory.class);
+    ParseObject.registerSubclass(Message.class);
 
     // Initialize the Parse SDK at the app entry point
     Parse.initialize(

@@ -1,26 +1,33 @@
 package com.c0llabor8.kanban.adapter;
 
 import android.content.Context;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
+import com.c0llabor8.kanban.model.Message;
+import com.c0llabor8.kanban.util.DateTimeUtils;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
+import org.w3c.dom.Text;
 
 public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.ViewHolder> {
 
-  //list of comments
-  // List<Comments> comments;
+  List<Message> messages;
   Context context;
 
-  //public TaskDetailAdapter(List<Comments> comments) {
-  //  this.comments = comments;
-  //}
+  public TaskDetailAdapter(Context context, List<Message> message) {
+    this.messages = message;
+    this.context = context;
+
+  }
   @Override
   public void onBindViewHolder(@NonNull TaskDetailAdapter.ViewHolder holder, int position,
       @NonNull List<Object> payloads) {
@@ -29,7 +36,7 @@ public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.Vi
 
   @Override
   public int getItemCount() {
-    return 0;
+    return messages.size();
   }
 
   @NonNull
@@ -40,28 +47,38 @@ public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.Vi
     LayoutInflater inflater = LayoutInflater.from(context);
     //create the view using the item_movie layout
     View commentView = inflater.inflate(R.layout.task_comments, parent, false);
+    TaskDetailAdapter.ViewHolder view = new TaskDetailAdapter.ViewHolder(commentView);
     //return a new ViewHolder
-    return new ViewHolder(commentView);
+    return view;
 
   }
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    Message message = messages.get(position);
+    holder.tvComment.setText(message.getBody());
+    holder.tvUsername.setText(message.getUser().getUsername());
+    holder.timeStamp.setText(DateTimeUtils.getRelativeTimeAgo(message.getRelativeTime()));
+  }
 
+  public void clear() {
+    messages.clear();
+    notifyDataSetChanged();
   }
 
 
   public class ViewHolder extends RecyclerView.ViewHolder {
 
-    EditText comment;
-    ImageView profileImage;
-    TextView testing;
+    TextView tvComment;
+    TextView tvUsername;
+    TextView timeStamp;
+
 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
-      comment = itemView.findViewById(R.id.etComment);
-      profileImage = itemView.findViewById(R.id.ivProfileImage);
-      testing = itemView.findViewById(R.id.tvRandom);
+      tvComment = itemView.findViewById(R.id.tvComment);
+      tvUsername = itemView.findViewById(R.id.tvUsername);
+      timeStamp = itemView.findViewById(R.id.tvTimeStamp);
     }
   }
 }
