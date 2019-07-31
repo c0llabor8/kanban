@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskListDetailActivity extends AppCompatActivity {
+
   //to create comments
   RecyclerView rvComments;
   TaskDetailAdapter adapter;
@@ -55,10 +56,12 @@ public class TaskListDetailActivity extends AppCompatActivity {
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         settingButtonEnabled(charSequence);
       }
+
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         settingButtonEnabled(charSequence);
       }
+
       @Override
       public void afterTextChanged(Editable editable) {
         if (etComment.length() == 0) {
@@ -69,12 +72,11 @@ public class TaskListDetailActivity extends AppCompatActivity {
       }
     });
 
-
     sendBtn = findViewById(R.id.btnSend);
     sendBtn.setEnabled(false);
     messageList = new ArrayList<>();
     adapter = new TaskDetailAdapter(this, messageList);
-    rvComments = (RecyclerView) findViewById(R.id.rvComments);
+    rvComments = findViewById(R.id.rvComments);
     rvComments.setLayoutManager(new LinearLayoutManager(this));
     rvComments.setAdapter(adapter);
 

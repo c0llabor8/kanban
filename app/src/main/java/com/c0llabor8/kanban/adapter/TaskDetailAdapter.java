@@ -1,22 +1,16 @@
 package com.c0llabor8.kanban.adapter;
 
 import android.content.Context;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.model.Message;
 import com.c0llabor8.kanban.util.DateTimeUtils;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
-import org.w3c.dom.Text;
 
 public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.ViewHolder> {
 
@@ -28,6 +22,7 @@ public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.Vi
     this.context = context;
 
   }
+
   @Override
   public void onBindViewHolder(@NonNull TaskDetailAdapter.ViewHolder holder, int position,
       @NonNull List<Object> payloads) {
