@@ -15,17 +15,15 @@ import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.ProjectFragment;
 import com.c0llabor8.kanban.fragment.TaskListFragment;
-import com.c0llabor8.kanban.fragment.dialog.ManageCategoryFragment;
+import com.c0llabor8.kanban.fragment.dialog.EditCategoriesDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
-import com.c0llabor8.kanban.fragment.dialog.StringResultDialog;
 import com.c0llabor8.kanban.fragment.sheet.BottomNavigationSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectBottomActionSheet;
 import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
-import com.c0llabor8.kanban.util.MemberProvider;
-import com.c0llabor8.kanban.util.TaskProvider;
+import com.c0llabor8.kanban.util.DialogUtils;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseException;
@@ -68,14 +66,9 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     if (fragment != null) {
       taskRefreshListener = (TaskRefreshListener) fragment;
-
-      TaskProvider.getInstance().updateTasks(currentProject, (tasks, e) ->
-          TaskProvider.getInstance().updateCategories(currentProject, (categories, err) ->
-              MemberProvider.getInstance().updateMembers(currentProject, (memberships, error) -> {
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(binding.content.getId(), fragment);
-                transaction.commit();
-              })));
+      FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+      transaction.replace(binding.content.getId(), fragment);
+      transaction.commit();
     }
   }
 
@@ -196,89 +189,61 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   }
 
   public void promptManageCategory() {
-    ManageCategoryFragment fragment = ManageCategoryFragment.newInstance(currentProject);
+    EditCategoriesDialog fragment = EditCategoriesDialog.newInstance(currentProject);
     fragment.setTaskRefreshListener(taskRefreshListener);
     fragment.show(getSupportFragmentManager(), "");
   }
 
   public void promptNewProject() {
-    StringResultDialog dialog = StringResultDialog.newInstance("Create new project",
-        "Project name");
+    DialogUtils.textInputDialog(this, "New project", "Project name",
+        result -> Project.create(result, e -> {
+          if (e != null) {
+            e.printStackTrace();
+            return;
+          }
 
-    dialog.onStringResult(
-        (String result) -> {
-          Project.create(result, e -> {
-            if (e != null) {
-              e.printStackTrace();
-              return;
-            }
-
-            loadProjects();
-            dialog.dismiss();
-          });
-        }
-    );
-
-    dialog.show(getSupportFragmentManager(), "");
+          loadProjects();
+        }));
   }
 
   public void promptInviteMember() {
-    StringResultDialog dialog = StringResultDialog.newInstance("Invite member",
-        "Email");
+    DialogUtils.textInputDialog(this, "Invite member", "Email",
+        (String result) -> Membership.invite(result, currentProject, (ParseException e) -> {
+          if (e != null) {
+            e.printStackTrace();
+            Snackbar.make(binding.getRoot(), e.getMessage(), Snackbar.LENGTH_SHORT).show();
+            return;
+          }
 
-    dialog.onStringResult((String result) -> {
-          Membership.invite(result, currentProject, (ParseException e) -> {
-            if (e != null) {
-              e.printStackTrace();
-
-              Snackbar.make(binding.getRoot(), e.getMessage(), Snackbar.LENGTH_SHORT).show();
-              return;
-            }
-
-            Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
-                currentProject.getName()), Snackbar.LENGTH_SHORT).show();
-          });
-
-          dialog.dismiss();
-        }
-    );
-
-    dialog.show(getSupportFragmentManager(), "");
+          Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
+              currentProject.getName()), Snackbar.LENGTH_SHORT).show();
+        }));
   }
 
   /**
    * Opens a dialog asking for a new project name
    */
   public void promptRenameProject() {
-    StringResultDialog dialog = StringResultDialog.newInstance(String.format("Rename %s",
-        currentProject.getName()), "New project name");
+    DialogUtils.textInputDialog(this, "Rename project", "Project name", result ->
+        currentProject.rename(result, (ParseException e) -> {
+          if (e != null) {
+            e.printStackTrace();
+            return;
+          }
 
-    dialog.onStringResult((String result) -> {
-          currentProject.rename(result, (ParseException e) -> {
-            if (e != null) {
-              e.printStackTrace();
-              return;
-            }
-
-            switchProjectScope(null);
-            loadProjects();
-          });
-
-          dialog.dismiss();
-        }
-    );
-
-    dialog.show(getSupportFragmentManager(), "");
+          switchProjectScope(null);
+          loadProjects();
+        }));
   }
 
   /**
    * Opens a dialog prompting the user to leave the current project
    */
   public void promptLeaveProject() {
-    new MaterialAlertDialogBuilder(this,
-        R.style.ThemeOverlay_MaterialComponents_MaterialAlertDialog)
+    new MaterialAlertDialogBuilder(this)
         .setTitle(String.format("Leave %s?", currentProject.getName()))
         .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel())
+        .setMessage("Once you leave this project you will need an active member to return.")
         .setPositiveButton("Leave", (dialogInterface, i) -> {
           currentProject.leave(e -> {
             if (e != null) {

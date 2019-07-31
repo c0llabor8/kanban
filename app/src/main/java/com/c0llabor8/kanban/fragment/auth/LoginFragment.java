@@ -63,7 +63,7 @@ public class LoginFragment extends BaseAuthFragment {
   }
 
   /*
-   * Enables the login buttontriihrvnnkbdnignbthflnjiuekjfnkk
+   * Enables the login button
    */
   @Override
   public void postAuthSuccess() {

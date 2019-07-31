@@ -29,15 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TaskListDetailActivity extends AppCompatActivity {
-
-
   //to create comments
   RecyclerView rvComments;
   TaskDetailAdapter adapter;
   private EditText etComment;
   private Button sendBtn;
   private List<Message> messageList;
-  //for details of individual task
   private TextView title;
   private TextView description;
   private TextView projectAssignment;
@@ -48,7 +45,8 @@ public class TaskListDetailActivity extends AppCompatActivity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_task_list_detail);
-
+    adapter = new TaskDetailAdapter();
+    rvComments = findViewById(R.id.rvComments);
     //everything needed for comments
     etComment = findViewById(R.id.etComment);
     //textWatcher to make sure etComment is being filled

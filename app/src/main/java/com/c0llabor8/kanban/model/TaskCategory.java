@@ -2,13 +2,10 @@ package com.c0llabor8.kanban.model;
 
 import com.c0llabor8.kanban.model.query.TaskQuery;
 import com.parse.DeleteCallback;
-import com.parse.FindCallback;
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 import java.util.Comparator;
-import java.util.List;
 
 @ParseClassName("TaskCategory")
 public class TaskCategory extends ParseObject {
@@ -36,7 +33,7 @@ public class TaskCategory extends ParseObject {
     TaskQuery query = new TaskQuery().whereCategoryEquals(category);
 
     query.findInBackground((tasks, e) -> {
-      for (Task task: tasks) {
+      for (Task task : tasks) {
         task.removeCategory();
         task.saveInBackground();
       }

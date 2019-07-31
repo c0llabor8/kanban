@@ -36,10 +36,10 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
   public MemberProfileAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent,
       int viewType) {
 
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        ListItemMembersBinding binding = ListItemMembersBinding.inflate(inflater, parent, false);
+    LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+    ListItemMembersBinding binding = ListItemMembersBinding.inflate(inflater, parent, false);
 
-        return new ViewHolder(binding);
+    return new ViewHolder(binding);
   }
 
   /**
@@ -75,19 +75,19 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
     }
 
     public void bind(Membership membership) {
-       // For Bitmaps:
-        Glide.with(context)
-            .load(R.raw.profile)
-            .apply(new RequestOptions().circleCrop())
-            .into(binding.ivProfile);
+      // For Bitmaps:
+      Glide.with(context)
+          .load(R.raw.profile)
+          .apply(new RequestOptions().circleCrop())
+          .into(binding.ivProfile);
 
-        binding.tvName.setText(membership.getUser().getUsername());
-        binding.ivProfile.setOnClickListener(new OnClickListener() {
-          @Override
-          public void onClick(View view) {
-            Log.d(TAG, "onClick: clicked on an image");
-          }
-        });
-      }
+      binding.tvName.setText(membership.getUser().getUsername());
+      binding.ivProfile.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Log.d(TAG, "onClick: clicked on an image");
+        }
+      });
     }
   }
+}

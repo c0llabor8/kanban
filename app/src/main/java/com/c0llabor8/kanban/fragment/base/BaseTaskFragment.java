@@ -15,4 +15,10 @@ public abstract class BaseTaskFragment extends Fragment implements TaskRefreshLi
     super.onCreate(savedInstanceState);
     project = getArguments().getParcelable("project");
   }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    onTaskRefresh();
+  }
 }

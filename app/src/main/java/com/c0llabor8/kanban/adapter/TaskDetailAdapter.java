@@ -19,7 +19,7 @@ import java.util.Locale;
 import org.w3c.dom.Text;
 
 public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.ViewHolder> {
-  //list of comments
+
   List<Message> messages;
   Context context;
 
@@ -67,7 +67,7 @@ public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.Vi
   }
 
 
-  public class ViewHolder extends RecyclerView.ViewHolder{
+  public class ViewHolder extends RecyclerView.ViewHolder {
 
     TextView tvComment;
     TextView tvUsername;

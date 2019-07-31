@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -16,31 +15,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.CategoryListAdapter;
-import com.c0llabor8.kanban.databinding.FragmentCategoryEditorBinding;
+import com.c0llabor8.kanban.databinding.FragmentEditCategoriesBinding;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog.TaskRefreshListener;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.TaskCategory;
+import com.c0llabor8.kanban.util.DialogUtils;
 import com.c0llabor8.kanban.util.TaskProvider;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.parse.DeleteCallback;
-import com.parse.ParseException;
 import java.util.Collections;
 import java.util.List;
 
-public class ManageCategoryFragment extends DialogFragment {
+public class EditCategoriesDialog extends DialogFragment {
 
   private Project project;
   private TaskRefreshListener listener;
   private CategoryListAdapter listAdapter;
 
-  private FragmentCategoryEditorBinding binding;
+  private FragmentEditCategoriesBinding binding;
 
-  public static ManageCategoryFragment newInstance(Project project) {
+  public static EditCategoriesDialog newInstance(Project project) {
 
     Bundle args = new Bundle();
 
     args.putParcelable("project", project);
-    ManageCategoryFragment fragment = new ManageCategoryFragment();
+    EditCategoriesDialog fragment = new EditCategoriesDialog();
     fragment.setArguments(args);
     return fragment;
   }
@@ -71,13 +68,16 @@ public class ManageCategoryFragment extends DialogFragment {
       @Nullable Bundle savedInstanceState) {
 
     listAdapter = new CategoryListAdapter(TaskProvider.getInstance().getCategories(project));
-    binding = FragmentCategoryEditorBinding.inflate(inflater, container, false);
+    binding = FragmentEditCategoriesBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+
+    binding.toolbar.setNavigationOnClickListener((View v) -> dismiss());
+    binding.toolbar.setTitle("Edit task categories");
 
     binding.categoryList.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.categoryList.setAdapter(listAdapter);
@@ -94,24 +94,18 @@ public class ManageCategoryFragment extends DialogFragment {
   /**
    * Launch a dialog in order to create a new category
    */
-  public void newCategory() {
-    MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(getContext())
-        .setTitle("Enter category label");
-
-    final EditText editText = new EditText(getContext());
-    builder.setView(editText);
-
-    builder.setPositiveButton("Create", (dialogInterface, i) -> {
-      TaskCategory.create(editText.getText().toString(), project, e -> {
-
-        TaskProvider.getInstance().updateCategories(project, (objects, e1) -> {
-          listAdapter.notifyDataSetChanged();
-          dialogInterface.dismiss();
-        });
-      });
-    });
-
-    builder.show();
+  private void newCategory() {
+    DialogUtils.textInputDialog(
+        getContext(), "New task category", "Category name",
+        (String result) -> TaskCategory.create(
+            result, project,
+            e ->
+                TaskProvider.getInstance().updateCategories(
+                    project, (objects, err) ->
+                        listAdapter.notifyDataSetChanged()
+                )
+        )
+    );
   }
 
   public void setTaskRefreshListener(TaskRefreshListener listener) {
