@@ -45,7 +45,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_task_list_detail);
-    adapter = new TaskDetailAdapter();
+    adapter = new TaskDetailAdapter(this, messageList);
     rvComments = findViewById(R.id.rvComments);
     //everything needed for comments
     etComment = findViewById(R.id.etComment);
