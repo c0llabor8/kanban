@@ -69,6 +69,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
     // Initialize the view pager and tabs with our pager adapter
     binding.pager.setAdapter(pagerAdapter);
     binding.tabs.setupWithViewPager(binding.pager, true);
+    binding.toolbar.setTitle(project.getName());
   }
 
   @Override
