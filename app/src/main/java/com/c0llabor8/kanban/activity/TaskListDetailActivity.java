@@ -1,21 +1,29 @@
 package com.c0llabor8.kanban.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TaskDetailAdapter;
+import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.model.Message;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
@@ -39,13 +47,16 @@ public class TaskListDetailActivity extends AppCompatActivity {
   private TextView title;
   private TextView description;
   private TextView projectAssignment;
-  private ImageView priorityLevel;
   private Task task;
+
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_task_list_detail);
+    Toolbar toolbar = findViewById(R.id.toolbar);
+    setSupportActionBar(toolbar);
+
     adapter = new TaskDetailAdapter(this, messageList);
     rvComments = findViewById(R.id.rvComments);
     //everything needed for comments
@@ -85,7 +96,9 @@ public class TaskListDetailActivity extends AppCompatActivity {
     title = findViewById(R.id.tvTitle);
     description = findViewById(R.id.tvDescription);
     projectAssignment = findViewById(R.id.tvAssignment);
-    priorityLevel = findViewById(R.id.ivPriorityLevel);
+    getSupportActionBar().setTitle(task.getTitle());
+
+
     title.setText(task.getTitle());
     description.setText(task.getDescription());
     //make sure there is project assigned to task
@@ -97,11 +110,54 @@ public class TaskListDetailActivity extends AppCompatActivity {
         }
       });
     }
-    //setPriorityLevel();
     sendButtonClickSetUp();
     populateComments();
   }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_task_details_incomplete, menu);
+    return true;
+  }
+
+  /**
+   * deals with when different icons are clicked on the menu app bar
+   */
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    switch (item.getItemId()) {
+      case R.id.miEdit:
+        //TODO: make task editable
+        return true;
+      case R.id.miComplete:
+        markAsComplete();
+        return true;
+      default:
+        return super.onOptionsItemSelected(item);
+    }
+  }
+
+
+  /**
+   * marks task as complete when the check button is clicked
+   */
+  private void markAsComplete() {
+    task.setCompleted();
+    task.saveInBackground(new SaveCallback() {
+      @Override
+      public void done(ParseException e) {
+        if (e == null) {
+          Log.d("completeTask", "Task successfully marked complete");
+        } else {
+          Log.d("completeTask", "Task not marked complete");
+          e.printStackTrace();
+        }
+      }
+    });
+    Toast toast = Toast.makeText(this, "item has been marked as completed", Toast.LENGTH_LONG);
+    toast.setGravity(Gravity.CENTER, 0, 0);
+    toast.show();
+  }
 
   /**
    * enables the button when sequence is not empty
@@ -121,7 +177,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
     ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
     query.whereEqualTo("task", task);
     query.include("user");
-    query.orderByDescending("createdAt");
+    query.orderByAscending("createdAt");
     query.findInBackground(new FindCallback<Message>() {
       @Override
       public void done(List<Message> objects, ParseException e) {
@@ -175,16 +231,4 @@ public class TaskListDetailActivity extends AppCompatActivity {
 
   }
 
-//  /**
-//   * sets the different icons based on priority level
-//   */
-//  private void setPriorityLevel() {
-//    if (task.getPriority() == 0) {
-//      priorityLevel.setImageResource(R.drawable.circle_priority_low);
-//    } else if (task.getPriority() == 1) {
-//      priorityLevel.setImageResource(R.drawable.circle_priority_medium);
-//    } else {
-//      priorityLevel.setImageResource(R.drawable.circle_priority_high);
-//    }
-//  }
 }
