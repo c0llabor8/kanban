@@ -19,12 +19,13 @@ import java.util.Map;
 public class TaskProvider {
 
   private static TaskProvider instance;
-  private HashMap<String, List<Task>> taskMap;
-  private HashMap<String, List<Task>> completedTaskMap;
-  private HashMap<String, List<Task>> categorizedTaskMap;
+  private Map<String, List<Task>> taskMap;
+  private Map<String, List<Task>> completedTaskMap;
+  private Map<String, List<Task>> categorizedTaskMap;
 
-  private HashMap<String, List<TaskCategory>> taskCategoryListMap;
-  private HashMap<String, HashMap<String, TaskCategory>> taskCategoryMap;
+  private Map<String, List<TaskCategory>> taskCategoryListMap;
+  private Map<String, HashMap<String, TaskCategory>> taskCategoryMap;
+  private Map<String, HashMap<String, Integer>> categoryTaskCountMap;
 
   private TaskProvider() {
     taskMap = new HashMap<>();
@@ -32,6 +33,7 @@ public class TaskProvider {
     categorizedTaskMap = new HashMap<>();
     taskCategoryListMap = new HashMap<>();
     taskCategoryMap = new HashMap<>();
+    categoryTaskCountMap = new HashMap<>();
   }
 
   public static TaskProvider getInstance() {
@@ -44,6 +46,18 @@ public class TaskProvider {
 
   public static TaskCategory getCategory(Project project, String category) {
     return project == null ? null : getInstance().getCategoryMap(project).get(category);
+  }
+
+  public static int getTaskCategoryCount(Project project,
+      TaskCategory category) {
+
+    String hash = (category == null) ? null : category.getTitle();
+
+    if (getInstance().getCategoryTaskCountMap(project).get(hash) == null) {
+      getInstance().getCategoryTaskCountMap(project).put(hash, 0);
+    }
+
+    return getInstance().getCategoryTaskCountMap(project).get(hash);
   }
 
   /**
@@ -100,11 +114,18 @@ public class TaskProvider {
   }
 
   private void insertTasks(Project project, List<Task> tasks) {
+    getCategoryTaskCountMap(project).clear();
+
     for (Task task : tasks) {
       if (task.getCompleted()) {
         getCompletedTasks(project).add(task);
       } else {
         getTasks(project).add(task);
+
+        getCategoryTaskCountMap(project).put(
+            task.getCategory().getObjectId(),
+            getTaskCategoryCount(project, task.getCategory()) + 1
+        );
       }
     }
   }
@@ -195,5 +216,15 @@ public class TaskProvider {
     }
 
     return taskCategoryMap.get(hash);
+  }
+
+  public Map<String, Integer> getCategoryTaskCountMap(Project project) {
+    String hash = (project == null) ? null : project.getObjectId();
+
+    if (categoryTaskCountMap.get(hash) == null) {
+      categoryTaskCountMap.put(hash, new HashMap<>());
+    }
+
+    return categoryTaskCountMap.get(hash);
   }
 }
