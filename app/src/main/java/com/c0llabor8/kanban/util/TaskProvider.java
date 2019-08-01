@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is a singleton instance that stores all Tasks for each project and their categories
@@ -21,12 +22,15 @@ public class TaskProvider {
   private HashMap<String, List<Task>> taskMap;
   private HashMap<String, List<Task>> completedTaskMap;
   private HashMap<String, List<Task>> categorizedTaskMap;
-  private HashMap<String, List<TaskCategory>> taskCategoryMap;
+
+  private HashMap<String, List<TaskCategory>> taskCategoryListMap;
+  private HashMap<String, HashMap<String, TaskCategory>> taskCategoryMap;
 
   private TaskProvider() {
     taskMap = new HashMap<>();
     completedTaskMap = new HashMap<>();
     categorizedTaskMap = new HashMap<>();
+    taskCategoryListMap = new HashMap<>();
     taskCategoryMap = new HashMap<>();
   }
 
@@ -36,6 +40,10 @@ public class TaskProvider {
     }
 
     return instance;
+  }
+
+  public static TaskCategory getCategory(Project project, String category) {
+    return project == null ? null : getInstance().getCategoryMap(project).get(category);
   }
 
   /**
@@ -116,9 +124,13 @@ public class TaskProvider {
     TaskCategoryQuery query = new TaskCategoryQuery();
     query.whereProjectEquals(project).findInBackground((objects, e) -> {
       getCategories(project).clear();
-      getCategories(project).addAll(objects);
-      Collections.sort(getCategories(project), new TaskCategory.SortComparator());
 
+      for (TaskCategory category : objects) {
+        getCategories(project).add(category);
+        getCategoryMap(project).put(category.toString(), category);
+      }
+
+      Collections.sort(getCategories(project), new TaskCategory.SortComparator());
       callback.done(getCategories(project), null);
     });
   }
@@ -168,8 +180,18 @@ public class TaskProvider {
   public List<TaskCategory> getCategories(Project project) {
     String hash = (project == null) ? null : project.getObjectId();
 
+    if (taskCategoryListMap.get(hash) == null) {
+      taskCategoryListMap.put(hash, new ArrayList<>());
+    }
+
+    return taskCategoryListMap.get(hash);
+  }
+
+  public Map<String, TaskCategory> getCategoryMap(Project project) {
+    String hash = (project == null) ? null : project.getObjectId();
+
     if (taskCategoryMap.get(hash) == null) {
-      taskCategoryMap.put(hash, new ArrayList<>());
+      taskCategoryMap.put(hash, new HashMap<>());
     }
 
     return taskCategoryMap.get(hash);

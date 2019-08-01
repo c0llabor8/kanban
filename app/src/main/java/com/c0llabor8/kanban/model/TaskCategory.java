@@ -1,8 +1,14 @@
 package com.c0llabor8.kanban.model;
 
+import android.content.Context;
+import androidx.core.content.ContextCompat;
+import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.model.query.TaskQuery;
+import com.c0llabor8.kanban.util.TaskProvider;
+import com.c0llabor8.kanban.util.WordUtils;
 import com.parse.DeleteCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.SaveCallback;
 import java.util.Comparator;
@@ -15,8 +21,12 @@ public class TaskCategory extends ParseObject {
   public static String KEY_ORDER = "order";
 
   public static void create(String title, Project project, SaveCallback callback) {
-    new TaskCategory().setTitle(title).setProject(project).setOrder(Integer.MAX_VALUE)
-        .saveInBackground(callback);
+    if (!TaskProvider.getInstance().getCategoryMap(project).keySet().contains(title)) {
+      new TaskCategory().setTitle(title).setProject(project).setOrder(Integer.MAX_VALUE)
+          .saveInBackground(callback);
+    } else {
+      callback.done(new ParseException(0, "Category already exists"));
+    }
   }
 
   public Project getProject() {
@@ -52,12 +62,31 @@ public class TaskCategory extends ParseObject {
   }
 
   public String getTitle() {
-    return getString(KEY_TITLE);
+    return WordUtils.capitalize(getString(KEY_TITLE));
   }
 
   public TaskCategory setTitle(String title) {
     put(KEY_TITLE, title);
     return this;
+  }
+
+  public int getColor(Context context) {
+    int red = ContextCompat.getColor(context, R.color.color_secondary);
+    int yellow = ContextCompat.getColor(context, R.color.color_tertiary);
+    int categories = TaskProvider.getInstance().getCategories(getProject()).size();
+
+    float value = (float) (this.getOrder()) / (float) (categories - 1);
+
+    if (categories == 1) {
+      value = 1f;
+    }
+
+    return androidx.core.graphics.ColorUtils.blendARGB(yellow, red, value);
+  }
+
+  @Override
+  public String toString() {
+    return getTitle();
   }
 
   @Override

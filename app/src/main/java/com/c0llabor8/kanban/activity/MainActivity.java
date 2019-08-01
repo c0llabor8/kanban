@@ -24,9 +24,11 @@ import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.DialogUtils;
+import com.c0llabor8.kanban.util.MemberProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 public class MainActivity extends AppCompatActivity implements ProjectSheetListener {
 
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     // Show our BottomNavigationSheet when the menu icon is clicked
     if (item.getItemId() == android.R.id.home) {
-      navFragment.show(getSupportFragmentManager(), "");
+      loadProjects(e -> navFragment.show(getSupportFragmentManager(), ""));
       return true;
     }
 
@@ -207,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   }
 
   public void promptInviteMember() {
-    DialogUtils.textInputDialog(this, "Invite member", "Email",
+    DialogUtils.textInputDialog(this, "Invite member", "Username",
         (String result) -> Membership.invite(result, currentProject, (ParseException e) -> {
           if (e != null) {
             e.printStackTrace();
@@ -215,8 +217,12 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
             return;
           }
 
-          Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
-              currentProject.getName()), Snackbar.LENGTH_SHORT).show();
+          MemberProvider.getInstance().updateMembers(currentProject,
+              (objects, err) -> {
+                taskRefreshListener.onTaskRefresh();
+                Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
+                    currentProject.getName()), Snackbar.LENGTH_SHORT).show();
+              });
         }));
   }
 
@@ -256,10 +262,19 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
         }).show();
   }
 
+  public void loadProjects() {
+    loadProjects(new SaveCallback() {
+      @Override
+      public void done(ParseException e) {
+
+      }
+    });
+  }
+
   /**
    * Query for all projects the current user is a member of and store them
    */
-  public void loadProjects() {
+  public void loadProjects(SaveCallback callback) {
     projectMenuMap = new SparseArray<>();
 
     Project.queryUserProjects((projects, e) -> {
@@ -271,6 +286,8 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       for (int i = 0; i < projects.size(); i++) {
         projectMenuMap.put(Menu.FIRST + i, projects.get(i));
       }
+
+      callback.done(null);
     });
   }
 }

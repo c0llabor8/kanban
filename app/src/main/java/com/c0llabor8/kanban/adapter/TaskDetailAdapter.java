@@ -53,7 +53,7 @@ public class TaskDetailAdapter extends RecyclerView.Adapter<TaskDetailAdapter.Vi
     Message message = messages.get(position);
     holder.tvComment.setText(message.getBody());
     holder.tvUsername.setText(message.getUser().getUsername());
-    holder.timeStamp.setText(DateTimeUtils.getRelativeTimeAgo(message.getRelativeTime()));
+    holder.timeStamp.setText(DateTimeUtils.getRelativeTime(message.getCreatedAt().getTime()));
   }
 
   public void clear() {

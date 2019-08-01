@@ -1,6 +1,6 @@
 package com.c0llabor8.kanban.adapter;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.graphics.PorterDuff.Mode;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ListItemTimelineBinding;
 import com.c0llabor8.kanban.model.Task;
-import com.c0llabor8.kanban.util.ColorUtil;
 import com.c0llabor8.kanban.util.DateTimeUtils;
-import com.c0llabor8.kanban.util.TaskProvider;
 import com.parse.GetCallback;
 import java.util.List;
 
@@ -111,21 +109,13 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
      * changes color of icon on timeline based on priority level
      */
     private void setPriority(Task task) {
+      Context context = binding.getRoot().getContext();
 
       task.fetchIfNeededInBackground((GetCallback<Task>) (object, e) -> {
         if (task.getCategory() != null) {
 
-          int categories = TaskProvider.getInstance().getCategories(task.getProject()).size();
-
-          float value =
-              (float) (task.getCategory().getOrder()) / (float) categories - 1;
-
-          if (categories == 1) {
-            value = 1f;
-          }
-
           binding.ivPriority
-              .setColorFilter(ColorUtil.mixTwoColors(Color.YELLOW, Color.RED, value), Mode.SRC);
+              .setColorFilter(task.getCategory().getColor(context), Mode.SRC);
         }
       });
     }

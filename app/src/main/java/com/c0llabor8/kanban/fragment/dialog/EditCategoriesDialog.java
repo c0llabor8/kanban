@@ -21,6 +21,7 @@ import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.util.DialogUtils;
 import com.c0llabor8.kanban.util.TaskProvider;
+import com.parse.ParseException;
 import java.util.Collections;
 import java.util.List;
 
@@ -99,7 +100,7 @@ public class EditCategoriesDialog extends DialogFragment {
         getContext(), "New task category", "Category name",
         (String result) -> TaskCategory.create(
             result, project,
-            e ->
+            (ParseException e) ->
                 TaskProvider.getInstance().updateCategories(
                     project, (objects, err) ->
                         listAdapter.notifyDataSetChanged()

@@ -9,20 +9,28 @@ public class Assignment extends ParseObject {
 
   public static final String KEY_USER = "user";
   public static final String KEY_TASK = "task";
+  public static final String KEY_PROJECT = "project";
 
   public ParseUser getUser() {
     return getParseUser(KEY_USER);
   }
 
-  public void setUser(ParseUser user) {
+  public Assignment setUser(ParseUser user) {
     put(KEY_USER, user);
+    return this;
+  }
+
+  public Assignment setProject(Project project) {
+    put(KEY_PROJECT, project);
+    return this;
   }
 
   public Task getTask() {
     return (Task) getParseObject(KEY_TASK);
   }
 
-  public void setTask(Task task) {
+  public Assignment setTask(Task task) {
     put(KEY_TASK, task);
+    return this;
   }
 }

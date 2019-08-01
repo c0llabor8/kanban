@@ -12,16 +12,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ListItemMembersBinding;
-import com.c0llabor8.kanban.model.Membership;
+import com.parse.ParseUser;
 import java.util.List;
 
 public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdapter.ViewHolder> {
 
   private static final String TAG = "MemberProfileAdapter";
-  private List<Membership> members;
+  private List<ParseUser> members;
   private Context context;
 
-  public MemberProfileAdapter(Context context, List<Membership> members) {
+  public MemberProfileAdapter(Context context, List<ParseUser> members) {
     this.members = members;
     this.context = context;
   }
@@ -50,8 +50,7 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
     Log.d(TAG, "onCreateViewHolder: called");
 
     // getting the product from the specified position
-    Membership membership = members.get(position);
-    holder.bind(membership);
+    holder.bind(members.get(position));
   }
 
   /**
@@ -74,14 +73,14 @@ public class MemberProfileAdapter extends RecyclerView.Adapter<MemberProfileAdap
       this.binding = binding;
     }
 
-    public void bind(Membership membership) {
+    public void bind(ParseUser user) {
       // For Bitmaps:
       Glide.with(context)
           .load(R.raw.profile)
           .apply(new RequestOptions().circleCrop())
           .into(binding.ivProfile);
 
-      binding.tvName.setText(membership.getUser().getUsername());
+      binding.tvName.setText(user.getUsername());
       binding.ivProfile.setOnClickListener(new OnClickListener() {
         @Override
         public void onClick(View view) {

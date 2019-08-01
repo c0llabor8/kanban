@@ -21,7 +21,7 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
       android:id="@+id/cont_line"
       android:layout_width="@dimen/keyline_6"
       android:layout_height="0dp"
@@ -33,11 +33,10 @@
       android:scaleType="fitXY"
       android:adjustViewBounds="true"/>
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
       android:id="@+id/time_status"
       android:layout_width="@dimen/keyline_2"
       android:layout_height="@dimen/keyline_2"
-      android:layout_marginBottom="8dp"
       android:adjustViewBounds="false"
       android:elevation="@dimen/keyline_2"
       android:src="@drawable/circle_timeline"
@@ -52,8 +51,8 @@
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/layout_default_margin"
       android:layout_marginStart="@dimen/layout_default_margin"
+      android:textAppearance="@style/TextAppearance.MyTheme.Body1"
       android:layout_marginEnd="8dp"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
       app:layout_constraintEnd_toStartOf="@+id/item_date"
       app:layout_constraintStart_toEndOf="@id/cont_line"
       app:layout_constraintTop_toTopOf="parent"
@@ -68,7 +67,7 @@
       android:layout_marginStart="@dimen/layout_default_margin"
       android:layout_marginEnd="8dp"
       android:maxLines="2"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+      android:textAppearance="@style/TextAppearance.MyTheme.Body2"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@id/cont_line"
@@ -80,7 +79,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginEnd="@dimen/layout_default_margin"
-      android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+      android:textAppearance="@style/TextAppearance.MyTheme.Caption"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintTop_toTopOf="@id/item_title"/>
 
