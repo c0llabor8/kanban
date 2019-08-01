@@ -175,7 +175,6 @@ public class TaskListDetailActivity extends AppCompatActivity {
 
   }
 
-
 //  /**
 //   * sets the different icons based on priority level
 //   */

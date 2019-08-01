@@ -1,7 +1,6 @@
 package com.c0llabor8.kanban.model;
 
 import com.parse.ParseClassName;
-import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
