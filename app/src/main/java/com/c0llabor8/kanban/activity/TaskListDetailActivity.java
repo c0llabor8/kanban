@@ -131,6 +131,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
         return true;
       case R.id.miComplete:
         markAsComplete();
+        finish();
         return true;
       default:
         return super.onOptionsItemSelected(item);
