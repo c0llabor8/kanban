@@ -22,7 +22,8 @@ public class TaskCategory extends ParseObject {
 
   public static void create(String title, Project project, SaveCallback callback) {
     if (!TaskProvider.getInstance().getCategoryMap(project).keySet().contains(title)) {
-      new TaskCategory().setTitle(title).setProject(project).setOrder(Integer.MAX_VALUE)
+      new TaskCategory().setTitle(title).setProject(project)
+          .setOrder(TaskProvider.getInstance().getCategories(project).size())
           .saveInBackground(callback);
     } else {
       callback.done(new ParseException(0, "Category already exists"));
