@@ -25,10 +25,8 @@ import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.DialogUtils;
 import com.c0llabor8.kanban.util.MemberProvider;
-import com.c0llabor8.kanban.util.TaskProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
-import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.SaveCallback;
 
@@ -78,12 +76,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
   //opens a new dialog for task creation
   private void openTaskCreationDialog() {
-    if (currentProject == null
-        || TaskProvider.getInstance().getCategories(currentProject).size() > 0) {
-      NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject);
-    } else {
-      Snackbar.make(binding.getRoot(), "Create a category first", Snackbar.LENGTH_SHORT).show();
-    }
+    NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject);
   }
 
   @Override

@@ -18,12 +18,12 @@ public class Membership extends ParseObject {
   public static final String KEY_PROJECT = "project";
 
   /**
-   * Invite and add a user to a project by email
+   * Invite and add a user to a project by username
    *
    * @param callback called once the user is added
    */
   public static void invite(String username, Project project, SaveCallback callback) {
-    if (!MemberProvider.getInstance().getUsernameMap(project).containsKey(username)) {
+    if (MemberProvider.getParseUser(project, username) == null) {
       ParseUser.getQuery().whereEqualTo("username", username).findInBackground(
           (List<ParseUser> user, ParseException e) -> {
             if (e != null) {

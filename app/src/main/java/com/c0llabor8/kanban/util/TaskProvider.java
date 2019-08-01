@@ -10,10 +10,8 @@ import com.parse.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * This class is a singleton instance that stores all Tasks for each project and their categories
@@ -42,6 +40,10 @@ public class TaskProvider {
     }
 
     return instance;
+  }
+
+  public static TaskCategory getCategory(Project project, String category) {
+    return project == null ? null : getInstance().getCategoryMap(project).get(category);
   }
 
   /**
@@ -193,9 +195,5 @@ public class TaskProvider {
     }
 
     return taskCategoryMap.get(hash);
-  }
-
-  public static TaskCategory getCategory(Project project, String category) {
-    return project == null ? null : getInstance().getCategoryMap(project).get(category);
   }
 }

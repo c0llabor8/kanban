@@ -58,7 +58,7 @@ public class NewTaskDialog extends DialogFragment {
 
       final String date = binding.etDate.getText().toString();
 
-      if (!title.isEmpty() && !date.isEmpty()) {
+      if (!title.isEmpty() && !date.isEmpty() && (project == null || assignee != null)) {
         Task.createNew(title, description, estimate, assignee, project, category,
             (ParseException e) -> {
               if (e != null) {
@@ -120,6 +120,10 @@ public class NewTaskDialog extends DialogFragment {
     datePickerDialog.getDatePicker()
         .setMinDate(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS);
 
+    updateSpinners();
+  }
+
+  private void updateSpinners() {
     // Only show categories and username selector while in a project
     if (project != null) {
       categoryArrayAdapter = new ArrayAdapter<>(
@@ -176,18 +180,7 @@ public class NewTaskDialog extends DialogFragment {
     // Only show categories and username selector while in a project
     if (project != null) {
       binding.etCategory.setAdapter(categoryArrayAdapter);
-
-      binding.etCategory.setText(
-          binding.etCategory.getAdapter().getItem(0).toString(),
-          false
-      );
-
       binding.etAssignee.setAdapter(usernameArrayAdapter);
-
-      binding.etAssignee.setText(
-          binding.etAssignee.getAdapter().getItem(0).toString(),
-          false
-      );
     } else {
       binding.tilCategory.setVisibility(View.GONE);
       binding.tilAssignees.setVisibility(View.GONE);
