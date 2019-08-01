@@ -5,7 +5,6 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,13 +18,14 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentNewTaskBinding;
-import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.util.DateTimeUtils;
 import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
+import com.google.android.material.snackbar.Snackbar;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 import java.util.Calendar;
 
@@ -58,10 +58,22 @@ public class NewTaskDialog extends DialogFragment {
 
       final String date = binding.etDate.getText().toString();
 
-      if (title.length() > 0 && date.length() > 0) {
+      if (!title.isEmpty() && !date.isEmpty()) {
         Task.createNew(title, description, estimate, assignee, project, category,
-            e -> listener.onTaskRefresh());
-        dismiss();
+            (ParseException e) -> {
+              if (e != null) {
+                Snackbar.make(
+                    binding.getRoot(),
+                    "Couldn't create this task",
+                    Snackbar.LENGTH_SHORT
+                ).show();
+                return;
+              }
+
+              listener.onTaskRefresh();
+              dismiss();
+            }
+        );
       }
 
       return true;
@@ -108,6 +120,7 @@ public class NewTaskDialog extends DialogFragment {
     datePickerDialog.getDatePicker()
         .setMinDate(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS);
 
+    // Only show categories and username selector while in a project
     if (project != null) {
       categoryArrayAdapter = new ArrayAdapter<>(
           getContext(),
@@ -160,6 +173,7 @@ public class NewTaskDialog extends DialogFragment {
     binding.toolbar.setOnMenuItemClickListener(onMenuItemClickListener);
     binding.tilDate.setEndIconOnClickListener(onDateClickedListener);
 
+    // Only show categories and username selector while in a project
     if (project != null) {
       binding.etCategory.setAdapter(categoryArrayAdapter);
 
@@ -178,45 +192,6 @@ public class NewTaskDialog extends DialogFragment {
       binding.tilCategory.setVisibility(View.GONE);
       binding.tilAssignees.setVisibility(View.GONE);
     }
-  }
-
-  private void createTask(String taskTitle, String taskDescription, Long date) {
-    Assignment assignment = new Assignment();
-    // assignment.setUser();
-    Task task = new Task();
-    task.setTitle(taskTitle);
-    task.setCategory(TaskProvider.getInstance().getCategoryMap(project)
-        .get(binding.etCategory.getText().toString()));
-    task.setDescription(taskDescription);
-    task.setEstimate(date);
-
-    if (project != null) {
-      task.setProject(project);
-    }
-
-    task.saveInBackground(e -> {
-      if (e != null) {
-        Log.d("TaskCreationActivity", "Error while saving task");
-        e.printStackTrace();
-        return;
-      }
-      Log.d("TaskCreationActivity", "Task saved successfully!");
-      assignment.setTask(task);
-      saveTask(assignment);
-    });
-  }
-
-  private void saveTask(Assignment assignment) {
-    assignment.saveInBackground(e -> {
-      if (e != null) {
-        Log.d("TaskCreationActivity", "Error while saving task");
-        e.printStackTrace();
-        return;
-      }
-
-      listener.onTaskRefresh();
-      Log.d("TaskCreationActivity", "Task saved successfully!");
-    });
   }
 
   public void setListener(TaskRefreshListener listener) {

@@ -91,12 +91,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     // Show our BottomNavigationSheet when the menu icon is clicked
     if (item.getItemId() == android.R.id.home) {
-      loadProjects(new SaveCallback() {
-        @Override
-        public void done(ParseException e) {
-          navFragment.show(getSupportFragmentManager(), "");
-        }
-      });
+      loadProjects(e -> navFragment.show(getSupportFragmentManager(), ""));
       return true;
     }
 
