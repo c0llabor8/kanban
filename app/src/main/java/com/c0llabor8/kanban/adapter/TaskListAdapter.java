@@ -102,7 +102,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.ViewHo
       context = binding.tvTitle.getContext();
       binding.tvTitle.setText(task.getTitle());
       binding.tvDescription.setText(task.getDescription());
-      binding.tvEstimate.setText(DateTimeUtils.getDateString(task.getEstimate()));
+      binding.tvEstimate.setText(DateTimeUtils.getRelativeTime(task.getEstimate()));
 
       if (type == VIEW_WITH_HEADER && headers) {
         task.getCategory().fetchIfNeededInBackground((GetCallback<TaskCategory>) (category, e) -> {

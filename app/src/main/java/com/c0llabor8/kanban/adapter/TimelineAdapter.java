@@ -5,16 +5,11 @@ import android.graphics.PorterDuff.Mode;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.ColorUtils;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ListItemTimelineBinding;
 import com.c0llabor8.kanban.model.Task;
-import com.c0llabor8.kanban.util.ColorUtil;
 import com.c0llabor8.kanban.util.DateTimeUtils;
-import com.c0llabor8.kanban.util.TaskProvider;
 import com.parse.GetCallback;
 import java.util.List;
 
@@ -116,23 +111,11 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     private void setPriority(Task task) {
       Context context = binding.getRoot().getContext();
 
-      int yellow = ContextCompat.getColor(context, R.color.color_tertiary);
-      int red = ContextCompat.getColor(context, R.color.color_secondary);
-
       task.fetchIfNeededInBackground((GetCallback<Task>) (object, e) -> {
         if (task.getCategory() != null) {
 
-          int categories = TaskProvider.getInstance().getCategories(task.getProject()).size();
-
-          float value =
-              (float) (task.getCategory().getOrder()) / (float) (categories - 1);
-
-          if (categories == 1) {
-            value = 1f;
-          }
-
           binding.ivPriority
-              .setColorFilter(ColorUtils.blendARGB(yellow, red, value), Mode.SRC);
+              .setColorFilter(task.getCategory().getColor(context), Mode.SRC);
         }
       });
     }

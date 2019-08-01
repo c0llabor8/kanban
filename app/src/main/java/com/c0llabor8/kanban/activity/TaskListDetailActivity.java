@@ -97,7 +97,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
         }
       });
     }
-    setPriorityLevel();
+    //setPriorityLevel();
     sendButtonClickSetUp();
     populateComments();
   }
@@ -176,16 +176,16 @@ public class TaskListDetailActivity extends AppCompatActivity {
   }
 
 
-  /**
-   * sets the different icons based on priority level
-   */
-  private void setPriorityLevel() {
-    if (task.getPriority() == 0) {
-      priorityLevel.setImageResource(R.drawable.circle_priority_low);
-    } else if (task.getPriority() == 1) {
-      priorityLevel.setImageResource(R.drawable.circle_priority_medium);
-    } else {
-      priorityLevel.setImageResource(R.drawable.circle_priority_high);
-    }
-  }
+//  /**
+//   * sets the different icons based on priority level
+//   */
+//  private void setPriorityLevel() {
+//    if (task.getPriority() == 0) {
+//      priorityLevel.setImageResource(R.drawable.circle_priority_low);
+//    } else if (task.getPriority() == 1) {
+//      priorityLevel.setImageResource(R.drawable.circle_priority_medium);
+//    } else {
+//      priorityLevel.setImageResource(R.drawable.circle_priority_high);
+//    }
+//  }
 }

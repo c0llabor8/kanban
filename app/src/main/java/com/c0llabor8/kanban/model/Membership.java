@@ -1,6 +1,9 @@
 package com.c0llabor8.kanban.model;
 
 
+import com.c0llabor8.kanban.model.query.AssignmentQuery;
+import com.c0llabor8.kanban.util.MemberProvider;
+import com.parse.DeleteCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -19,26 +22,44 @@ public class Membership extends ParseObject {
    *
    * @param callback called once the user is added
    */
-  public static void invite(String email, Project project, SaveCallback callback) {
-    ParseUser.getQuery().whereEqualTo("email", email).findInBackground(
-        (List<ParseUser> user, ParseException e) -> {
-          if (e != null) {
-            callback.done(e);
-            return;
-          }
+  public static void invite(String username, Project project, SaveCallback callback) {
+    if (!MemberProvider.getInstance().getUsernameMap(project).containsKey(username)) {
+      ParseUser.getQuery().whereEqualTo("username", username).findInBackground(
+          (List<ParseUser> user, ParseException e) -> {
+            if (e != null) {
+              callback.done(e);
+              return;
+            }
 
-          if (user.size() == 0) {
-            callback.done(new ParseException(0, "Sorry, user not found"));
-            return;
-          }
+            if (user.size() == 0) {
+              callback.done(new ParseException(0, "Sorry, user not found"));
+              return;
+            }
 
-          Membership membership = new Membership().setUser(user.get(0)).setProject(project);
+            Membership membership = new Membership().setUser(user.get(0)).setProject(project);
 
-          project.increment(Project.KEY_MEMBERS);
-          project.saveInBackground();
+            project.increment(Project.KEY_MEMBERS);
+            project.saveInBackground();
 
-          membership.saveInBackground(callback);
-        });
+            membership.saveInBackground(callback);
+          });
+    } else {
+      callback.done(new ParseException(0, "User is already a member"));
+    }
+  }
+
+  static void leave(Membership membership, DeleteCallback callback) {
+    AssignmentQuery query = new AssignmentQuery()
+        .whereUserEquals(membership.getUser())
+        .whereProjectEquals(membership.getProject());
+
+    query.findInBackground((List<Assignment> objects, ParseException e) -> {
+      for (Assignment assignment : objects) {
+        assignment.deleteInBackground();
+      }
+
+      membership.deleteInBackground(callback);
+    });
   }
 
   public ParseUser getUser() {

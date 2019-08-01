@@ -22,90 +22,109 @@
     <androidx.core.widget.NestedScrollView
       android:layout_width="match_parent"
       android:layout_height="match_parent"
+      android:fillViewport="true"
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-      <LinearLayout
+      <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginStart="@dimen/activity_default_margin"
-        android:layout_marginEnd="@dimen/activity_default_margin"
-        android:orientation="vertical">
+        android:layout_marginEnd="@dimen/activity_default_margin">
 
         <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/til_title"
           style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-          android:hint="Task title"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:hint="Title"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
           <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etTitle"
+            android:id="@+id/et_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:singleLine="true"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/til_date"
           style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-          android:hint="Task description"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/layout_default_margin"
+          android:hint="Deadline"
+          app:endIconDrawable="@drawable/ic_calendar_24dp"
+          app:endIconMode="custom"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+
+          app:layout_constraintTop_toBottomOf="@id/til_title">
+          <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/til_category"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/layout_default_margin"
+          android:hint="Category"
+          android:labelFor="@id/et_category"
+          app:endIconMode="dropdown_menu"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/til_date">
+          <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/et_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+          android:id="@+id/til_assignees"
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/layout_default_margin"
+          android:hint="Assignee"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/til_category">
+          <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            android:id="@+id/et_assignee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:singleLine="true"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/layout_default_margin"
+          android:hint="Description"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/til_assignees">
           <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etDescription"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:gravity="start|top"
+            android:inputType="textMultiLine|text"
+            android:nestedScrollingEnabled="true"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-          style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-          android:hint="mm/dd/yyyy"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content">
-          <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-          android:id="@+id/tvPriority"
-          android:textStyle="bold"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:text="Priority Level"
-          android:textColor="#202020"
-          android:textSize="18sp"/>
-
-        <RadioGroup
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:checkedButton="@+id/rgHigh"
-          android:orientation="vertical">
-
-          <RadioButton
-            android:id="@+id/rgHigh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="#E94347"
-            android:text="High Priority"
-            android:textSize="15dp"/>
-
-          <RadioButton
-            android:id="@+id/rgMedium"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="#FCA91B"
-            android:text="Medium Priority"
-            android:textSize="15dp"/>
-
-          <RadioButton
-            android:id="@+id/rgLow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:buttonTint="#91C659"
-            android:text="Low Priority"
-            android:textSize="15dp"/>
-
-        </RadioGroup>
-
-      </LinearLayout>
+      </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
   </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

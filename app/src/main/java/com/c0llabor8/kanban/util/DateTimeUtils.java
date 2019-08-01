@@ -1,7 +1,6 @@
 package com.c0llabor8.kanban.util;
 
 import android.text.format.DateUtils;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -24,21 +23,12 @@ public class DateTimeUtils {
     return sdf.format(date);
   }
 
-  public static String getRelativeTimeAgo(String createdAt) {
-    String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
-    SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
-    sf.setLenient(true);
-
-    String relativeDate = "";
-    try {
-      long dateMillis = sf.parse(createdAt).getTime();
-      relativeDate = DateUtils.getRelativeTimeSpanString(dateMillis,
-          System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS).toString();
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
-
-    return relativeDate;
+  public static String getRelativeTime(long millis) {
+    return DateUtils.getRelativeTimeSpanString(
+        millis,
+        System.currentTimeMillis(),
+        DateUtils.SECOND_IN_MILLIS
+    ).toString();
   }
 
 }

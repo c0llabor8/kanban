@@ -24,6 +24,8 @@ import com.c0llabor8.kanban.fragment.sheet.ProjectSheetListener;
 import com.c0llabor8.kanban.model.Membership;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.DialogUtils;
+import com.c0llabor8.kanban.util.MemberProvider;
+import com.c0llabor8.kanban.util.TaskProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.parse.ParseException;
@@ -74,7 +76,12 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
   //opens a new dialog for task creation
   private void openTaskCreationDialog() {
-    NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject);
+    if (currentProject == null
+        || TaskProvider.getInstance().getCategories(currentProject).size() > 0) {
+      NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject);
+    } else {
+      Snackbar.make(binding.getRoot(), "Create a category first", Snackbar.LENGTH_SHORT).show();
+    }
   }
 
   @Override
@@ -207,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
   }
 
   public void promptInviteMember() {
-    DialogUtils.textInputDialog(this, "Invite member", "Email",
+    DialogUtils.textInputDialog(this, "Invite member", "Username",
         (String result) -> Membership.invite(result, currentProject, (ParseException e) -> {
           if (e != null) {
             e.printStackTrace();
@@ -215,8 +222,12 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
             return;
           }
 
-          Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
-              currentProject.getName()), Snackbar.LENGTH_SHORT).show();
+          MemberProvider.getInstance().updateMembers(currentProject,
+              (objects, err) -> {
+                taskRefreshListener.onTaskRefresh();
+                Snackbar.make(binding.getRoot(), String.format("Added %s to %s", result,
+                    currentProject.getName()), Snackbar.LENGTH_SHORT).show();
+              });
         }));
   }
 

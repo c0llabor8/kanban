@@ -52,7 +52,7 @@ public class Project extends ParseObject {
         return;
       }
 
-      Membership.invite(ParseUser.getCurrentUser().getEmail(), project, callback);
+      Membership.invite(ParseUser.getCurrentUser().getUsername(), project, callback);
     });
   }
 
@@ -80,21 +80,22 @@ public class Project extends ParseObject {
             callback.done(e);
           }
 
-          // Delete the membership and check if the project is empty for deletion
-          memberships.get(0).deleteInBackground(err -> {
-            if (err != null) {
-              callback.done(err);
-              return;
-            }
+          for (Membership membership : memberships) {
+            Membership.leave(membership, err -> {
+              if (err != null) {
+                callback.done(err);
+                return;
+              }
 
-            this.increment(KEY_MEMBERS, -1);
+              this.increment(KEY_MEMBERS, -1);
 
-            if (this.getMembers() == 0) {
-              this.deleteEventually();
-            }
+              if (this.getMembers() == 0) {
+                this.deleteEventually();
+              }
 
-            callback.done(null);
-          });
+              callback.done(null);
+            });
+          }
         });
   }
 
