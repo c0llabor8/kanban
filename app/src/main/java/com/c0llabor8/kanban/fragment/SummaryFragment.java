@@ -8,6 +8,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import com.anychart.APIlib;
+import com.anychart.AnyChart;
+import com.anychart.chart.common.dataentry.DataEntry;
+import com.anychart.chart.common.dataentry.ValueDataEntry;
+import com.anychart.charts.Cartesian;
+import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.HoverMode;
+import com.anychart.enums.TooltipPositionMode;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.MemberProfileAdapter;
 import com.c0llabor8.kanban.adapter.TaskListAdapter;
@@ -16,6 +24,8 @@ import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class SummaryFragment extends BaseTaskFragment {
@@ -59,8 +69,8 @@ public class SummaryFragment extends BaseTaskFragment {
         LinearLayoutManager.HORIZONTAL, false));
     // Set up the RecyclerView
     binding.rvMembers.setAdapter(memberProfileAdapter);
-    binding.rvTasksCompleted.setLayoutManager(new LinearLayoutManager(getContext()));
-    binding.rvTasksCompleted.setAdapter(taskListAdapter);
+    //binding.rvTasksCompleted.setLayoutManager(new LinearLayoutManager(getContext()));
+    //binding.rvTasksCompleted.setAdapter(taskListAdapter);
 
     binding.tvCompleted.setText(String.format(
         Locale.getDefault(), "%d",
@@ -71,8 +81,45 @@ public class SummaryFragment extends BaseTaskFragment {
         Locale.getDefault(), "%d",
         TaskProvider.getInstance().getTasks(project).size()
     ));
-  }
 
+    binding.barChart.setProgressBar(binding.progressBar);
+
+    // Creates a chart
+    Cartesian cartesian = AnyChart.column();
+
+    // Create data
+    List<DataEntry> data = new ArrayList<>();
+    //for (int i = 0; i < ; i++) {
+    data.add(new ValueDataEntry("Backlog",10000));
+    data.add(new ValueDataEntry("In Progress", 15000));
+    data.add(new ValueDataEntry("Testing", 30000));
+    //}
+
+    // Creates a column series and sets the data
+    Column column = cartesian.column(data);
+    cartesian.barGroupsPadding(10);
+    column.tooltip()
+        .titleFormat("{%X}")
+        .offsetX(0d)
+        .offsetY(5d)
+        .format("${%Value} {%SeriesName}");
+
+
+    cartesian.animation(true);
+    cartesian.title("Tasks Overview");
+
+    cartesian.yScale().minimum(0d);
+    cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+    cartesian.yAxis(0).title("Number of Tasks");
+    cartesian.xAxis(0).title("CATEGORIES");
+
+    cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
+    cartesian.interactivity().hoverMode(HoverMode.BY_X);
+
+    binding.barChart.setChart(cartesian);
+    APIlib.getInstance().setActiveAnyChartView(binding.barChart);
+
+  }
   @Override
   public void onTaskRefresh() {
     taskListAdapter.notifyDataSetChanged();
