@@ -90,7 +90,7 @@ public class SummaryFragment extends BaseTaskFragment {
     // Create data
     List<DataEntry> data = new ArrayList<>();
     //for (int i = 0; i < ; i++) {
-    data.add(new ValueDataEntry("Backlog",10000));
+    data.add(new ValueDataEntry("Backlog", 10000));
     data.add(new ValueDataEntry("In Progress", 15000));
     data.add(new ValueDataEntry("Testing", 30000));
     //}
@@ -103,7 +103,6 @@ public class SummaryFragment extends BaseTaskFragment {
         .offsetX(0d)
         .offsetY(5d)
         .format("${%Value} {%SeriesName}");
-
 
     cartesian.animation(true);
     cartesian.title("Tasks Overview");
@@ -120,6 +119,7 @@ public class SummaryFragment extends BaseTaskFragment {
     APIlib.getInstance().setActiveAnyChartView(binding.barChart);
 
   }
+
   @Override
   public void onTaskRefresh() {
     taskListAdapter.notifyDataSetChanged();
