@@ -23,13 +23,15 @@
 
     <androidx.appcompat.widget.AppCompatImageView
       android:id="@+id/cont_line"
-      android:layout_width="@dimen/keyline_4"
+      android:layout_width="@dimen/keyline_6"
       android:layout_height="0dp"
       android:layout_marginStart="@dimen/layout_default_margin"
       android:src="@drawable/timeline_rectangle"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintStart_toEndOf="@+id/iv_priority"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toTopOf="parent"
+      android:scaleType="fitXY"
+      android:adjustViewBounds="true"/>
 
     <androidx.appcompat.widget.AppCompatImageView
       android:id="@+id/time_status"
@@ -45,26 +47,32 @@
 
     <TextView
       android:id="@+id/item_title"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/layout_default_margin"
       android:layout_marginStart="@dimen/layout_default_margin"
       android:textAppearance="@style/TextAppearance.MyTheme.Body1"
+      android:layout_marginEnd="8dp"
+      app:layout_constraintEnd_toStartOf="@+id/item_date"
       app:layout_constraintStart_toEndOf="@id/cont_line"
-      app:layout_constraintTop_toTopOf="parent"/>
+      app:layout_constraintTop_toTopOf="parent"
+      android:gravity="start"/>
 
     <TextView
       android:id="@+id/item_description"
-      android:layout_width="wrap_content"
+      android:layout_width="0dp"
       android:layout_height="wrap_content"
       android:layout_marginTop="@dimen/layout_default_margin"
       android:layout_marginBottom="@dimen/layout_default_margin"
       android:layout_marginStart="@dimen/layout_default_margin"
+      android:layout_marginEnd="8dp"
       android:maxLines="2"
       android:textAppearance="@style/TextAppearance.MyTheme.Body2"
       app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toEndOf="@id/cont_line"
-      app:layout_constraintTop_toBottomOf="@+id/item_title"/>
+      app:layout_constraintTop_toBottomOf="@+id/item_title"
+      android:gravity="start"/>
 
     <TextView
       android:id="@+id/item_date"
