@@ -28,7 +28,9 @@ import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.SaveCallback;
 
 public class MainActivity extends AppCompatActivity implements ProjectSheetListener {
 
@@ -89,7 +91,12 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     // Show our BottomNavigationSheet when the menu icon is clicked
     if (item.getItemId() == android.R.id.home) {
-      navFragment.show(getSupportFragmentManager(), "");
+      loadProjects(new SaveCallback() {
+        @Override
+        public void done(ParseException e) {
+          navFragment.show(getSupportFragmentManager(), "");
+        }
+      });
       return true;
     }
 
@@ -267,10 +274,19 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
         }).show();
   }
 
+  public void loadProjects() {
+    loadProjects(new SaveCallback() {
+      @Override
+      public void done(ParseException e) {
+
+      }
+    });
+  }
+
   /**
    * Query for all projects the current user is a member of and store them
    */
-  public void loadProjects() {
+  public void loadProjects(SaveCallback callback) {
     projectMenuMap = new SparseArray<>();
 
     Project.queryUserProjects((projects, e) -> {
@@ -282,6 +298,8 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
       for (int i = 0; i < projects.size(); i++) {
         projectMenuMap.put(Menu.FIRST + i, projects.get(i));
       }
+
+      callback.done(null);
     });
   }
 }
