@@ -1,12 +1,17 @@
 package com.c0llabor8.kanban.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PorterDuff.Mode;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
+import com.c0llabor8.kanban.activity.TaskListDetailActivity;
 import com.c0llabor8.kanban.databinding.ListItemTimelineBinding;
 import com.c0llabor8.kanban.model.Task;
 import com.c0llabor8.kanban.util.DateTimeUtils;
@@ -49,6 +54,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
     final Task task = tasks.get(position);
     // Populate all tasks
     holder.populateTasks(task, getItemViewType(position));
+
+    Context context = holder.binding.getRoot().getContext();
   }
 
 
@@ -71,11 +78,13 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
   class ViewHolder extends RecyclerView.ViewHolder {
 
     private ListItemTimelineBinding binding;
+    Context context;
 
 
     public ViewHolder(ListItemTimelineBinding binding) {
       super(binding.getRoot());
       this.binding = binding;
+      context = binding.getRoot().getContext();
     }
 
     /**
@@ -87,6 +96,18 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
       binding.itemTitle.setText(task.getTitle());
       binding.itemDescription.setText(task.getDescription());
       binding.itemDate.setText(DateTimeUtils.getDateString(task.getEstimate()));
+
+      binding.getRoot().setOnClickListener(view -> {
+        int position = getAdapterPosition();
+        if (position != RecyclerView.NO_POSITION) {
+          Log.d("task", task.getTitle());
+          Intent intent = new Intent(context, TaskListDetailActivity.class);
+
+          intent.putExtra(Task.class.getSimpleName(), task);
+          context.startActivity(intent);
+        }
+      });
+
       setPriority(task);
 
       switch (type) {

@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTaskListBinding;
@@ -17,6 +18,7 @@ import com.c0llabor8.kanban.util.TaskProvider;
 
 public class TaskListFragment extends BaseTaskFragment {
 
+  SwipeRefreshLayout swipeRefreshLayout;
   private TaskListAdapter listAdapter;
   private FragmentTaskListBinding binding;
 
@@ -57,10 +59,20 @@ public class TaskListFragment extends BaseTaskFragment {
   }
 
   @Override
+  public void setSwipeRefresh(SwipeRefreshLayout layout) {
+    if (project == null) {
+      swipeRefreshLayout = layout;
+    }
+  }
+
+  @Override
   public void onTaskRefresh() {
     if (project == null) {
       TaskProvider.getInstance().updateTasks(project,
-          (objects, e) -> listAdapter.notifyDataSetChanged());
+          (objects, e) -> {
+            listAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+          });
     } else {
       listAdapter.notifyDataSetChanged();
     }
