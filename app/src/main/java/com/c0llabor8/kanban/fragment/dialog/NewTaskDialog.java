@@ -32,6 +32,7 @@ import java.util.Calendar;
 public class NewTaskDialog extends DialogFragment {
 
   private FragmentNewTaskBinding binding;
+  private Task task;
   private Calendar calendar = Calendar.getInstance();
   private ArrayAdapter<TaskCategory> categoryArrayAdapter;
   private ArrayAdapter<String> usernameArrayAdapter;
@@ -39,6 +40,7 @@ public class NewTaskDialog extends DialogFragment {
   private DatePickerDialog datePickerDialog;
   private TaskRefreshListener listener;
   private Project project;
+
 
   private OnMenuItemClickListener onMenuItemClickListener = new OnMenuItemClickListener() {
     @Override
@@ -70,7 +72,10 @@ public class NewTaskDialog extends DialogFragment {
                 return;
               }
 
-              listener.onTaskRefresh();
+              if (listener != null) {
+                listener.onTaskRefresh();
+              }
+
               dismiss();
             }
         );
@@ -103,6 +108,7 @@ public class NewTaskDialog extends DialogFragment {
     fragment.setArguments(args);
     return fragment;
   }
+
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -185,6 +191,16 @@ public class NewTaskDialog extends DialogFragment {
       binding.tilCategory.setVisibility(View.GONE);
       binding.tilAssignees.setVisibility(View.GONE);
     }
+
+    if (task != null) {
+      binding.etTitle.setText(task.getTitle());
+      binding.etDescription.setText(task.getDescription());
+      binding.etDate.setText(DateTimeUtils.getDateString(task.getEstimate()));
+    }
+  }
+
+  public void update(Task task) {
+    this.task = task;
   }
 
   public void setListener(TaskRefreshListener listener) {
