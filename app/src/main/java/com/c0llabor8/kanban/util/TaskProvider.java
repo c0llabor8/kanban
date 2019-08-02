@@ -51,7 +51,7 @@ public class TaskProvider {
   public static int getTaskCategoryCount(Project project,
       TaskCategory category) {
 
-    String hash = (category == null) ? null : category.getTitle();
+    String hash = (category == null) ? null : category.getObjectId();
 
     if (getInstance().getCategoryTaskCountMap(project).get(hash) == null) {
       getInstance().getCategoryTaskCountMap(project).put(hash, 0);
@@ -122,10 +122,12 @@ public class TaskProvider {
       } else {
         getTasks(project).add(task);
 
-        getCategoryTaskCountMap(project).put(
-            task.getCategory().getObjectId(),
-            getTaskCategoryCount(project, task.getCategory()) + 1
-        );
+        if (task.getCategory() != null) {
+          getCategoryTaskCountMap(project).put(
+              task.getCategory().getObjectId(),
+              getTaskCategoryCount(project, task.getCategory()) + 1
+          );
+        }
       }
     }
   }

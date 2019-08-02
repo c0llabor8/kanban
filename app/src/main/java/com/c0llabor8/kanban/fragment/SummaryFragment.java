@@ -14,7 +14,9 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
 import com.anychart.core.cartesian.series.Column;
+import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
+import com.anychart.enums.Position;
 import com.anychart.enums.TooltipPositionMode;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.MemberProfileAdapter;
@@ -22,6 +24,7 @@ import com.c0llabor8.kanban.adapter.TaskListAdapter;
 import com.c0llabor8.kanban.databinding.FragmentSummaryBinding;
 import com.c0llabor8.kanban.fragment.base.BaseTaskFragment;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.model.TaskCategory;
 import com.c0llabor8.kanban.util.MemberProvider;
 import com.c0llabor8.kanban.util.TaskProvider;
 import java.util.ArrayList;
@@ -89,35 +92,35 @@ public class SummaryFragment extends BaseTaskFragment {
 
     // Create data
     List<DataEntry> data = new ArrayList<>();
-    //for (int i = 0; i < ; i++) {
-    data.add(new ValueDataEntry("Backlog", 10000));
-    data.add(new ValueDataEntry("In Progress", 15000));
-    data.add(new ValueDataEntry("Testing", 30000));
-    //}
+    for (TaskCategory category : TaskProvider.getInstance().getCategories(project)) {
+      data.add(new ValueDataEntry(category.getTitle(), TaskProvider.getTaskCategoryCount(project, category
+          )));
+    }
 
     // Creates a column series and sets the data
     Column column = cartesian.column(data);
-    cartesian.barGroupsPadding(10);
+    //cartesian.barGroupsPadding(10);
     column.tooltip()
         .titleFormat("{%X}")
+        .position(Position.CENTER_BOTTOM)
+        .anchor(Anchor.CENTER_BOTTOM)
         .offsetX(0d)
         .offsetY(5d)
-        .format("${%Value} {%SeriesName}");
+        .format("{%Value} {%groupsSeparator:}");
 
     cartesian.animation(true);
-    cartesian.title("Tasks Overview");
+    cartesian.title("Tasks Category Overview");
 
     cartesian.yScale().minimum(0d);
-    cartesian.yAxis(0).labels().format("${%Value}{groupsSeparator: }");
+    cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }");
     cartesian.yAxis(0).title("Number of Tasks");
-    cartesian.xAxis(0).title("CATEGORIES");
+    cartesian.xAxis(0).title("Task Categories");
 
     cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
     cartesian.interactivity().hoverMode(HoverMode.BY_X);
 
     binding.barChart.setChart(cartesian);
     APIlib.getInstance().setActiveAnyChartView(binding.barChart);
-
   }
 
   @Override
