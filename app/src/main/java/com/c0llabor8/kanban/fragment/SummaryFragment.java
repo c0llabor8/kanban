@@ -127,5 +127,7 @@ public class SummaryFragment extends BaseTaskFragment {
   public void onTaskRefresh() {
     taskListAdapter.notifyDataSetChanged();
     memberProfileAdapter.notifyDataSetChanged();
+    //binding.barChart.notifyDataSetChanged();
+    binding.barChart.invalidate();
   }
 }
