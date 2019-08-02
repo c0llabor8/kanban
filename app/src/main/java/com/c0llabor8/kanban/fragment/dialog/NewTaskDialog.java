@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.FragmentNewTaskBinding;
 import com.c0llabor8.kanban.model.Project;
@@ -192,7 +193,7 @@ public class NewTaskDialog extends DialogFragment {
   }
 
   public interface TaskRefreshListener {
-
+    void setSwipeRefresh(SwipeRefreshLayout layout);
     void onTaskRefresh();
   }
 }

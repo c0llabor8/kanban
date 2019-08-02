@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.anychart.APIlib;
 import com.anychart.AnyChart;
 import com.anychart.chart.common.dataentry.DataEntry;
@@ -122,6 +123,9 @@ public class SummaryFragment extends BaseTaskFragment {
     binding.barChart.setChart(cartesian);
     APIlib.getInstance().setActiveAnyChartView(binding.barChart);
   }
+
+  @Override
+  public void setSwipeRefresh(SwipeRefreshLayout layout) {}
 
   @Override
   public void onTaskRefresh() {
