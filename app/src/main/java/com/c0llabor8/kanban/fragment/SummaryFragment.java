@@ -36,6 +36,7 @@ public class SummaryFragment extends BaseTaskFragment {
   private TaskListAdapter taskListAdapter;
   private MemberProfileAdapter memberProfileAdapter;
   private FragmentSummaryBinding binding;
+  List<DataEntry> data;
 
   public static SummaryFragment newInstance(Project project) {
     Bundle args = new Bundle();
@@ -91,10 +92,10 @@ public class SummaryFragment extends BaseTaskFragment {
     Cartesian cartesian = AnyChart.column();
 
     // Create data
-    List<DataEntry> data = new ArrayList<>();
+    data = new ArrayList<>();
     for (TaskCategory category : TaskProvider.getInstance().getCategories(project)) {
-      data.add(new ValueDataEntry(category.getTitle(), TaskProvider.getTaskCategoryCount(project, category
-          )));
+      data.add(new ValueDataEntry(category.getTitle(),
+          TaskProvider.getTaskCategoryCount(project, category)));
     }
 
     // Creates a column series and sets the data
@@ -118,16 +119,17 @@ public class SummaryFragment extends BaseTaskFragment {
 
     cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
     cartesian.interactivity().hoverMode(HoverMode.BY_X);
-
+    //binding.barChart.setData(data);
+    binding.barChart.invalidate();
     binding.barChart.setChart(cartesian);
     APIlib.getInstance().setActiveAnyChartView(binding.barChart);
+    binding.barChart.refreshDrawableState();
+
   }
 
   @Override
   public void onTaskRefresh() {
     taskListAdapter.notifyDataSetChanged();
     memberProfileAdapter.notifyDataSetChanged();
-    //binding.barChart.notifyDataSetChanged();
-    binding.barChart.invalidate();
   }
 }
