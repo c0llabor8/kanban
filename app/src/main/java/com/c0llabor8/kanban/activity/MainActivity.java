@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.databinding.ActivityMainBinding;
 import com.c0llabor8.kanban.fragment.ProjectFragment;
@@ -52,8 +53,14 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     // Not within a project scope in the initial screen, so keep it at null
     switchProjectScope(null);
-
     setSupportActionBar(binding.bar);
+
+    binding.swipeRefresh.setOnRefreshListener(new OnRefreshListener() {
+      @Override
+      public void onRefresh() {
+        taskRefreshListener.onTaskRefresh();
+      }
+    });
     loadProjects();
   }
 
@@ -68,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
     if (fragment != null) {
       taskRefreshListener = (TaskRefreshListener) fragment;
+      taskRefreshListener.setSwipeRefresh(binding.swipeRefresh);
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
       transaction.replace(binding.content.getId(), fragment);
       transaction.commit();

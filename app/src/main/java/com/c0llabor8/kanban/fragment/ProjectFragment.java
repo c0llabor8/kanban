@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.ProjectPagerAdapter;
 import com.c0llabor8.kanban.databinding.FragmentProjectBinding;
@@ -22,6 +23,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   private Project project;
   private FragmentProjectBinding binding;
   private ProjectPagerAdapter pagerAdapter;
+  SwipeRefreshLayout swipeRefreshLayout;
 
   public static ProjectFragment newInstance(Project project) {
     Bundle args = new Bundle();
@@ -73,6 +75,11 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   }
 
   @Override
+  public void setSwipeRefresh(SwipeRefreshLayout layout) {
+    swipeRefreshLayout = layout;
+  }
+
+  @Override
   public void onTaskRefresh() {
     TaskProvider.getInstance().updateTasks(project, (tasks, e) ->
         TaskProvider.getInstance().updateCategories(project, (categories, err) ->
@@ -82,6 +89,8 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
 
               if (fragment instanceof TaskRefreshListener) {
                 TaskRefreshListener listener = (TaskRefreshListener) fragment;
+                listener.setSwipeRefresh(swipeRefreshLayout);
+                swipeRefreshLayout.setRefreshing(false);
                 listener.onTaskRefresh();
               }
             })));

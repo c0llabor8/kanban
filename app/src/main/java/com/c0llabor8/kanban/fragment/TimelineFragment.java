@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TimelineAdapter;
 import com.c0llabor8.kanban.databinding.FragmentTimelineBinding;
@@ -52,6 +53,9 @@ public class TimelineFragment extends BaseTaskFragment {
     binding.rvTimeline.setAdapter(timelineAdapter);
     binding.executePendingBindings();
   }
+
+  @Override
+  public void setSwipeRefresh(SwipeRefreshLayout layout) {}
 
   @Override
   public void onTaskRefresh() {
