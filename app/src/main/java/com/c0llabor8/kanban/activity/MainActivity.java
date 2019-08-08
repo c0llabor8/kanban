@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements ProjectSheetListe
 
   //opens a new dialog for task creation
   private void openTaskCreationDialog() {
-    NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject);
+    NewTaskDialog.newInstance().show(getSupportFragmentManager(), currentProject, null);
   }
 
   @Override

@@ -2,6 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/linearLayout3"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
@@ -19,10 +20,7 @@
     app:titleTextColor="@android:color/white">
   </androidx.appcompat.widget.Toolbar>
 
-
   <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/list_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -46,7 +44,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
 
-
     <TextView
       android:id="@+id/tvDescription"
       android:layout_width="match_parent"
@@ -64,7 +61,7 @@
       app:layout_constraintTop_toBottomOf="@+id/tvTitle"/>
 
     <TextView
-      android:id="@+id/tvAssignment"
+      android:id="@+id/tvProjectName"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_marginTop="16dp"
@@ -74,11 +71,10 @@
       android:text="Personal Task"
       app:layout_constraintBottom_toTopOf="@+id/tvTitle"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.039"
+      app:layout_constraintHorizontal_bias="0.028"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0"/>
-
+      app:layout_constraintVertical_bias="1.0"/>
 
     <androidx.recyclerview.widget.RecyclerView
       android:id="@+id/rvComments"
@@ -93,7 +89,6 @@
       app:layout_constraintHorizontal_bias="0.0"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/tvDescription"/>
-
 
     <EditText
       android:id="@+id/etComment"
@@ -130,6 +125,45 @@
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.998"/>
 
+    <TextView
+      android:id="@+id/etDate"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginEnd="32dp"
+      android:text="Date"
+      app:layout_constraintBottom_toTopOf="@+id/tvTitle"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="1.0"
+      app:layout_constraintStart_toEndOf="@+id/tvAssignment"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintVertical_bias="1.0"/>
+
+    <TextView
+      android:id="@+id/tvCategory"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginStart="24dp"
+      app:layout_constraintBottom_toTopOf="@+id/rvComments"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/tvDescription"
+      app:layout_constraintVertical_bias="0.363"/>
+
+    <TextView
+      android:id="@+id/tvAssignment"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"
+      android:layout_marginEnd="32dp"
+      app:layout_constraintBottom_toTopOf="@+id/rvComments"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/tvDescription"
+      app:layout_constraintVertical_bias="0.4"/>
 
   </androidx.constraintlayout.widget.ConstraintLayout>
 

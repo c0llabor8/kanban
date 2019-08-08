@@ -1,8 +1,6 @@
 package com.c0llabor8.kanban.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -19,16 +17,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.appcompat.widget.Toolbar.OnMenuItemClickListener;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.c0llabor8.kanban.R;
 import com.c0llabor8.kanban.adapter.TaskDetailAdapter;
-import com.c0llabor8.kanban.fragment.TaskListFragment;
 import com.c0llabor8.kanban.fragment.dialog.NewTaskDialog;
+import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Message;
 import com.c0llabor8.kanban.model.Project;
 import com.c0llabor8.kanban.model.Task;
+import com.c0llabor8.kanban.model.TaskCategory;
+import com.c0llabor8.kanban.model.query.AssignmentQuery;
+import com.c0llabor8.kanban.util.DateTimeUtils;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -37,20 +37,22 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.util.ArrayList;
 import java.util.List;
-import org.parceler.Parcels;
 
 public class TaskListDetailActivity extends AppCompatActivity {
 
   //to create comments
   RecyclerView rvComments;
   TaskDetailAdapter adapter;
+  Task task;
   private EditText etComment;
   private Button sendBtn;
   private List<Message> messageList;
   private TextView title;
   private TextView description;
   private TextView projectAssignment;
-  Task task;
+  private TextView date;
+  private TextView category;
+  private TextView assignee;
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,12 +71,10 @@ public class TaskListDetailActivity extends AppCompatActivity {
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         settingButtonEnabled(charSequence);
       }
-
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         settingButtonEnabled(charSequence);
       }
-
       @Override
       public void afterTextChanged(Editable editable) {
         if (etComment.length() == 0) {
@@ -96,14 +96,21 @@ public class TaskListDetailActivity extends AppCompatActivity {
     //everything needed to display task details
     task = getIntent().getParcelableExtra(Task.class.getSimpleName());
     title = findViewById(R.id.tvTitle);
+    date = findViewById(R.id.etDate);
     description = findViewById(R.id.tvDescription);
-    projectAssignment = findViewById(R.id.tvAssignment);
+    projectAssignment = findViewById(R.id.tvProjectName);
+
+    category = findViewById(R.id.tvCategory);
+    setCategoryInDetail();
+
+    assignee = findViewById(R.id.tvAssignment);
+    setAssigneeInDetail();
+
+    //set title of menu bar to be title of task
     getSupportActionBar().setTitle(task.getTitle());
-
-
     title.setText(task.getTitle());
     description.setText(task.getDescription());
-    //make sure there is project assigned to task
+    date.setText(DateTimeUtils.getDateString(task.getEstimate()));
     if (task.getProject() != null) {
       task.getProject().fetchIfNeededInBackground(new GetCallback<Project>() {
         @Override
@@ -114,6 +121,37 @@ public class TaskListDetailActivity extends AppCompatActivity {
     }
     sendButtonClickSetUp();
     populateComments();
+  }
+
+  /**
+   * gets assignment and displays in detail view
+   */
+  private void setAssigneeInDetail() {
+    AssignmentQuery query =
+        new AssignmentQuery().whereTaskEquals(task);
+    query.findInBackground(new FindCallback<Assignment>() {
+      @Override
+      public void done(List<Assignment> objects, ParseException e) {
+        if (objects.size() != 0) {
+          Assignment assignment = objects.get(0);
+          assignee.setText("Assigned to: " + assignment.getUser().getUsername());
+        }
+      }
+    });
+  }
+
+  /**
+   * gets category and displays in detail view
+   */
+  private void setCategoryInDetail() {
+    if (task.getCategory() != null) {
+      task.getCategory().fetchIfNeededInBackground(new GetCallback<TaskCategory>() {
+        @Override
+        public void done(TaskCategory taskCategory, ParseException e) {
+          category.setText("Category: " + task.getCategory().toString());
+        }
+      });
+    }
   }
 
   @Override
@@ -130,12 +168,13 @@ public class TaskListDetailActivity extends AppCompatActivity {
     switch (item.getItemId()) {
       case R.id.miEdit:
         editEvent();
-        //finish();
         return true;
       case R.id.miComplete:
         markAsComplete();
         finish();
         return true;
+      case R.id.miBack:
+        finish();
       default:
         return super.onOptionsItemSelected(item);
     }
@@ -146,10 +185,8 @@ public class TaskListDetailActivity extends AppCompatActivity {
    */
   private void editEvent() {
     NewTaskDialog dialog = NewTaskDialog.newInstance();
-    dialog.show(getSupportFragmentManager(), task.getProject());
-    dialog.update(task);
+    dialog.show(getSupportFragmentManager(), task.getProject(), task);
   }
-
 
   /**
    * marks task as complete when the check button is clicked
@@ -167,7 +204,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
         }
       }
     });
-    Toast toast = Toast.makeText(this, "item has been marked as completed", Toast.LENGTH_LONG);
+    Toast toast = Toast.makeText(this, "task has been marked as completed", Toast.LENGTH_LONG);
     toast.setGravity(Gravity.CENTER, 0, 0);
     toast.show();
   }
