@@ -15,6 +15,8 @@ import com.anychart.chart.common.dataentry.DataEntry;
 import com.anychart.chart.common.dataentry.ValueDataEntry;
 import com.anychart.charts.Cartesian;
 import com.anychart.core.cartesian.series.Column;
+import com.anychart.data.Mapping;
+import com.anychart.data.Set;
 import com.anychart.enums.Anchor;
 import com.anychart.enums.HoverMode;
 import com.anychart.enums.Position;
@@ -37,7 +39,9 @@ public class SummaryFragment extends BaseTaskFragment {
   private TaskListAdapter taskListAdapter;
   private MemberProfileAdapter memberProfileAdapter;
   private FragmentSummaryBinding binding;
-  List<DataEntry> data;
+  private List<DataEntry> data;
+  private Set set;
+  private Cartesian cartesian;
 
   public static SummaryFragment newInstance(Project project) {
     Bundle args = new Bundle();
@@ -63,6 +67,7 @@ public class SummaryFragment extends BaseTaskFragment {
     // Inflate the layout for this fragment
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary,
         container, false);
+
     return binding.getRoot();
   }
 
@@ -74,8 +79,6 @@ public class SummaryFragment extends BaseTaskFragment {
         LinearLayoutManager.HORIZONTAL, false));
     // Set up the RecyclerView
     binding.rvMembers.setAdapter(memberProfileAdapter);
-    //binding.rvTasksCompleted.setLayoutManager(new LinearLayoutManager(getContext()));
-    //binding.rvTasksCompleted.setAdapter(taskListAdapter);
 
     binding.tvCompleted.setText(String.format(
         Locale.getDefault(), "%d",
@@ -88,20 +91,29 @@ public class SummaryFragment extends BaseTaskFragment {
     ));
 
     binding.barChart.setProgressBar(binding.progressBar);
+    getChart();
 
-    // Creates a chart
+  }
+
+  private void getChart() {
+
+    // Creates a column in chart
     Cartesian cartesian = AnyChart.column();
-
-    // Create data
+    // Adds data to the column
     data = new ArrayList<>();
     for (TaskCategory category : TaskProvider.getInstance().getCategories(project)) {
       data.add(new ValueDataEntry(category.getTitle(),
           TaskProvider.getTaskCategoryCount(project, category)));
     }
 
+    APIlib.getInstance().setActiveAnyChartView(binding.barChart);
+    set = Set.instantiate();
+    set.data(data);
+    Mapping seriesData = set.mapAs("{ x: 'x', value: 'value' }");
+
     // Creates a column series and sets the data
-    Column column = cartesian.column(data);
-    //cartesian.barGroupsPadding(10);
+    Column column = cartesian.column(seriesData);
+    // Tooltip
     column.tooltip()
         .titleFormat("{%X}")
         .position(Position.CENTER_BOTTOM)
@@ -120,12 +132,7 @@ public class SummaryFragment extends BaseTaskFragment {
 
     cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
     cartesian.interactivity().hoverMode(HoverMode.BY_X);
-    //binding.barChart.setData(data);
-    binding.barChart.invalidate();
     binding.barChart.setChart(cartesian);
-    APIlib.getInstance().setActiveAnyChartView(binding.barChart);
-    binding.barChart.refreshDrawableState();
-
   }
 
   @Override
@@ -135,5 +142,16 @@ public class SummaryFragment extends BaseTaskFragment {
   public void onTaskRefresh() {
     taskListAdapter.notifyDataSetChanged();
     memberProfileAdapter.notifyDataSetChanged();
+    updateCompleteTaskTable();
+    // Updates the existing set with already created mappings in chart
+    binding.btnRefresh.setOnClickListener(view -> {
+      set.data(data);
+    });
   }
+
+  private void updateCompleteTaskTable() {
+    TaskProvider.getInstance().updateTasks(project,
+        (objects, e) -> taskListAdapter.notifyDataSetChanged());
+  }
+
 }
