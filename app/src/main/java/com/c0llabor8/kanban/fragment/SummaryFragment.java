@@ -39,8 +39,8 @@ public class SummaryFragment extends BaseTaskFragment {
   private MemberProfileAdapter memberProfileAdapter;
   private FragmentSummaryBinding binding;
   private List<DataEntry> data;
-  private Cartesian cartesian;
   private Set set;
+  private Cartesian cartesian;
 
   public static SummaryFragment newInstance(Project project) {
     Bundle args = new Bundle();
@@ -67,8 +67,6 @@ public class SummaryFragment extends BaseTaskFragment {
     binding = DataBindingUtil.inflate(inflater, R.layout.fragment_summary,
         container, false);
 
-    getChart();
-
     return binding.getRoot();
   }
 
@@ -92,26 +90,29 @@ public class SummaryFragment extends BaseTaskFragment {
     ));
 
     binding.barChart.setProgressBar(binding.progressBar);
+    getChart();
+
   }
 
   private void getChart() {
-    APIlib.getInstance().setActiveAnyChartView(binding.barChart);
+
     // Creates a column in chart
-    cartesian = AnyChart.column();
-    // Create data
+    Cartesian cartesian = AnyChart.column();
+    // Adds data to the column
     data = new ArrayList<>();
     for (TaskCategory category : TaskProvider.getInstance().getCategories(project)) {
       data.add(new ValueDataEntry(category.getTitle(),
           TaskProvider.getTaskCategoryCount(project, category)));
     }
 
+    APIlib.getInstance().setActiveAnyChartView(binding.barChart);
     set = Set.instantiate();
     set.data(data);
     Mapping seriesData = set.mapAs("{ x: 'x', value: 'value' }");
 
     // Creates a column series and sets the data
     Column column = cartesian.column(seriesData);
-    //cartesian.barGroupsPadding(10);
+    // Tooltip
     column.tooltip()
         .titleFormat("{%X}")
         .position(Position.CENTER_BOTTOM)
@@ -131,16 +132,6 @@ public class SummaryFragment extends BaseTaskFragment {
     cartesian.tooltip().positionMode(TooltipPositionMode.POINT);
     cartesian.interactivity().hoverMode(HoverMode.BY_X);
     binding.barChart.setChart(cartesian);
-
-    // Updates the existing set with already created mappings
-    binding.btnRefresh.setOnClickListener(view -> {
-      data = new ArrayList<>();
-      for (TaskCategory category : TaskProvider.getInstance().getCategories(project)) {
-        data.add(new ValueDataEntry(category.getTitle(),
-            TaskProvider.getTaskCategoryCount(project, category)));
-      }
-      set.data(data);
-    });
   }
 
   @Override
@@ -148,6 +139,10 @@ public class SummaryFragment extends BaseTaskFragment {
     taskListAdapter.notifyDataSetChanged();
     memberProfileAdapter.notifyDataSetChanged();
     updateCompleteTaskTable();
+    // Updates the existing set with already created mappings in chart
+    binding.btnRefresh.setOnClickListener(view -> {
+      set.data(data);
+    });
   }
 
   private void updateCompleteTaskTable() {
