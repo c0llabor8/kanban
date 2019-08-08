@@ -6,6 +6,7 @@ import static com.c0llabor8.kanban.model.Assignment.KEY_USER;
 
 import com.c0llabor8.kanban.model.Assignment;
 import com.c0llabor8.kanban.model.Project;
+import com.c0llabor8.kanban.model.Task;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -20,6 +21,11 @@ public class AssignmentQuery extends ParseQuery<Assignment> {
 
   public AssignmentQuery whereUserEquals(ParseUser user) {
     whereEqualTo(KEY_USER, user);
+    return this;
+  }
+
+  public AssignmentQuery whereTaskEquals(Task task) {
+    whereEqualTo(KEY_TASK, task);
     return this;
   }
 

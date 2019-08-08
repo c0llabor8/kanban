@@ -1,10 +1,15 @@
 package com.c0llabor8.kanban.model;
 
+import android.util.Log;
+import com.c0llabor8.kanban.model.query.AssignmentQuery;
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.util.Comparator;
+import java.util.List;
 
 @ParseClassName("Task")
 public class Task extends ParseObject {
@@ -40,6 +45,48 @@ public class Task extends ParseObject {
 
       assignment.saveInBackground(callback);
     });
+  }
+
+  public static void editTask(Task task, String title, String description, long estimate,
+      Project project,
+      TaskCategory category, ParseUser user, SaveCallback callback) {
+    task.setTitle(title);
+    task.setEstimate(estimate);
+    if (description != null) {
+      task.setDescription(description);
+    }
+    if (project != null) {
+      task.setProject(project);
+    }
+    if (category != null) {
+      task.setCategory(category);
+    }
+    task.saveInBackground(new SaveCallback() {
+      @Override
+      public void done(ParseException e) {
+
+        AssignmentQuery query =
+            new AssignmentQuery().whereProjectEquals(project).whereTaskEquals(task);
+
+        query.findInBackground(new FindCallback<Assignment>() {
+          @Override
+          public void done(List<Assignment> objects, ParseException e) {
+            if (objects.size() != 0) {
+              Assignment assignment = objects.get(0);
+
+              assignment.setUser((user == null) ?
+                  ParseUser.getCurrentUser() : user);
+
+              assignment.saveInBackground(callback);
+              return;
+            }
+
+            callback.done(null);
+          }
+        });
+      }
+    });
+
   }
 
   public Task setCompleted() {
