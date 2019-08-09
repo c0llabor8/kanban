@@ -37,7 +37,7 @@ import java.util.Locale;
 
 public class SummaryFragment extends BaseTaskFragment {
 
-  Cartesian cartesian;
+  private Cartesian cartesian;
   private List<DataEntry> data = new ArrayList<>();
 
   private TaskListAdapter taskListAdapter;
@@ -84,14 +84,14 @@ public class SummaryFragment extends BaseTaskFragment {
     // Set up the RecyclerView
     binding.rvMembers.setAdapter(memberProfileAdapter);
 
-    binding.pieChart.setChart(cartesian);
+    binding.chart.setChart(cartesian);
 
     updateTaskCounts();
     updateChart();
   }
 
   private void updateChart() {
-    binding.pieChart.clear();
+    binding.chart.clear();
 
     for (TaskCategory category : TaskProvider.getInstance().getCategories(project)) {
       data.add(new ValueDataEntry(category.getTitle(),
@@ -99,7 +99,7 @@ public class SummaryFragment extends BaseTaskFragment {
     }
 
     cartesian.data(data);
-    binding.pieChart.setChart(cartesian);
+    binding.chart.setChart(cartesian);
   }
 
   @Override
