@@ -72,6 +72,14 @@ public class TaskListFragment extends BaseTaskFragment {
           (objects, e) -> {
             listAdapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
+
+            if (listAdapter.getItemCount() == 0) {
+              binding.rvTasks.setVisibility(View.GONE);
+              binding.artwork.setVisibility(View.VISIBLE);
+            } else {
+              binding.rvTasks.setVisibility(View.VISIBLE);
+              binding.artwork.setVisibility(View.GONE);
+            }
           });
     } else {
       listAdapter.notifyDataSetChanged();
