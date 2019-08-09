@@ -3,6 +3,8 @@ package com.c0llabor8.kanban.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
@@ -37,9 +39,15 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    setHasOptionsMenu(true);
     // Get the project object passed in from the parent activity
     pagerAdapter = new ProjectPagerAdapter(getChildFragmentManager(), project);
+  }
+
+  @Override
+  public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+    inflater.inflate(R.menu.menu_main, menu);
+    super.onCreateOptionsMenu(menu, inflater);
   }
 
   @Nullable
