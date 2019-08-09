@@ -60,5 +60,15 @@ public class TimelineFragment extends BaseTaskFragment {
   @Override
   public void onTaskRefresh() {
     timelineAdapter.notifyDataSetChanged();
+
+    if (timelineAdapter.getItemCount() == 0) {
+      binding.artwork.setImageResource(R.drawable.empty_state_project_timeline);
+      binding.rvTimeline.setVisibility(View.GONE);
+      binding.artwork.setVisibility(View.VISIBLE);
+    } else {
+      binding.artwork.setImageDrawable(null);
+      binding.rvTimeline.setVisibility(View.VISIBLE);
+      binding.artwork.setVisibility(View.GONE);
+    }
   }
 }

@@ -37,6 +37,8 @@ public class TaskListFragment extends BaseTaskFragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       @Nullable Bundle savedInstanceState) {
 
+    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
+
     if (project == null) {
       listAdapter = new TaskListAdapter(TaskProvider.getInstance().getTasks(project));
     } else {
@@ -46,7 +48,6 @@ public class TaskListFragment extends BaseTaskFragment {
       );
     }
 
-    binding = DataBindingUtil.inflate(inflater, R.layout.fragment_task_list, container, false);
     return binding.getRoot();
   }
 
@@ -72,17 +73,25 @@ public class TaskListFragment extends BaseTaskFragment {
           (objects, e) -> {
             listAdapter.notifyDataSetChanged();
             swipeRefreshLayout.setRefreshing(false);
-
-            if (listAdapter.getItemCount() == 0) {
-              binding.rvTasks.setVisibility(View.GONE);
-              binding.artwork.setVisibility(View.VISIBLE);
-            } else {
-              binding.rvTasks.setVisibility(View.VISIBLE);
-              binding.artwork.setVisibility(View.GONE);
-            }
           });
     } else {
       listAdapter.notifyDataSetChanged();
+    }
+
+    if (listAdapter.getItemCount() == 0) {
+
+      if (project == null) {
+        binding.artwork.setImageResource(R.drawable.empty_state_list);
+      } else {
+        binding.artwork.setImageResource(R.drawable.empty_state_project_list);
+      }
+
+      binding.rvTasks.setVisibility(View.GONE);
+      binding.artwork.setVisibility(View.VISIBLE);
+    } else {
+      binding.artwork.setImageDrawable(null);
+      binding.rvTasks.setVisibility(View.VISIBLE);
+      binding.artwork.setVisibility(View.GONE);
     }
   }
 }
