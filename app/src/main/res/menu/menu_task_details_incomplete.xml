@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:app="http://schemas.android.com/apk/res-auto">
   <item
-  android:id="@+id/miBack"
-  android:icon="@drawable/baseline_arrow_back_black_18dp"
-  android:title="Complete"
-  app:showAsAction="always">
-</item>
+    android:id="@+id/miBack"
+    android:icon="@drawable/baseline_arrow_back_black_18dp"
+    android:title="Complete"
+    app:showAsAction="always">
+  </item>
   <item
     android:id="@+id/miEdit"
     android:icon="@drawable/outline_edit_black_18dp"

@@ -50,13 +50,6 @@ public class TaskListDetailActivity extends AppCompatActivity {
   private EditText etComment;
   private Button sendBtn;
   private List<Message> messageList;
-  private TextView title;
-  private TextView description;
-  private TextView projectAssignment;
-  private TextView date;
-  private TextView category;
-  private TextView assignee;
-
   Runnable pollComments = new Runnable() {
     @Override
     public void run() {
@@ -65,10 +58,16 @@ public class TaskListDetailActivity extends AppCompatActivity {
       } finally {
         // 100% guarantee that this always happens, even if
         // your update method throws an exception
-        handler.postDelayed(pollComments, 3*1000);
+        handler.postDelayed(pollComments, 3 * 1000);
       }
     }
   };
+  private TextView title;
+  private TextView description;
+  private TextView projectAssignment;
+  private TextView date;
+  private TextView category;
+  private TextView assignee;
 
   void startRepeatingTask() {
     pollComments.run();
@@ -95,10 +94,12 @@ public class TaskListDetailActivity extends AppCompatActivity {
       public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         settingButtonEnabled(charSequence);
       }
+
       @Override
       public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
         settingButtonEnabled(charSequence);
       }
+
       @Override
       public void afterTextChanged(Editable editable) {
         if (etComment.length() == 0) {
@@ -281,7 +282,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
       public void done(List<Message> objects, ParseException e) {
         if (e == null) {
           messageList.addAll(objects);
-          adapter.notifyDataSetChanged();
+          adapter.notifyItemRangeInserted(adapter.getItemCount(), objects.size());
           rvComments.scrollToPosition(messageList.size() - 1);
         } else {
           Log.d("HomeActivity", "get post failed");

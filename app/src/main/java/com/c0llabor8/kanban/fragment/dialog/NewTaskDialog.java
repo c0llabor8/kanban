@@ -261,7 +261,9 @@ public class NewTaskDialog extends DialogFragment {
   }
 
   public interface TaskRefreshListener {
+
     void setSwipeRefresh(SwipeRefreshLayout layout);
+
     void onTaskRefresh();
   }
 }
