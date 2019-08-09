@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  xmlns:tools="http://schemas.android.com/tools"
-  >
+  xmlns:app="http://schemas.android.com/apk/res-auto">
   <androidx.core.widget.NestedScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:overScrollMode="never">
+    android:layout_height="match_parent">
     <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent"
@@ -21,87 +18,75 @@
 
       <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="466dp"
-        tools:layout_editor_absoluteY="190dp">
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/keyline_2"
+        android:layout_marginEnd="@dimen/keyline_2">
 
-        <TextView
-          android:id="@+id/tvCompleted"
-          android:layout_width="wrap_content"
-          android:layout_height="80dp"
-          android:layout_marginTop="8dp"
-          android:layout_marginStart="100dp"
-          android:text="10"
-          android:textAppearance="@style/TextAppearance.MyTheme.Headline2"
-          app:layout_constraintBottom_toTopOf="@+id/tvComplete"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-          android:id="@+id/tvIncomplete"
-          android:layout_width="wrap_content"
-          android:layout_height="80dp"
-          android:layout_marginTop="8dp"
-          android:layout_marginEnd="112dp"
-          android:text="15"
-          android:textAppearance="@style/TextAppearance.MyTheme.Headline2"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toTopOf="parent"/>
-        <TextView
-          android:id="@+id/tvComplete"
+        <LinearLayout
+          android:id="@+id/tableCompletion"
           android:layout_width="0dp"
-          android:layout_height="26dp"
-          android:layout_marginTop="12dp"
-          android:layout_marginStart="100dp"
-          android:text="COMPLETE"
-          android:textAppearance="@style/TextAppearance.MyTheme.Subtitle1"
-          android:visibility="visible"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/tvCompleted"/>
-        <TextView
-          android:id="@+id/tvOpen"
-          android:layout_width="0dp"
-          android:layout_height="27dp"
-          android:layout_marginTop="12dp"
-          android:layout_marginEnd="122dp"
-          android:text="OPEN"
-          android:textAppearance="@style/TextAppearance.MyTheme.Subtitle1"
+          android:layout_height="wrap_content"
+          android:paddingBottom="@dimen/keyline_2"
+          android:baselineAligned="false"
+          android:orientation="horizontal"
           app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/tvIncomplete"
-          tools:ignore="MissingConstraints"/>
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent">
+          <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+              android:id="@+id/tvIncomplete"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textAppearance="@style/TextAppearance.MyTheme.Headline2"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+              android:id="@+id/tvOpen"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="OPEN"
+              android:textAppearance="@style/TextAppearance.MyTheme.Subtitle1"
+              app:layout_constraintEnd_toEndOf="parent"
+              app:layout_constraintTop_toBottomOf="@+id/tvIncomplete"/>
+          </LinearLayout>
+
+          <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+              android:id="@+id/tvCompleted"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textAppearance="@style/TextAppearance.MyTheme.Headline2"/>
+
+            <TextView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="COMPLETE"
+              android:textAppearance="@style/TextAppearance.MyTheme.Subtitle1"/>
+          </LinearLayout>
+        </LinearLayout>
 
         <com.anychart.AnyChartView
-          android:id="@+id/barChart"
-          android:layout_width="392dp"
-          android:layout_height="298dp"
-          android:layout_marginTop="8dp"
-          android:layout_marginBottom="20dp"
+          android:id="@+id/chart"
+          android:layout_width="0dp"
+          android:layout_height="0dp"
           app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintDimensionRatio="w,1:1"
           app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintHorizontal_bias="0.473"
           app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toBottomOf="@+id/progressBar"
-          app:layout_constraintVertical_bias="1.0">
-          <Button
-            android:id="@+id/btnRefresh"
-            style="@style/Widget.AppCompat.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:insetLeft="300dp"
-            android:text="SHOW"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-        </com.anychart.AnyChartView>
-
-        <ProgressBar
-          android:id="@+id/progressBar"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_marginTop="100dp"
-          android:layout_marginStart="8dp"
-          android:layout_marginEnd="8dp"
-          app:layout_constraintEnd_toEndOf="parent"
-          app:layout_constraintHorizontal_bias="0.53"
-          app:layout_constraintStart_toStartOf="parent"
-          app:layout_constraintTop_toTopOf="parent"/>
-
+          app:layout_constraintTop_toBottomOf="@id/tableCompletion"/>
 
       </androidx.constraintlayout.widget.ConstraintLayout>
 
