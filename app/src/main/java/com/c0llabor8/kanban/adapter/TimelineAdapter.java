@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.graphics.PorterDuff.Mode;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -77,8 +75,8 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
 
   class ViewHolder extends RecyclerView.ViewHolder {
 
-    private ListItemTimelineBinding binding;
     Context context;
+    private ListItemTimelineBinding binding;
 
 
     public ViewHolder(ListItemTimelineBinding binding) {

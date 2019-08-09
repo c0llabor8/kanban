@@ -1,6 +1,5 @@
 package com.c0llabor8.kanban.model;
 
-import android.util.Log;
 import com.c0llabor8.kanban.model.query.AssignmentQuery;
 import com.parse.FindCallback;
 import com.parse.ParseClassName;

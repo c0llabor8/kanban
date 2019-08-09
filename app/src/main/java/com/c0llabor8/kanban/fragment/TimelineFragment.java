@@ -54,7 +54,8 @@ public class TimelineFragment extends BaseTaskFragment {
   }
 
   @Override
-  public void setSwipeRefresh(SwipeRefreshLayout layout) {}
+  public void setSwipeRefresh(SwipeRefreshLayout layout) {
+  }
 
   @Override
   public void onTaskRefresh() {
