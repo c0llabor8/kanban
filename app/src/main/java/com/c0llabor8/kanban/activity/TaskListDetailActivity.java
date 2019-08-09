@@ -1,6 +1,7 @@
 package com.c0llabor8.kanban.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -40,6 +41,8 @@ import java.util.List;
 
 public class TaskListDetailActivity extends AppCompatActivity {
 
+  final Handler handler = new Handler();
+
   //to create comments
   RecyclerView rvComments;
   TaskDetailAdapter adapter;
@@ -53,6 +56,27 @@ public class TaskListDetailActivity extends AppCompatActivity {
   private TextView date;
   private TextView category;
   private TextView assignee;
+
+  Runnable pollComments = new Runnable() {
+    @Override
+    public void run() {
+      try {
+        populateComments(); //this function can change value of mInterval.
+      } finally {
+        // 100% guarantee that this always happens, even if
+        // your update method throws an exception
+        handler.postDelayed(pollComments, 3*1000);
+      }
+    }
+  };
+
+  void startRepeatingTask() {
+    pollComments.run();
+  }
+
+  void stopRepeatingTask() {
+    handler.removeCallbacks(pollComments);
+  }
 
   @Override
   protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -120,7 +144,25 @@ public class TaskListDetailActivity extends AppCompatActivity {
       });
     }
     sendButtonClickSetUp();
-    populateComments();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    startRepeatingTask();
+  }
+
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    stopRepeatingTask();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    stopRepeatingTask();
   }
 
   /**
@@ -228,13 +270,19 @@ public class TaskListDetailActivity extends AppCompatActivity {
     query.whereEqualTo("task", task);
     query.include("user");
     query.orderByAscending("createdAt");
+
+    if (messageList.size() > 0) {
+      query.whereGreaterThan("createdAt",
+          messageList.get(messageList.size() - 1).getCreatedAt());
+    }
+
     query.findInBackground(new FindCallback<Message>() {
       @Override
       public void done(List<Message> objects, ParseException e) {
         if (e == null) {
           messageList.addAll(objects);
-          adapter.notifyItemInserted(0);
-          rvComments.scrollToPosition(0);
+          adapter.notifyDataSetChanged();
+          rvComments.scrollToPosition(messageList.size() - 1);
         } else {
           Log.d("HomeActivity", "get post failed");
         }
