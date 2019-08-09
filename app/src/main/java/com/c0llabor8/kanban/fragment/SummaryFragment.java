@@ -82,7 +82,7 @@ public class SummaryFragment extends BaseTaskFragment {
   }
 
   private void updateChart() {
-    binding.chart.clear();
+    data.clear();
 
     for (TaskCategory category : TaskProvider.getInstance().getCategories(project)) {
       data.add(new ValueDataEntry(category.getTitle(),
@@ -90,7 +90,6 @@ public class SummaryFragment extends BaseTaskFragment {
     }
 
     cartesian.data(data);
-    binding.chart.setChart(cartesian);
   }
 
   @Override
