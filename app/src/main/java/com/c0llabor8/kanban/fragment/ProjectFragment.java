@@ -23,7 +23,7 @@ public class ProjectFragment extends Fragment implements TaskRefreshListener {
   private Project project;
   private FragmentProjectBinding binding;
   private ProjectPagerAdapter pagerAdapter;
-  SwipeRefreshLayout swipeRefreshLayout;
+  private SwipeRefreshLayout swipeRefreshLayout;
 
   public static ProjectFragment newInstance(Project project) {
     Bundle args = new Bundle();

@@ -281,7 +281,7 @@ public class TaskListDetailActivity extends AppCompatActivity {
       public void done(List<Message> objects, ParseException e) {
         if (e == null) {
           messageList.addAll(objects);
-          adapter.notifyDataSetChanged();
+          adapter.notifyItemRangeInserted(adapter.getItemCount(), objects.size());
           rvComments.scrollToPosition(messageList.size() - 1);
         } else {
           Log.d("HomeActivity", "get post failed");

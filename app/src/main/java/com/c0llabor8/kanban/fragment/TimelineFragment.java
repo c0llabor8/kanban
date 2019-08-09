@@ -51,7 +51,6 @@ public class TimelineFragment extends BaseTaskFragment {
     super.onViewCreated(view, savedInstanceState);
     binding.rvTimeline.setLayoutManager(new LinearLayoutManager(getContext()));
     binding.rvTimeline.setAdapter(timelineAdapter);
-    binding.executePendingBindings();
   }
 
   @Override

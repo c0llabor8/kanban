@@ -66,18 +66,7 @@ public class TaskListFragment extends BaseTaskFragment {
     }
   }
 
-  @Override
-  public void onTaskRefresh() {
-    if (project == null) {
-      TaskProvider.getInstance().updateTasks(project,
-          (objects, e) -> {
-            listAdapter.notifyDataSetChanged();
-            swipeRefreshLayout.setRefreshing(false);
-          });
-    } else {
-      listAdapter.notifyDataSetChanged();
-    }
-
+  private void updateState() {
     if (listAdapter.getItemCount() == 0) {
 
       if (project == null) {
@@ -92,6 +81,21 @@ public class TaskListFragment extends BaseTaskFragment {
       binding.artwork.setImageDrawable(null);
       binding.rvTasks.setVisibility(View.VISIBLE);
       binding.artwork.setVisibility(View.GONE);
+    }
+  }
+
+  @Override
+  public void onTaskRefresh() {
+    if (project == null) {
+      TaskProvider.getInstance().updateTasks(project,
+          (objects, e) -> {
+            listAdapter.notifyDataSetChanged();
+            swipeRefreshLayout.setRefreshing(false);
+            updateState();
+          });
+    } else {
+      listAdapter.notifyDataSetChanged();
+      updateState();
     }
   }
 }
